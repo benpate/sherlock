@@ -3,9 +3,11 @@ module github.com/benpate/sherlock
 go 1.19
 
 replace github.com/benpate/hannibal => ../hannibal
+
 replace github.com/benpate/rosetta => ../rosetta
 
 require (
+	github.com/PuerkitoBio/goquery v1.8.1
 	github.com/benpate/derp v0.27.1
 	github.com/benpate/hannibal v0.4.1
 	github.com/benpate/remote v0.10.3
@@ -17,6 +19,7 @@ require (
 )
 
 require (
+	github.com/andybalholm/cascadia v1.3.1 // indirect
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/benpate/exp v0.7.0 // indirect
 	github.com/gorilla/css v1.0.0 // indirect

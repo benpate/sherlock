@@ -34,7 +34,9 @@ func ParseOpenGraph(url string, reader io.Reader, data mapof.Any) mapof.Any {
 
 	if ogInfo.Article != nil {
 		if data.IsZeroValue(vocab.PropertyPublished) {
-			data[vocab.PropertyPublished] = ogInfo.Article.PublishedTime.Unix()
+			if ogInfo.Article.PublishedTime != nil {
+				data[vocab.PropertyPublished] = ogInfo.Article.PublishedTime.Unix()
+			}
 		}
 
 		if data.IsZeroValue(vocab.PropertyTag) {

@@ -2,7 +2,6 @@ package sherlock
 
 import (
 	"bytes"
-	"mime"
 
 	"github.com/benpate/derp"
 	"github.com/benpate/hannibal/streams"
@@ -39,14 +38,14 @@ func (client Client) Load(uri string) (streams.Document, error) {
 
 	// If Content-Type is valid, try to parse as ActivityStreams JSON
 	header := transaction.ResponseObject.Header
-	if contentType := header.Get("Content-Type"); client.isActivityStream(contentType) {
+	if contentType := header.Get("Content-Type"); isActivityStream(contentType) {
 		if result, err := ParseActivityStream(&body); err == nil {
 			return streams.NewDocument(result, streams.WithClient(client)), nil
 		}
 	}
 
 	// Try to parse the document as HTML
-	result, err := ParseHTML(uri, &body)
+	result, err := Parse(uri, &body)
 
 	if err != nil {
 		return streams.NilDocument(), derp.Wrap(err, location, "Error parsing HTML page")
@@ -54,19 +53,4 @@ func (client Client) Load(uri string) (streams.Document, error) {
 
 	// Populate and return the resulting document
 	return streams.NewDocument(result, streams.WithClient(client), streams.WithHeader(header)), nil
-}
-
-func (client Client) isActivityStream(value string) bool {
-
-	// ActivityStreams have their own MIME type, but we have to check some alternates, too.
-	if mediaType, _, err := mime.ParseMediaType(value); err == nil {
-		switch mediaType {
-		case "application/activity+json":
-		case "application/ld+json":
-		case "application/json":
-			return true
-		}
-	}
-
-	return false
 }

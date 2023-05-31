@@ -35,3 +35,30 @@ func TestLoad_OpenGraph(t *testing.T) {
 	require.Nil(t, err)
 	spew.Dump(meta.Value())
 }
+
+func TestLoad_MastodonProfile(t *testing.T) {
+
+	client := NewClient()
+	meta, err := client.Load("https://mastodon.social/@benpate")
+
+	require.Nil(t, err)
+	spew.Dump(meta.Value())
+}
+
+func TestLoad_MastodonProfile_Redirect(t *testing.T) {
+
+	client := NewClient()
+	meta, err := client.Load("https://mastodon.social/users/benpate")
+
+	require.Nil(t, err)
+	spew.Dump(meta.Value())
+}
+
+func TestLoad_MastodonToot(t *testing.T) {
+
+	client := NewClient()
+	meta, err := client.Load("https://mastodon.social/@benpate/109596019301374311")
+
+	require.Nil(t, err)
+	spew.Dump(meta.Value())
+}
