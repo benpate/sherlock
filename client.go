@@ -52,5 +52,11 @@ func (client Client) Load(uri string) (streams.Document, error) {
 	}
 
 	// Populate and return the resulting document
-	return streams.NewDocument(result, streams.WithClient(client), streams.WithHeader(header)), nil
+	return streams.NewDocument(
+		result,
+		streams.WithClient(client),
+		streams.WithMeta("cache-control", header.Get("cache-control")),
+		streams.WithMeta("etag", header.Get("etag")),
+		streams.WithMeta("expires", header.Get("expires")),
+	), nil
 }

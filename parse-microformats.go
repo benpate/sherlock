@@ -7,6 +7,7 @@ import (
 
 	"github.com/benpate/hannibal/vocab"
 	"github.com/benpate/rosetta/convert"
+	"github.com/benpate/rosetta/html"
 	"github.com/benpate/rosetta/mapof"
 	"willnorris.com/go/microformats"
 )
@@ -71,6 +72,23 @@ func ParseMicroFormats(uri *url.URL, reader io.Reader, data mapof.Any) mapof.Any
 				if data.IsZeroValue(vocab.PropertyInReplyTo) {
 					if repostOf := convert.String(item.Properties["repost-of"]); repostOf != "" {
 						data[vocab.PropertyInReplyTo] = convert.String(repostOf)
+					}
+				}
+
+				if data.IsZeroValue((vocab.PropertyContent)) {
+					if contents := item.Properties["content"]; len(contents) > 0 {
+						for _, content := range contents {
+							if contentMap, ok := content.(map[string]string); ok {
+								if html := contentMap["html"]; html != "" {
+									data[vocab.PropertyContent] = html
+									break
+								}
+								if text := contentMap["value"]; text != "" {
+									data[vocab.PropertyContent] = html.FromText(text)
+									break
+								}
+							}
+						}
 					}
 				}
 
