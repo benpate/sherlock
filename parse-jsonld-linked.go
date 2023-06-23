@@ -7,14 +7,13 @@ import (
 )
 
 // ParseLinkedJSONLD searches the GoQuery document for links to ActivityPub-like documents.
-func ParseLinkedJSONLD(document *goquery.Document) (mapof.Any, bool) {
+func ParseLinkedJSONLD(document *goquery.Document, result mapof.Any) bool {
 	// TODO: LOW: Add support for JSON-LD metadata embedded in a <script> tag
 	// This may be a way to extract the JSON-LD metadata
 	// https://pkg.go.dev/github.com/daetal-us/getld#section-readme
 
 	selection := document.Find("link[rel=alternate]")
 
-	result := mapof.NewAny()
 	var success bool
 
 	selection.EachWithBreak(func(_ int, link *goquery.Selection) bool {
@@ -38,5 +37,5 @@ func ParseLinkedJSONLD(document *goquery.Document) (mapof.Any, bool) {
 		return true // continue
 	})
 
-	return result, success
+	return success
 }

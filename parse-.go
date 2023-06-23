@@ -13,6 +13,15 @@ import (
 // Parse searches for all of the metadata available in a document,
 // including OpenGraph, MicroFormats, and JSON-LD.
 func Parse(target string, body *bytes.Buffer) (mapof.Any, error) {
+	result := mapof.Any{}
+	err := ParseWithDefault(target, body, result)
+	return result, err
+}
+
+// ParseWithDefault searches for all the metadata available in a document,
+// including OpenGraph, MicroFormats, and JSON-LD.  Any metadata that is found is
+// added to the provided mapof.Any object.
+func ParseWithDefault(target string, body *bytes.Buffer, result mapof.Any) error {
 
 	const location = "sherlock.Parse"
 
@@ -20,7 +29,7 @@ func Parse(target string, body *bytes.Buffer) (mapof.Any, error) {
 	parsedURL, err := url.Parse(target)
 
 	if err != nil {
-		return nil, derp.Wrap(err, location, "Error parsing URL", target)
+		return derp.Wrap(err, location, "Error parsing URL", target)
 	}
 
 	// Search the returned HTML for JSON-LD
@@ -28,16 +37,14 @@ func Parse(target string, body *bytes.Buffer) (mapof.Any, error) {
 
 	if gqDoc, err := goquery.NewDocumentFromReader(bytes.NewReader(bodyBytes)); err == nil {
 
-		if result, ok := ParseEmbeddedJSONLD(gqDoc); ok {
-			return result, nil
+		if ParseEmbeddedJSONLD(gqDoc, result) {
+			return withContext(result)
 		}
 
-		if result, ok := ParseLinkedJSONLD(gqDoc); ok {
-			return result, nil
+		if ParseLinkedJSONLD(gqDoc, result) {
+			return withContext(result)
 		}
 	}
-
-	result := mapof.Any{}
 
 	// Try OpenGraph (via HTMLInfo)
 	result = ParseOpenGraph(target, bytes.NewReader(bodyBytes), result)
@@ -47,21 +54,21 @@ func Parse(target string, body *bytes.Buffer) (mapof.Any, error) {
 
 	// If we have SOMETHING to work with, then call it here.
 	if IsAdequite(result) {
-		return withContext(result), nil
+		return withContext(result)
 	}
 
 	// Otherwise, look for an oEmbed provider for this document
 	if ok := ParseOEmbed(bytes.NewReader(bodyBytes), result); ok {
-		return withContext(result), nil
+		return withContext(result)
 	}
 
 	// If the result is STILL EMPTY, then we have failed.
 	if len(result) == 0 {
-		return result, derp.NewNotFoundError("sherlock.Parse", "No metadata found in document")
+		return derp.NewNotFoundError("sherlock.Parse", "No metadata found in document")
 	}
 
 	// Yippe-Ki-Yay!
-	return result, nil
+	return withContext(result)
 }
 
 // IsAdequite returns TRUE if this JSON-LD document includes the minimum fields that we'd really like
@@ -101,7 +108,9 @@ func IsAdequite(value mapof.Any) bool {
 // withContext adds the standard ActivityStreams @context to the JSON-LD document.
 // If we're doing this, it's because we're assembling a "fake" JSON-LD document out of
 // other metadata (like OpenGraph, MicroFormats, oEmbed, etc).
-func withContext(value mapof.Any) mapof.Any {
-	value["@context"] = vocab.ContextTypeActivityStreams
-	return value
+func withContext(value mapof.Any) error {
+	if _, ok := value["@context"]; !ok {
+		value["@context"] = vocab.ContextTypeActivityStreams
+	}
+	return nil
 }
