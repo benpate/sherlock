@@ -27,6 +27,15 @@ func TestLoad_IndieWeb(t *testing.T) {
 	spew.Dump(meta.Value())
 }
 
+func TestLoad_NickSimpson(t *testing.T) {
+
+	client := NewClient()
+	meta, err := client.Load("https://nicksimson.com/posts/2022-never/")
+
+	require.Nil(t, err)
+	spew.Dump(meta.Value())
+}
+
 func TestLoad_OpenGraph(t *testing.T) {
 
 	client := NewClient()
