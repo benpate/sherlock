@@ -13,6 +13,7 @@ func ParseOpenGraph(url string, reader io.Reader, data mapof.Any) mapof.Any {
 
 	ogInfo := opengraph.NewOpenGraph()
 
+	// nolint: errcheck // derp.Report is ok to ignore
 	if err := ogInfo.ProcessHTML(reader); err != nil {
 		derp.Report(derp.Wrap(err, "urlmeta.loadOpenGraph", "Error parsing HTML", url))
 		return data
