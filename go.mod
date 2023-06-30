@@ -5,9 +5,9 @@ go 1.19
 require (
 	github.com/PuerkitoBio/goquery v1.8.1
 	github.com/benpate/derp v0.27.2
-	github.com/benpate/hannibal v0.4.2
+	github.com/benpate/hannibal v0.4.3
 	github.com/benpate/remote v0.10.4
-	github.com/benpate/rosetta v0.16.0
+	github.com/benpate/rosetta v0.16.2
 	github.com/davecgh/go-spew v1.1.1
 	github.com/dyatlov/go-opengraph/opengraph v0.0.0-20220524092352-606d7b1e5f8a
 	github.com/stretchr/testify v1.8.4
