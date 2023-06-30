@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"testing"
 
+	"github.com/benpate/rosetta/mapof"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/stretchr/testify/require"
 )
@@ -98,8 +99,9 @@ To use the Mastodon web application, please enable JavaScript. Alternatively, tr
 </html>
 `
 
-	jsonld, err := Parse("https://indieweb.org", bytes.NewBufferString(html))
+	json := mapof.NewAny()
+	err := Parse("https://indieweb.org", bytes.NewBufferString(html), json)
 
 	require.Nil(t, err)
-	spew.Dump(jsonld)
+	spew.Dump(json)
 }

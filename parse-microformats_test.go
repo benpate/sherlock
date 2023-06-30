@@ -47,7 +47,7 @@ func TestMicroformats_Files(t *testing.T) {
 		buffer.Write(fileBytes)
 
 		result := mapof.NewAny()
-		require.Nil(t, ParseWithDefault("", &buffer, result))
+		require.Nil(t, Parse("", &buffer, result))
 
 		spew.Dump("------------------------------------------------", fileEntry.Name(), result)
 		return
