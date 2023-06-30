@@ -19,7 +19,7 @@ func NewClient() Client {
 
 // Load tries to load a remote resource from the internet, and returns a streams.Document.
 // This method implements the hannibal/streams.Client interface.
-func (client Client) Load(uri string) (streams.Document, error) {
+func (client Client) Load(uri string, defaultValue map[string]any) (streams.Document, error) {
 
 	const location = "sherlock.Cient.Load"
 
@@ -45,15 +45,13 @@ func (client Client) Load(uri string) (streams.Document, error) {
 	}
 
 	// Try to parse the document as HTML
-	result, err := Parse(uri, &body)
-
-	if err != nil {
+	if err := Parse(uri, &body, defaultValue); err != nil {
 		return streams.NilDocument(), derp.Wrap(err, location, "Error parsing HTML page")
 	}
 
 	// Populate and return the resulting document
 	return streams.NewDocument(
-		result,
+		defaultValue,
 		streams.WithClient(client),
 		streams.WithMeta("cache-control", header.Get("cache-control")),
 		streams.WithMeta("etag", header.Get("etag")),

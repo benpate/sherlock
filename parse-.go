@@ -12,16 +12,8 @@ import (
 
 // Parse searches for all of the metadata available in a document,
 // including OpenGraph, MicroFormats, and JSON-LD.
-func Parse(target string, body *bytes.Buffer) (mapof.Any, error) {
-	result := mapof.Any{}
-	err := ParseWithDefault(target, body, result)
-	return result, err
-}
-
-// ParseWithDefault searches for all the metadata available in a document,
-// including OpenGraph, MicroFormats, and JSON-LD.  Any metadata that is found is
-// added to the provided mapof.Any object.
-func ParseWithDefault(target string, body *bytes.Buffer, result mapof.Any) error {
+// Any metadata that is found is added to the default result object.
+func Parse(target string, body *bytes.Buffer, result mapof.Any) error {
 
 	const location = "sherlock.Parse"
 
