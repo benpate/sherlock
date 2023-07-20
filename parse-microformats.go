@@ -46,7 +46,7 @@ func ParseMicroFormats(uri *url.URL, reader io.Reader, data mapof.Any) mapof.Any
 				if data.IsZeroValue(vocab.PropertyPublished) {
 					if publishedString := convert.String(item.Properties["published"]); publishedString != "" {
 						if timeValue, ok := convert.TimeOk(publishedString, time.Time{}); ok {
-							data[vocab.PropertyPublished] = timeValue.Format(time.RFC3339)
+							data[vocab.PropertyPublished] = timeValue.Unix()
 						}
 					}
 				}

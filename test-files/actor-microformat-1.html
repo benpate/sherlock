@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+
+    
+      <title>Home | James' Coffee Blog</title>
+    
+
+    <link rel="stylesheet" href="/assets/styles/styles.css" />
+    <link rel="stylesheet" href="/assets/styles/annotate.css" />
+
+    <link rel="webmention" href="https://webmention.io/jamesg.blog/webmention" />
+
+    <link href="mailto:jamesg@jamesg.blog" rel="me">
+
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="https://jamesg.blog/feeds/posts.xml">
+
+    <!-- This link specifies a manifest that states a search engine you can use on my site. -->
+    <link rel="search" type="application/opensearchdescription+xml" title="IndieWeb Search" href="/assets/opensearch.xml">
+
+    <!-- This link contains information that mobile devices use to render progressive web apps (PWAs).
+        PWAs make websites feel more native to some mobile devices when a web page is added to a device home screen
+        or saved as a device app. -->
+    <link rel="manifest" href="/assets/manifest.json">
+
+    
+      <meta name="description" content="Hello! Привіт! I'm James (/d͡ʒeɪmz/) (also capjamesg). My pronouns are he/him/his. I am a technical writer. I live in Scotland. This is my blog." />
+    
+    
+    
+      <meta property="og:image" content="https://screenshots.jamesg.blog/?url=https://jamesg.blog/">
+    
+
+    <link rel="icon" href="/favicon.ico" />
+
+    <link rel="apple-touch-icon-precomposed" href="/favicon.ico" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta rel="canonical" href="https://jamesg.blog/" />
+
+    <script type="text/javascript" src="/assets/js/indieconfig.js"></script>
+    <script type="text/javascript" src="/assets/js/webaction.js"></script>
+
+    <link rel="self" href="https://jamesg.blog/" />
+
+    <!-- This script lets someone link directly to a particular piece of text in a page.
+        See https://jamesg.blog/2022/10/11/fragmention-links/ for more information. -->
+    <script src="/assets/js/annotate.js"></script>
+
+    
+
+    <link href="https://vjs.zencdn.net/5.8.8/video-js.css" rel="stylesheet">
+
+    
+
+    <!-- The styles below show up when a user has dark mode enabled on my site.
+        The logic for when these styles are applied is in a script further down on the page. -->
+    <style id="darkmode" media="none">
+      html, .citation_box, details, summary, .social li {
+        background-color: #1F2937;
+      }
+      .highlight {
+        color: black;
+      }
+      .highlight a {
+        color: blue;
+        border-bottom: 2px dotted blue;
+      }
+      .highlight a:hover {
+        color: violet;
+      }
+      a {
+        color: lightgreen;
+        border-bottom: 2px dotted lightgreen;
+      }
+      a:hover {
+        color: #ccc;
+      }
+      h1, h2, h3 {
+        color: orange;
+      }
+      .social_interaction, .webmention {
+        background: none;
+      }
+      p, li, dt, dd, .indieweb_footer, input, label {
+        color: white;
+      }
+      input, textarea, code, pre, main {
+        background-color: #0c2548;
+        color: #ccc;
+      }
+    </style>
+    <link href="/assets/styles/prism.css" rel="stylesheet" />
+  </head>
+  <body>
+    <main>
+        <!-- Skip link so that screen reader users can skip narration of the navigation bar. -->
+      <a href="#main" class="accessibility_label">Skip to main content</a>
+    	<nav id="top_navigation">
+	<p><a href="https://jamesg.blog" rel="home author" class="p-author h-card">James' Coffee Blog <span aria-hidden="true" class="seasonal_emoji">☕</span></a></p>
+	<ul>
+		<li><a href="/indieweb/">IndieWeb</a></li>
+		<li><a href="/coffee/">Coffee</a></li>
+		<li><a href="https://jamesg.blog/category/moments-of-joy-series/">Moments of Joy</a></li>
+		<li><a href="/category/podcast/">Podcast</a></li>
+		<li><a href="/blogroll/">Blogroll</a></li>
+		<li><a href="#" onclick="document.querySelector('command-k').open(); return false;">Search</a></li>
+		<li><a href="/magic" aria-label="Go to a random page" style="border: none;">🪄</a></li>
+	</ul>
+</nav>
+      <!-- This code applies dark mode to a page if:
+            1. A visitor has dark mode enabled on their system and hasn't disabled dark mode using the button
+                in the site site navigation bar.
+            2. A visitor has enabled dark mode using the button in the site navigation bar.
+            Preferences for dark mode are saved across page views.
+            See https://github.com/capjamesg/darkmode.js for more info. -->
+      <script>
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.getElementById('darkmode').media = "all";
+        }
+
+        if (localStorage.getItem('darkmode') == "true") {
+          document.getElementById('darkmode').media = "all";
+        } else if (localStorage.getItem('darkmode') == "false") {
+          document.getElementById('darkmode').media = "none";
+        }
+
+        var navigation = document.getElementById("top_navigation");
+        var ul = navigation.getElementsByTagName("ul")[0];
+        
+        var li = document.createElement("li");
+        var dark_style = document.getElementById("darkmode");
+  
+        if (dark_style.media === "all") {
+          li.innerHTML = "<a onclick='toggleTheme();'>Light Mode</a>";
+        } else {
+          li.innerHTML = "<a onclick='toggleTheme();'>Dark Mode</a>";
+        }
+
+        var last_li = ul.getElementsByTagName("li")[ul.getElementsByTagName("li").length - 1];
+
+        ul.insertBefore(li, last_li);
+  
+        function toggleTheme() {
+          if (dark_style.media === "all") {
+            dark_style.media = "none";
+            li.innerHTML = "<a onclick='toggleTheme();'>Dark Mode</a>";
+            localStorage.setItem('darkmode', 'false');
+          } else {
+            dark_style.media = "all";
+            li.innerHTML = "<a onclick='toggleTheme();'>Light Mode</a>";
+            localStorage.setItem('darkmode', 'true');
+          }
+        }
+      </script>
+      <script>var hovercards = {}</script><div id="main">
+    	 <template>
+    <link rel="stylesheet" href="https://capjamesg.github.io/stories.js/stories.css">
+</template>
+
+<style>
+	.activeStory {
+		cursor: pointer;
+		border: 2px solid #1DA1F2;
+	}
+</style>
+
+<h1>James' Coffee Blog <span aria-hidden="true" class="seasonal_emoji">☕</span></h1>
+
+<div>
+	<section class="flex_item h-card p-author">
+		<div class="flex_left_home intro" style="flex: 0 30%;">
+			<img src="/assets/coffeeshop.jpg" class="u-photo main-photo u-logo" id="profile_image" alt="James sitting in a coffee shop, happily staring at a cup of coffee." width="100" height="100" />
+			
+			<p>Hello! Привіт! I'm <a href="https://jamesg.blog/" class="p-name u-url p-given-name">James</a> (<a rel="pronunciation" class="u-sound p-ipa" href="/assets/pronunciation.m4a">/d͡ʒeɪmz/</a>) (also <abbr class="p-nickname" title="[cap] = cappuccino, James G.">capjamesg</abbr>). My pronouns are <a href="https://en.pronouns.page/he"><span class="u-pronoun">he</span>/<span class="u-pronoun">him</span>/<span class="u-pronoun">his</span></a>. I am a technical writer. I live in <span class="p-country-name">Scotland</span>. This is my blog.</p>
+
+			<p class="p-note">On this blog, I write about the open web and coffee. Every two weeks, I co-host the <a href="https://hwclondon.co.uk">Europe Homebrew Website Club</a>.</p>
+
+			<p>My email address is <a href="mailto:readers@jamesg.blog" class="u-email">readers@jamesg.blog</a>.</p>
+
+			<p>I also contribute to the <a href="https://indieweb.org/User:Jamesg.blog" rel="me">IndieWeb</a> wiki. I have open sourced some code on <a href="https://github.com/capjamesg" rel="me">GitHub</a>. <a href="/currently/">Read my Currently page</a>.</p>
+
+			<p id="funny_story"></p>
+
+			
+            <p><a href="/category/post/">624 Posts</a> <embed class="light_mode" src="/assets/sparkline.svg?0,1,0,8,6,2,0,10,3,2,3,4,4,1,0,0,0,0,0,3,0,0,0,0,2,0,3,3,2,3,0,1,0,0,0,0,0,0,0,1,0,2,1,0,0,0,0,9,0,1,0,0,1,0,2,0,1,0,0,0,0,1,0,0,0,3,3,1,1,0,5,2,0,0,0,1,1,0,1,0,1,0,2,2,0,0,0,0,0,2"
+            class="sparkline" width=100 height=15 /></p>
+            <p><a href="https://indieweb.org/User:Jamesg.blog">IndieWeb Wiki Contributions</a> <embed class="light_mode" src="https://sparkline.jamesg.blog/?username=Jamesg.blog&api_url=https://indieweb.org/wiki/api.php&only_image=true&days=30"
+            class="sparkline" width=100 height=15 /></p>
+		</div>
+		<div class="flex_right_home h-feed hfeed">
+			<ul class="blog">
+			
+				
+<li style=" margin-bottom: 15px;" class="social_interaction h-entry">
+    
+        <h3 class="p-name"><a href="/2023/07/08/podcast/" class="u-url">Podcast #3: Bubbles, programming languages, use-case driven development</a></h3>
+        <p>Published on <time class="dt-published" datetime="2023-07-08 00:00:00">July 08, 2023</time> under the <a href="/category/podcast/" class="p-category">Podcast</a> category.</p>
+        <div class="p-summary e-content" style="max-width: initial;"><p>A curious mix of topics indeed! Join me for my latest podcast episode in which I discuss, among other things, bubbles, programming languages, and use-case driven development. I also talk about <a href="https://rubenerd.com">Ruben's blog</a>, a source of inspiration that encouraged me to expand the topics about which I write on my blog. In the episode, I also mention the <a href="https://onsug.com">Overnightscape Underground</a>, to which episodes of this podcast are now syndicated. I hope you enjoy the episode!</p></div>
+        
+</li>
+
+			
+				
+<li style=" margin-bottom: 15px;" class="social_interaction h-entry">
+    
+        <h3 class="p-name"><a href="/2023/07/08/use-case-driven-standards-dev/" class="u-url">Use case-driven standards development</a></h3>
+        <p>Published on <time class="dt-published" datetime="2023-07-08 00:00:00">July 08, 2023</time> under the <a href="/category/web/" class="p-category">Web</a> category.</p>
+        <div class="p-summary e-content" style="max-width: initial;"><p>XKCD encapsulates a situation in standards development that we all want to avoid well in their epitome <em>Standards</em> comic:</p></div>
+        
+</li>
+
+			
+				
+<li style=" margin-bottom: 15px;" class="social_interaction h-entry">
+    
+        <h3 class="p-name"><a href="/2023/07/02/how-to-delete-a-webmention/" class="u-url">How to Delete a Webmention</a></h3>
+        <p>Published on <time class="dt-published" datetime="2023-07-02 00:00:00">July 02, 2023</time> under the <a href="/category/indieweb/" class="p-category">IndieWeb</a> category.</p>
+        <div class="p-summary e-content" style="max-width: initial;"><p>At a <a href="https://events.indieweb.org/2023/07/galactic-bonus-homebrew-website-club-fx6CzfoWMDYL">bonus edition of Homebrew Website Club</a> this weekend, we discussed how to delete a Webmention. We talked about both how to and how not to delete a <a href="https://indieweb.org/Webmention">Webmention</a>, and the ins-and-outs of implementations between different servers. I thought I should write about this on my blog just in case anyone else would find the information helpful.</p></div>
+        
+</li>
+
+			
+				
+<li style=" margin-bottom: 15px;" class="social_interaction h-entry">
+    
+        <h3 class="p-name"><a href="/2023/07/02/podcast/" class="u-url">Podcast #2: Taylor Swift, dreams for the web, tea</a></h3>
+        <p>Published on <time class="dt-published" datetime="2023-07-02 00:00:00">July 02, 2023</time> under the <a href="/category/podcast/" class="p-category">Podcast</a> category.</p>
+        <div class="p-summary e-content" style="max-width: initial;"><p>While sipping on a cup of black tea this quiet Sunday afternoon, I recorded the second episode of my podcast. In the episode, I discuss a game I have been working on this week to compare one's voice to Taylor Swift's voice, rambles on my dreams for the web, greetings, and tea. This episode is more technical than I thought. Next time I shall try to come prepared with more non-technical topics!</p></div>
+        
+</li>
+
+			
+				
+<li style=" margin-bottom: 15px;" class="social_interaction h-entry">
+    
+        <h3 class="p-name"><a href="/2023/07/01/indieweb-carnival/" class="u-url">IndieWeb Carnival July 2023: Moments of Joy</a></h3>
+        <p>Published on <time class="dt-published" datetime="2023-07-01 00:00:00">July 01, 2023</time> under the <a href="/category/indieweb/" class="p-category">IndieWeb</a> category.</p>
+        <div class="p-summary e-content" style="max-width: initial;"><p>Sara started the <a href="https://sarajaksa.eu/2023/06/carnival-of-indieweb-june-2023-edition-indieweb-and-cooking/">IndieWeb Carnival last month</a>, a fun challenge that invites you to post a blog post on a topic selected by a rotating set of participants each month. Sara started us off with the topic "IndieWeb and Cooking", and shared a few questions to help think through the challenge. I enjoyed the invitation to write about cooking: I got out of my comfort zone and wrote about something new.</p></div>
+        
+</li>
+
+			
+			</ul>
+			<p><a href="/category/post/">View all blog posts</a>
+		</div>
+	</section>
+</div>
+
+<style>
+	#main ul {
+		margin-left: 10px;
+	}
+	video {
+		height: 300px;
+		width: 100%;
+	}
+	.on-air {
+		background: #6BAB54;
+		color: white;
+		border-bottom: none;
+		padding: 2px;
+		border-radius: 3px;
+	}
+	.pinned h3 {
+		margin: 0;
+	}
+	@media screen and (max-width: 750px) {
+		.flex_item {
+			display: block;
+		}
+		#main ul {
+			padding: 0;
+			margin-left: 0;
+		}
+		.social_interaction, .intro {
+			border-bottom: 1px solid lightgray;
+			border-radius: 0;
+			border-color: lightgrey !important;
+		}
+		.pinned h3 {
+			margin-bottom: 20px;
+		}
+	}
+</style>
+
+<script src="https://vjs.zencdn.net/5.8.8/video.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/3.6.12/videojs-contrib-hls.js"></script>
+
+<script>
+	var funny_facts = ["Perpetually curious.", "Spilling crumbly pastries since the 2000s.", "Sarcasm enthusiast.", "Melodica player.", "Happy February 2nd!", "What is coffee multiplied by coffee?", "Analytic and algebraic topology of locally Euclidean metrization of infinitely differentiable Riemannian manifold.", "Taylor Swift superfan.", "Amateur fruit connoisseur.", "It's me. Hi. I'm the problem it's me."];
+
+	var random_fact = funny_facts[Math.floor(Math.random() * funny_facts.length)];
+
+	document.getElementById("funny_story").innerHTML = random_fact;
+
+	function isOnAirLiveStream () {
+		var fetch_data = fetch("https://stream.jamesg.blog/hls/live.m3u8");
+
+		fetch_data.then(function(response) {
+			if (response.ok) {
+				document.getElementById("funny_story").innerHTML = `
+
+				<h2>Live Stream <span role="img" aria-label="camera">📷</span></h2>
+						<video id="video-player" width="600" height="340" class="video-js vjs-default-skin" controls>
+							<source src="http://stream.jamesg.blog/hls/live.m3u8" type="application/x-mpegURL">
+					</video>
+				`;
+				var player = videojs('video-player');
+				player.play();
+				
+		}});
+	}
+
+	isOnAirLiveStream();
+</script>
+
+<script>
+	var images = [
+			["https://jamesg.blog/assets/paintedladies.jpeg", ""],
+			["https://jamesg.blog/assets/sfbay.jpg", ""]
+	];
+</script>
+<html-story></html-story>
+
+<script src="https://capjamesg.github.io/stories.js/stories.js"></script>
+
+<script>
+var htmlStory = document.querySelector('html-story');
+
+				htmlStory.images = images;
+if (images.length > 0) {
+		var profile_image = document.getElementById("profile_image");
+		profile_image.addEventListener("click", function () {
+			document.querySelector('html-story').show();
+		});
+		profile_image.classList.add("activeStory");
+	}
+</script>
+      </div>
+      <p class="accessibility_label"><a href="#main">Go Back to the Top</a></p>
+      <footer>
+	<ul>
+		<li><a href="/search/?time_machine=true">Time Machine</a></li>
+		<li><a href="/coffee/maps/">Coffee Maps</a></li>
+		<li><a href="wiki.jamesg.blog/Projects">Projects</a></li>
+		<li><a href="/talks/">Talks</a></li>
+		<li><a href="/sitemap/">Sitemap</a></li>
+		<li><a href="/archive/">Archive</a></li>
+		<li><a href="https://capjamesg.github.io/index/">Index</a></li>
+		<li><a href="/privacy/" rel="privacy-policy">Privacy</a></li>
+		<li><a href="https://jamesg.coffee">Bookmarks</a></li>
+		<li><a href="/feeds/posts.xml">RSS</a></li>
+	</ul>
+	<div class="indieweb_footer">
+		<a href="https://indieweb.org/Webmention" class="button-link"><img src="/assets/webmention_button.webp" alt="Webmention logo indicating that you can send a webmention to this blog" width="80" height="15" /></a>
+		<a href="https://indieweb.org" class="button-link"><img src="/assets/indieweb_button.webp" alt="IndieWeb logo" width="80" height="15" /></a><br />
+		<a href="https://microformats.org" class="button-link"><img src="/assets/microformats_button.webp" alt="Microformats logo" width="80" height="15" /></a><br />
+		<a href="https://xn--sr8hvo.ws/%F0%9F%98%85%F0%9F%8F%BD%E3%8A%97%EF%B8%8F/previous">←</a>
+		  IndieWeb Webring
+		<a href="https://xn--sr8hvo.ws/%F0%9F%98%85%F0%9F%8F%BD%E3%8A%97%EF%B8%8F/next">→</a>
+		<!-- I use lights.png in my Christmas theme. It takes me a while to re-find the lights every year so I thought I'd leave them commented here. -->
+		<!-- <img src="/assets/lights.png" alt="" /> -->
+	</div>
+</footer>
+
+<script src="/assets/webmention.min.js" async></script>
+<script src="/assets/js/seasonal.js"></script>
+      
+    </main>
+    <template>
+        <style>
+            * {
+                box-sizing: border-box;
+                font-family: sans-serif;
+            }
+            input, input[type="search"] {
+                padding: 0.5em;
+                border: 1px solid #ccc;
+                border-radius: 0.25em;
+                font-size: 1em;
+                width: 100%;
+            }
+            button, input[type="submit"] {
+                background-color: #EEBAB2;
+                color: black;
+                border: none;
+                cursor: pointer;
+                width: 100%;
+                padding: 10px;
+            }
+            menu {
+                margin: 0;
+                padding: 0;
+            }
+            ul {
+                padding: 0;
+            }
+            ul li {
+                list-style: none;
+                padding: 1em;
+                border-bottom: 1px solid #ccc;
+            }
+            ul li:hover {
+                background-color: #eee;
+            }
+            ul li:last-child {
+                border-bottom: none;
+            }
+            a {
+                text-decoration: none;
+                color: black;
+            }
+            input {
+                box-sizing: border-box;
+            }
+            #command-k {
+                max-width: 30em;
+                width: 30em !important;
+                overflow: hidden;
+            }
+            #command-k-search-results {
+                max-height: 200px;
+                overflow-y: scroll;
+                padding: 0;
+                margin-top: 20px;
+                margin-bottom: 20px;
+                list-style: none;
+                border-bottom: 1px solid #ccc;
+            }
+            #command-k-search-results li:hover {
+                background-color: #eee;
+            }
+            .category {
+                background-color: #ccc;
+                margin-left: 0.5em;
+                border-radius: 0.25em;
+                font-size: 0.8em;
+                padding: 3px;
+            }
+        </style>
+    </template>
+    <command-k></command-k>
+    <script src="/assets/js/commandk.js"></script>
+    <script>
+        function searchFunction (searchField, shadowRoot) {
+            fetch(`https://jamesg.blog/qs/search?q=${searchField.value}`)
+            .then((response) => response.json())
+            .then((data) => {
+                shadowRoot.querySelector('#command-k-search-results').innerHTML = '';
+                data.forEach((result) => {
+                    const li = document.createElement('li');
+                    const a = document.createElement('a');
+                    const category = document.createElement('span');
+                    a.href = result.url;
+                    category.innerText = result.category;
+                    a.innerText = result.title;
+                    li.appendChild(a);
+                    category.classList.add('category');
+                    li.appendChild(category);
+                    shadowRoot.querySelector('#command-k-search-results').appendChild(li);
+                    shadowRoot.querySelector('#command-k-search-results').appendChild(li);
+                });
+            }).catch((error) => {
+                console.log(error);
+            });
+        }
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'k' && e.metaKey) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            if (e.key === 'k' && e.ctrlKey) {
+                e.preventDefault();
+                document.querySelector('command-k').open();
+            }
+        });
+    </script>
+    
+  </body>
+</html>

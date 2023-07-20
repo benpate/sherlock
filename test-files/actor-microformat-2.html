@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title lang="tr" style="text-transform:uppercase">Tantek &#xC7;elik</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="self" href="https://tantek.com/"/>
+<link rel="icon" href="logo.jpg"/>
+<link rel="apple-touch-icon-precomposed" href="logo.jpg"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<link rel="webmention" href="https://webmention.io/tantek.com/webmention"/>
+<link rel="hub" href="https://pubsubhubbub.superfeedr.com/"/>
+<link rel="openid.delegate" href="https://tantek.com/"/>
+<link rel="openid.server" href="https://indieauth.com/openid"/>
+<link rel="authorization_endpoint" href="https://indieauth.com/auth"/>
+<link rel="token_endpoint" href="https://tokens.indieauth.com/token"/>
+<link rel="microsub" href="https://aperture.p3k.io/microsub/277"/>
+<link rel="alternate" type="text/mf2+html" href="#updates"/>
+<link rel="alternate" type="application/atom+xml" href="updates.atom"/>
+<link rel="serviceworker" href="serviceworker.js"/>
+<style type="text/css">/**/ 
+/* HTML5+CSS work in progress. Copy paste AT YOUR OWN RISK! */
+
+@import "2023/simple.css";
+h2 { font-size:1em; }
+
+body { 
+  margin:auto;
+  padding:1.6em;
+  max-width:940px;
+}
+
+iframe { max-width:100%; }
+abbr { text-decoration:none }
+
+.header {
+ border-bottom:solid 1px #666;
+ margin-top:0;
+ margin-bottom:1em;
+}
+
+.header h1 {
+  margin:0;
+  padding:5px 0 0;
+  font-size:3em;
+  line-height:1.3;
+  font-weight:bold;
+  white-space:nowrap;
+}
+.header h2 {
+  font-size:1.5em;
+  font-weight:normal;
+  line-height:1em;
+  min-width:20em;
+  min-height:3em;
+  margin:0;
+}
+
+.aside dt, .aside dd {margin:0;padding:0}
+.aside dt { margin-top:.77em; color:#666; }
+.aside dd { color:#000}
+.aside img { max-width:100% }
+
+form.search {
+  clear: right;
+  text-align: right;
+  margin-bottom: 1em;
+  white-space: nowrap; 
+  font-size: 1.3em;
+}
+
+.stream>ol { margin:0; padding:0; }
+
+/* div.stream li.h-entry .figure { margin:0 -1em; } */
+
+span.see-more { display:inline; }
+
+.interact img,
+.p-org.h-card img,
+.p-category.h-card img { height:1.4em; vertical-align:-.3em }
+
+@media screen and (min-width:40em) {
+/* progressive enhance wider screens */
+
+span.see-more { display:none; }
+
+body { padding:2em; }
+
+.header { height:90px; margin-top:1.3em }
+
+form.search { 
+  margin-top: -3.9em; 
+  width: 34%;
+  float: right; 
+}
+
+.stream {
+  clear:left;
+  float:left;
+  width:62%;
+  margin-right:4%;
+}
+
+.stream>ol { margin-right:3em; }
+
+.hentry ol, .hentry ul { margin-left:30px; }
+
+.aside {
+  float:left;
+  width:33%;
+}
+
+.footer .section {
+  float:left;
+  width:30%;
+  margin-right:3%;
+}
+
+div.stream li.h-entry .figure { margin:0; }
+
+.aside .recent-photos {
+  margin-left:0; margin-right:0;
+}
+
+.aside .recent-photos h2 {
+  margin-left:0;
+}
+
+} /* end wider screen enhancements */
+
+
+.photo { 
+  width:73px; 
+  float:left;
+  margin:0 20px 0 0;
+}
+
+form.search input[type=search] { width:62%; }
+
+form.search input, form.search button {
+  font-size:1em;
+  height:1.7em;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin:0;
+  vertical-align:bottom;
+}
+
+.stream>ol { list-style:none; }
+
+.aside h2,.footer h2 {
+  font-size: 1.3em;
+  text-transform:uppercase;
+  line-height:1.25;  
+  margin:0 0 1em;
+}
+
+.aside .section { margin-top:2em; }
+.aside .section.hello { margin-top:0; }
+
+.aside .section h2 {  margin-bottom:0.5em;
+}
+
+.aside p,.aside li,.aside dl,.footer p,.footer li {
+  font-size:1.3em;
+  line-height:1.54;
+  margin:0;
+  color: #AAA; /* #666; */
+  list-style:none;
+}
+/*.hello p { color:#000; }*/
+.elsewhere img {
+  vertical-align:bottom;
+  padding-bottom:.2em;
+}
+.aside h2 {
+  font-size:1.5em;
+  line-height:1.43;
+  font-weight:bold;
+}
+
+.aside .recent-photos {
+  margin-left:-1.5em;
+  margin-right:-1.5em; 
+  padding:0;
+}
+
+.aside .recent-photos h2 {
+  margin-left:1em;
+}
+
+div.footer {
+  margin-left:1em;
+  clear:both;
+  margin-top:1em;
+  padding-top:5em;
+}
+.footer address { white-space:nowrap; }
+
+.footer p { margin-top:1em; }
+.footer .section li { list-style:disc inside; }
+
+address {
+  font-style:normal;
+  text-align:center;
+  clear:both;
+  margin:1em 5%;
+  padding:3em;
+}
+
+ul.nav,.nav li,ul.offsite { list-style:none; }
+ul.nav { float:right; margin-right: 5%; }
+ul.offsite,.offsite li,.nav li { list-style:inline; display:inline; }
+
+#a:link { color: #D0D044;  /* color:#2240C0;*/ }
+#a:link:hover { color:#F0F088; /* color:#22B040;*/ }
+#a:visited { color:#66D; }
+#a:visited:hover { color:#99F; /* color:#88D0F0;*/ /* color:#118020; */ }
+
+/* events */
+#events li.vevent { list-style:none;margin-top:1em; }
+#events abbr.location {
+ display:block; text-align:center;
+ text-transform:uppercase;
+ font-weight:bold; font-size:2em; word-spacing:-.1em; font-size:1.5em;
+}
+#events li.vevent a { 
+  display:block; width:167px; text-align:center; color:inherit;
+  border:2px solid; padding:2px 1px 0 1px; 
+}
+#events li.vevent object,.vevent img { max-width:160px }
+#events li.vevent .with { display:block }
+.subhead { display:block }
+.html5 { 
+  display:block; padding-top:3px;
+  color:#3C790A;
+  font-family: Helvetica, sans-serif; font-weight: 900; 
+  font-size: 27px; line-height:.7em; 
+}
+.html5 span { 
+  display:block;
+  font-size:66%; line-height:1em; text-transform:capitalize;
+}
+#events .vevent a:visited:hover { color:#66F; }
+#events .vevent a:link:hover { color:#33F; }
+input,button { font-size:1em; }
+button { margin: 0 0.5em 0 0; padding:0 0.5em; }
+kbd { color: #000 }
+/**/</style>
+</head>
+<body class="h-card vcard">
+<header><div class="header">
+<img class="photo u-photo" src="photo.jpg" alt=""/><a class="u-url u-uid" rel="author" href=""></a>
+<div class="hgroup" style="margin-bottom:-1em">
+<h1 class="p-name fn" lang="tr">Tantek &#xC7;elik</h1>
+<h2 class="p-role role">
+<span class="p-category category">inventor</span>, 
+<span class="p-category category">connector</span>, 
+<span class="p-category category">writer</span>, 
+<span class="p-category category">runner</span>, 
+<span class="p-category category">scientist</span><span class="see-more">, <a href="#hello">more</a>.</span>
+</h2>
+</div>
+<span class="see-more" style="float:left; max-width:6em; font-size:2.4em; margin:0; padding:0; text-align:center">
+<a href="//tantek.com/contact"><abbr title="Message Tantek">&#128172;</abbr></a>
+<a rel="payment" href="//tantek.com/tip/1" title="Tip: Did you read something of value here and want to encourage more posts like that? Feel free to tip a small amount and mention which topics you enjoyed! (Just please avoid specific products or services. Thanks! -t)">&#128079; </a>
+</span>
+<form class="search" action="https://duckduckgo.com/html/" method="get"><div>
+<input type="hidden" name="type" value="list"/>
+<input type="search" value="site:tantek.com " name="q" style="max-width:10.5em"/>
+<button type="submit">Search</button>
+</div></form>
+</div></header>
+
+<!-- h-feed filled in dynamically -->
+<div class="h-feed section stream" id="updates">
+<div class="pinned"></div>
+<ol>
+<li class="h-entry hentry as-note">
+<p class="article"><span class="p-name entry-title e-content entry-content">June #<span class="p-category auto-tag">trailRunner</span> #<span class="p-category auto-tag">ultraRunner</span> weekends<br class="auto-break"/>3 finished #<span class="p-category auto-tag">MUC50k</span> <a class="auto-link h-cassis-username" href="https://twitter.com/InsideTrail">@InsideTrail</a> #<span class="p-category auto-tag">RodeoBeach</span> 9:38:28, my 3rd #<span class="p-category auto-tag">50k</span> #<span class="p-category auto-tag">ultraMarathon</span> #<span class="p-category auto-tag">trailRace</span><br class="auto-break"/>11 volunteered <a class="auto-link h-cassis-username" href="https://twitter.com/TheDipsea">@TheDipsea</a> #<span class="p-category auto-tag">DipseaRace</span> at #<span class="p-category auto-tag">MuirWoods</span><br class="auto-break"/>18 finished <a class="auto-link h-cassis-username" href="https://twitter.com/BrokenArrowCA">@BrokenArrowCA</a> #<span class="p-category auto-tag">BA23k</span> 5:22:54 #<span class="p-category auto-tag">RingDasBell</span>, my 1st #<span class="p-category auto-tag">skyRace</span><br class="auto-break"/>24-25 crewed pal <a class="auto-link h-cassis-username" href="https://twitter.com/davidtlam">@davidtlam</a> <a class="auto-link" href="https://wser.org">@wser.org</a> 100mi to a successful #<span class="p-category auto-tag">WS100</span> finish!<br class="auto-break"/><br class="auto-break"/>#<span class="p-category auto-tag">runner</span> #<span class="p-category auto-tag">running</span> #<span class="p-category auto-tag">trailRunning</span><br class="auto-break"/><br class="auto-break"/>Heart &amp; mind full, body pushed to its limits, capturing my experiences in a few write-ups.</span></p>
+<span class="info footer"><a href="/2023/178/t1/june-trailrunner-ultrarunner" class="dt-published published dt-updated updated u-url u-uid"><time class="value" datetime="22:10-0700">22:10</time> on <time class="value">2023-06-27</time></a></span>
+</li>
+<li class="h-entry hentry as-note">
+<p class="article"><span class="p-name entry-title e-content entry-content">Two anniversaries today: microformats (18y) and POSSE (11y).<br class="auto-break"/><br class="auto-break"/>Happy 18 years of <a class="auto-link" href="https://microformats.org/">https://microformats.org/</a> #<span class="p-category auto-tag">microformats</span>!<br class="auto-break"/><br class="auto-break"/>Most prominent this past year (again) has been the littlest #<span class="p-category auto-tag">microformat</span> that could:<br class="auto-break"/><br class="auto-break"/>rel=me &#x2014; AKA #<span class="p-category auto-tag">relMe</span>, now effectively the standard for #<span class="p-category auto-tag">distributed</span> #<span class="p-category auto-tag">verification</span> on the web:<br class="auto-break"/>* <a class="auto-link" href="https://microformats.org/wiki/rel-me">https://microformats.org/wiki/rel-me</a> (originally introduced in 2004<a id="t5RU1_ref-1" href="#t5RU1_note-1">&sup1;</a>)<br class="auto-break"/><br class="auto-break"/>with support added in the past year for:<br class="auto-break"/>* #<span class="p-category auto-tag">GitHub</span> multiple rel-me links<a id="t5RU1_ref-2" href="#t5RU1_note-2">&sup2;</a><br class="auto-break"/>* #<span class="p-category auto-tag">Wikipedia</span> User page rel-me link<a id="t5RU1_ref-3" href="#t5RU1_note-3">&sup3;</a><br class="auto-break"/><br class="auto-break"/><a class="auto-link figure" href="https://indieweb.org/POSSE"><img class="auto-embed" alt="Figure out how you want to fit into the network." src="https://indieweb.org/images/6/6a/fit-into-the-network.png"/></a><br class="auto-break"/>#<span class="p-category auto-tag">POSSE</span>, short for &ldquo;Publish (on your) Own Site, Syndicate Elsewhere&rdquo;, as a term of use is now 11 years old<a id="t5RU1_ref-3" href="#t5RU1_note-3">&sup3;</a>, which is surprising since when it was conceived, the #<span class="p-category auto-tag">IndieWeb</span> community was in a period of very rapid innovation &amp; iteration. <br class="auto-break"/><br class="auto-break"/>POSSE itself replaced a previous term, "POSE", short for &ldquo;Publish Once Syndicate Everywhere&rdquo;, which had only been around a year or two at most (I&rsquo;m still looking for the first use of the "POSE" abbreviation for that meaning). <br class="auto-break"/><br class="auto-break"/>Since &ldquo;publish once&rdquo; was vague enough to include practices of publishing once on a social media silo, or in someone else&rsquo;s garage<a id="t5RU1_ref-5" href="#t5RU1_note-5">&#8309;</a>, we needed to clearly express the requirement to use your own site instead, first, as the source of your truth. Cross-posting to other sites &amp; channels, is a second, optional step, ideally with a permalink linking back to your original post so viewers can easily discover and use your site.<br class="auto-break"/><br class="auto-break"/>That distinction was enough for POSSE to express a strong creator-owned-first publishing model that resonated and grew. Every time a silo shutdown<a id="t5RU1_ref-6" href="#t5RU1_note-6">&#8310;</a> at the end of its incredible journey<a id="t5RU1_ref-7" href="#t5RU1_note-7">&#8311;</a>, removing posts &amp; permalinks from the web, POSSE was there for people who were tired of losing their data, permalinks, &amp; profiles, and wanted an alternative.<br class="auto-break"/><br class="auto-break"/><br class="auto-break"/>This is day 43 of #<span class="p-category auto-tag">100DaysOfIndieWeb</span>. #<span class="p-category auto-tag">100Days</span><br class="auto-break"/><br class="auto-break"/>&larr; Day 42: <a class="auto-link" href="https://tantek.com/2023/160/t1/mastodon-activitypub-follow-form-bridgy-fed">https://tantek.com/2023/160/t1/mastodon-activitypub-follow-form-bridgy-fed</a><br class="auto-break"/>&rarr; &#128302;<br class="auto-break"/><br class="auto-break"/><br class="auto-break"/>Glossary<br class="auto-break"/><br class="auto-break"/>permalink<br class="auto-break"/>&#xA0; <a class="auto-link" href="https://indieweb.org/permalink">https://indieweb.org/permalink</a><br class="auto-break"/>POSE<br class="auto-break"/>&#xA0; <a class="auto-link" href="https://indieweb.org/POSE">https://indieweb.org/POSE</a><br class="auto-break"/>POSSE<br class="auto-break"/>&#xA0; <a class="auto-link" href="https://indieweb.org/POSSE">https://indieweb.org/POSSE</a><br class="auto-break"/>silo<br class="auto-break"/>&#xA0; <a class="auto-link" href="https://indieweb.org/silo">https://indieweb.org/silo</a><br class="auto-break"/><br class="auto-break"/>References<br class="auto-break"/><br class="auto-break"/><a id="t5RU1_note-1" href="#t5RU1_ref-1">&sup1;</a> <a class="auto-link" href="https://gmpg.org/xfn/11#me">https://gmpg.org/xfn/11#me</a><br class="auto-break"/><a id="t5RU1_note-2" href="#t5RU1_ref-2">&sup2;</a> <a class="auto-link" href="https://tantek.com/2023/032/t1/years-relmeauth-replace-openid">https://tantek.com/2023/032/t1/years-relmeauth-replace-openid</a><br class="auto-break"/><a id="t5RU1_note-3" href="#t5RU1_ref-3">&sup3;</a> <a class="auto-link" href="https://tantek.com/2023/139/t1/wikipedia-supports-indieweb-rel-me">https://tantek.com/2023/139/t1/wikipedia-supports-indieweb-rel-me</a><br class="auto-break"/><a id="t5RU1_note-4" href="#t5RU1_ref-4">&#8308;</a> <a class="auto-link" href="https://tantek.com/2012/173/t1/posse-core-indieweb-approach">https://tantek.com/2012/173/t1/posse-core-indieweb-approach</a><br class="auto-break"/><a id="t5RU1_note-5" href="#t5RU1_ref-5">&#8309;</a> <a class="auto-link" href="https://tantek.com/2023/001/t1/own-your-notes">https://tantek.com/2023/001/t1/own-your-notes</a><br class="auto-break"/><a id="t5RU1_note-6" href="#t5RU1_ref-6">&#8310;</a> <a class="auto-link" href="https://indieweb.org/site-deaths">https://indieweb.org/site-deaths</a><br class="auto-break"/><a id="t5RU1_note-7" href="#t5RU1_ref-7">&#8311;</a> <a class="auto-link" href="https://ourincrediblejourney.tumblr.com/">https://ourincrediblejourney.tumblr.com/</a></span></p>
+<span class="info footer"><a href="/2023/171/t1/anniversaries-microformats-posse" class="dt-published published dt-updated updated u-url u-uid"><time class="value" datetime="16:52-0700">16:52</time> on <time class="value">2023-06-20</time></a></span>
+</li>
+<li class="h-entry hentry as-note">
+<p class="article"><span class="reply-context" style="display:block">&#8627; In reply to <a href="https://hachyderm.io/@renegadejade/110553942884474761" class="u-in-reply-to h-cite">hachyderm.io user renegadejade&rsquo;s post</a></span> <span class="p-name entry-title e-content entry-content"><a class="auto-link" href="https://hachyderm.io/@renegadejade">@renegadejade@hachyderm.io</a> in short, yes, it is a thing! <br class="auto-break"/><br class="auto-break"/>Lots of great replies to your post already about directly using #<span class="p-category auto-tag">WithKnown</span> or #<span class="p-category auto-tag">WordPress</span> with the #<span class="p-category auto-tag">ActivityPub</span> plugin, or cross-posting from/via GitHub.<br class="auto-break"/><br class="auto-break"/>Another #<span class="p-category auto-tag">IndieWeb</span> compatible option is Bridgy Fed (<a class="auto-link" href="https://fed.brid.gy/">https://fed.brid.gy/</a>) which can proxy posts, replies, likes etc. directly from a blog to #<span class="p-category auto-tag">fediverse</span> / ActivityPub (no #<span class="p-category auto-tag">Mastodon</span> account needed). Details: <a class="auto-link" href="https://fed.brid.gy/docs">https://fed.brid.gy/docs</a><br class="auto-break"/><br class="auto-break"/>This very reply to your toot is from my own domain, and its #<span class="p-category auto-tag">hashtags</span> are also discoverable via fediverse hashtags.<br class="auto-break"/><br class="auto-break"/>I set up #<span class="p-category auto-tag">BridgyFed</span> last October<a id="t5RT1_ref-1" href="#t5RT1_note-1">&sup1;</a> along with the broader #<span class="p-category auto-tag">TwitterMigration</span> I saw happening in my circles, and am quite happy with it. Posted more about my experience after a few months<a id="t5RT1_ref-2" href="#t5RT1_note-2">&sup2;</a>, and using BridgyFed to add a fediverse follow form to my homepage<a id="t5RT1_ref-3" href="#t5RT1_note-3">&sup3;</a>.<br class="auto-break"/><br class="auto-break"/>Whether WordPress, Known, or with another blog setup &amp; Bridgy Fed, pick what works best for you and your setup. There&rsquo;s #<span class="p-category auto-tag">IndieWeb</span> folks using each, feel free to drop by <a class="auto-link" href="https://chat.indieweb.org/dev">https://chat.indieweb.org/dev</a> to chat more about any IndieWeb/fediverse option!<br class="auto-break"/><br class="auto-break"/><a id="t5RT1_note-1" href="#t5RT1_ref-1">&sup1;</a> <a class="auto-link" href="https://tantek.com/2022/301/t1/twittermigration-bridgyfed-mastodon-indieweb">https://tantek.com/2022/301/t1/twittermigration-bridgyfed-mastodon-indieweb</a><br class="auto-break"/><a id="t5RT1_note-2" href="#t5RT1_ref-2">&sup2;</a> <a class="auto-link" href="https://tantek.com/2023/008/t7/bridgy-indieweb-posse-backfeed">https://tantek.com/2023/008/t7/bridgy-indieweb-posse-backfeed</a><br class="auto-break"/><a id="t5RT1_note-3" href="#t5RT1_ref-3">&sup3;</a> <a class="auto-link" href="https://tantek.com/2023/020/t2/bridgy-fed-follow-form">https://tantek.com/2023/020/t2/bridgy-fed-follow-form</a></span></p>
+<span class="info footer"><a href="/2023/170/t1/" class="dt-published published dt-updated updated u-url u-uid"><time class="value" datetime="15:10-0700">15:10</time> on <time class="value">2023-06-19</time></a></span>
+</li>
+<li class="h-entry hentry as-note">
+<p class="article"><span class="p-name entry-title e-content entry-content">If you added a #<span class="p-category auto-tag">Mastodon</span> / #<span class="p-category auto-tag">ActivityPub</span> follow form to your #<span class="p-category auto-tag">IndieWeb</span> site based on Bridgy Fed (e.g. using code/instructions I previously posted<a id="t5RH1_ref-1" href="#t5RH1_note-1">&sup1;</a>), you need to update it to add another invisible input element for the "protocol", e.g.:<br class="auto-break"/><br class="auto-break"/>&lt;input name="protocol" type="hidden" value="web" /&gt;<br class="auto-break"/><br class="auto-break"/>Otherwise people trying to use your form to follow you may see an error from #<span class="p-category auto-tag">BridgyFed</span> like:<br class="auto-break"/>&gt; Bad Request <br class="auto-break"/>&gt; Missing required parameter protocol<br class="auto-break"/><br class="auto-break"/>Here is the complete example that I posted previously with the new invisible input:<br class="auto-break"/><br class="auto-break"/>&lt;form method="post" action="https://fed.brid.gy/remote-follow"&gt;<br class="auto-break"/>&#xA0;&lt;label for="follow-address"&gt;&#128024; Follow <br class="auto-break"/>&#xA0; &lt;kbd&gt;@tantek.com@tantek.com&lt;/kbd&gt;:&lt;br /&gt; <br class="auto-break"/>&#xA0; enter your @-@ fediverse address:&lt;/label&gt;<br class="auto-break"/>&#xA0;&lt;input id="follow-address" name="address" type="text" required="required"<br class="auto-break"/>&#xA0; &#xA0; &#xA0; &#xA0; placeholder="@you@instance.social" alt="fediverse address" value="" /&gt;<br class="auto-break"/>&#xA0;&lt;input name="domain" type="hidden" value="tantek.com" /&gt;<br class="auto-break"/>&#xA0;&lt;input name="protocol" type="hidden" value="web" /&gt;<br class="auto-break"/>&#xA0;&lt;button type="submit"&gt;Follow&lt;/button&gt;<br class="auto-break"/>&lt;/form&gt;<br class="auto-break"/><br class="auto-break"/>I also updated that previous post<a id="t5RH1_ref-1" href="#t5RH1_note-1">&sup1;</a> with the new input in case people find that instead.<br class="auto-break"/><br class="auto-break"/><br class="auto-break"/>This is day 42 of #<span class="p-category auto-tag">100DaysOfIndieWeb</span>. #<span class="p-category auto-tag">100Days</span><br class="auto-break"/><br class="auto-break"/>&larr; Day 41: <a class="auto-link" href="https://tantek.com/2023/139/t1/wikipedia-supports-indieweb-rel-me">https://tantek.com/2023/139/t1/wikipedia-supports-indieweb-rel-me</a><br class="auto-break"/>&rarr; Day 43: <a class="auto-link" href="https://tantek.com/2023/171/t1/anniversaries-microformats-posse">https://tantek.com/2023/171/t1/anniversaries-microformats-posse</a><br class="auto-break"/><br class="auto-break"/><br class="auto-break"/><a id="t5RH1_note-1" href="#t5RH1_ref-1">&sup1;</a> <a class="auto-link" href="https://tantek.com/2023/020/t2/bridgy-fed-follow-form">https://tantek.com/2023/020/t2/bridgy-fed-follow-form</a></span></p>
+<span class="info footer"><a href="/2023/160/t1/mastodon-activitypub-follow-form-bridgy-fed" class="dt-published published dt-updated updated u-url u-uid"><time class="value" datetime="19:14-0700">19:14</time> on <time class="value">2023-06-09</time></a></span>
+</li>
+<li class="h-entry hentry as-note">
+<p class="article"><span class="reply-context" style="display:block">&#8627; In reply to <a href="https://indieweb.social/@tchambers/110492011267601933" class="u-in-reply-to h-cite">an IndieWeb page</a></span> <span class="p-name entry-title e-content entry-content"><a class="auto-link" href="https://indieweb.social/@tchambers">@tchambers@indieweb.social</a> thanks Tim! And now two more years of work on AB Priority projects<a id="t5RF2_ref-1" href="#t5RF2_note-1">&sup1;</a> (and whatever else we come up with <a class="auto-link" href="https://W3C.social/@AB">@AB@W3C.social</a>).<br class="auto-break"/><br class="auto-break"/><a id="t5RF2_note-1" href="#t5RF2_ref-1">&sup1;</a> <a class="auto-link" href="https://www.w3.org/wiki/AB/Priorities">https://www.w3.org/wiki/AB/Priorities</a></span></p>
+<span class="info footer"><a href="/2023/158/t2/" class="dt-published published dt-updated updated u-url u-uid"><time class="value" datetime="01:57-0700">01:57</time> on <time class="value">2023-06-07</time></a></span>
+</li>
+<li class="h-entry hentry as-note">
+<p class="article"><span class="p-name entry-title e-content entry-content">Congrats to fellow re-elected W3C Advisory Board (<a class="auto-link" href="https://W3C.social/@AB">@AB@W3C.social</a> <a class="auto-link h-cassis-username" href="https://twitter.com/W3CAB">@W3CAB</a>) members:<br class="auto-break"/>* <a class="auto-link" href="https://cwilso.com">@cwilso.com</a> (<a class="auto-link" href="https://mastodon.social/@cdub">@cdub@mastodon.social</a> <a class="auto-link h-cassis-username" href="https://twitter.com/cwilso">@cwilso</a>)<br class="auto-break"/>* <a class="auto-link" href="https://fantasai.inkedblade.net">@fantasai.inkedblade.net</a> (<a class="auto-link" href="https://w3c.social/@fantasai">@fantasai@w3c.social</a> <a class="auto-link h-cassis-username" href="https://twitter.com/fantasai">@fantasai</a>)<br class="auto-break"/>* Avneesh Singh<br class="auto-break"/>and newcomers:<br class="auto-break"/>* <a class="auto-link" href="https://mastodon.social/@reidmore">@reidmore@mastodon.social</a> (<a class="auto-link h-cassis-username" href="https://twitter.com/wendy_a_reid">@wendy_a_reid</a>)<br class="auto-break"/>* Song XU<br class="auto-break"/><br class="auto-break"/>Thanks to Heejin Chung and Charles Nevile for your service on the #<span class="p-category auto-tag">W3CAB</span>.<br class="auto-break"/><br class="auto-break"/><a class="auto-link" href="https://www.w3.org/blog/news/archives/9933">https://www.w3.org/blog/news/archives/9933</a><br class="auto-break"/>via #<span class="p-category auto-tag">W3C</span> (<a class="auto-link" href="https://w3.org">@w3.org</a> <a class="auto-link" href="https://w3c.social/@w3c">@w3c@w3c.social</a> <a class="auto-link h-cassis-username" href="https://twitter.com/w3c">@w3c</a>): <a class="auto-link" href="https://w3c.social/@w3c/110491804762139049">https://w3c.social/@w3c/110491804762139049</a><br class="auto-break"/><br class="auto-break"/>Previously: <a class="auto-link" href="https://tantek.com/2023/128/t1/w3c-advisory-board-election-support">https://tantek.com/2023/128/t1/w3c-advisory-board-election-support</a></span></p>
+<span class="info footer"><a href="/2023/158/t1/congrats-elected-w3cab-members" class="dt-published published dt-updated updated u-url u-uid"><time class="value" datetime="01:15-0700">01:15</time> on <time class="value">2023-06-07</time></a></span>
+</li>
+<li class="h-entry hentry as-note">
+<p class="article"><span class="p-name entry-title e-content entry-content">Ran my 11th #<span class="p-category auto-tag">BayToBreakers</span> in 1:47:11 on Sunday 2023-05-21, again the day after an <a class="auto-link" href="https://sfrunco.com">@sfrunco.com</a> (<a class="auto-link h-cassis-username" href="https://twitter.com/SFRunCo">@SFRunCo</a>) Saturday trail #<span class="p-category auto-tag">run</span>, but this time in the middle of a very long training run, my last before the rescheduled #<span class="p-category auto-tag">MUC50k</span> trail race. Ran over 4 miles to the start, hopped in the next race corral, ran Bay to Breakers with the colorfully costumed crowd, picked up my medal, ate a banana, ran back through Golden Gate Park, and then a bit more up city hills to round out 18 miles and 1000'.<br class="auto-break"/><br class="auto-break"/>#<span class="p-category auto-tag">2023_141</span> #<span class="p-category auto-tag">SanFrancisco</span> #<span class="p-category auto-tag">runner</span> <br class="auto-break"/><br class="auto-break"/>2022: <a class="auto-link" href="https://tantek.com/2022/138/t1/ran-baytobreakers">https://tantek.com/2022/138/t1/ran-baytobreakers</a></span></p>
+<span class="info footer"><a href="/2023/157/t1/ran-baytobreakers" class="dt-published published dt-updated updated u-url u-uid"><time class="value" datetime="23:37-0700">23:37</time> on <time class="value">2023-06-06</time></a></span>
+</li>
+<li class="h-entry hentry as-note">
+<p class="article"><span class="p-name entry-title e-content entry-content">&#128077;</span><span class="reply-context"> to <a href="https://github.com/snarfed/bridgy-fed/issues/493" class="u-in-reply-to h-cite">issue 493 of GitHub project &ldquo;bridgy-fed&rdquo;</a></span></p>
+<span class="info footer"><a href="/2023/145/t2/" class="dt-published published dt-updated updated u-url u-uid"><time class="value" datetime="12:57-0700">12:57</time> on <time class="value">2023-05-25</time></a></span>
+</li>
+<li class="h-entry hentry as-note">
+<p class="article"><span class="reply-context" style="display:block">&#8627; In reply to <a href="https://alpaca.gold/@Jeremiah/110429738228188634" class="u-in-reply-to h-cite">alpaca.gold user Jeremiah&rsquo;s post</a></span> <span class="p-name entry-title e-content entry-content"><a class="auto-link" href="https://jeremiahlee.com">@jeremiahlee.com</a> (<a class="auto-link" href="https://alpaca.gold/@Jeremiah">@Jeremiah@alpaca.gold</a>) you&rsquo;re right that the #<span class="p-category auto-tag">IndieWeb</span> is more of a movement. It&rsquo;s a community based on shared values &amp; principles<a id="t5R21_ref-1" href="#t5R21_note-1">&sup1;</a>, one of which is plurality<a id="t5R21_ref-2" href="#t5R21_note-2">&sup2;</a>, explicitly prioritizing interoperability over any &ldquo;particular piece of technology&rdquo;.<br class="auto-break"/><br class="auto-break"/>As to &ldquo;subdomains as usernames using #<span class="p-category auto-tag">ActivityPub</span>?&rdquo;, myself and others are using our (sub)domains as usernames, e.g. via the #<span class="p-category auto-tag">BridgyFed</span> service<a id="t5R21_ref-3" href="#t5R21_note-3">&sup3;</a>. Mine should be self-evident in the header of this post wherever you&rsquo;re reading #<span class="p-category auto-tag">fediverse</span> posts.<br class="auto-break"/><br class="auto-break"/>Completely agree that &ldquo;a link that also works as a mention name is obvious / intuitable&rdquo;, have been practicing that for a while, and wrote up some notes about how &amp; why:<br class="auto-break"/><br class="auto-break"/>* <a class="auto-link" href="https://tantek.com/2023/011/t1/indieweb-evolving-at-mention">https://tantek.com/2023/011/t1/indieweb-evolving-at-mention</a><br class="auto-break"/>* <a class="auto-link" href="https://tantek.com/2023/014/t4/domain-first-federated-atmention">https://tantek.com/2023/014/t4/domain-first-federated-atmention</a><br class="auto-break"/>* <a class="auto-link" href="https://tantek.com/2023/018/t1/elevate-indieweb-above-silo">https://tantek.com/2023/018/t1/elevate-indieweb-above-silo</a><br class="auto-break"/>* <a class="auto-link" href="https://tantek.com/2023/019/t5/reply-domain-above-address-and-silo">https://tantek.com/2023/019/t5/reply-domain-above-address-and-silo</a><br class="auto-break"/><br class="auto-break"/>which I should organize into a longer blog post at some point.<br class="auto-break"/><br class="auto-break"/><br class="auto-break"/><a id="t5R21_note-1" href="#t5R21_ref-1">&sup1;</a> <a class="auto-link" href="https://indieweb.org/principles">https://indieweb.org/principles</a><br class="auto-break"/><a id="t5R21_note-2" href="#t5R21_ref-2">&sup2;</a> <a class="auto-link" href="https://indieweb.org/plurality">https://indieweb.org/plurality</a><br class="auto-break"/><a id="t5R21_note-3" href="#t5R21_ref-3">&sup3;</a> <a class="auto-link" href="https://indieweb.org/Bridgy_Fed#IndieWeb_Examples">https://indieweb.org/Bridgy_Fed#IndieWeb_Examples</a></span></p>
+<span class="info footer"><a href="/2023/145/t1/" class="dt-published published dt-updated updated u-url u-uid"><time class="value" datetime="12:41-0700">12:41</time> on <time class="value">2023-05-25</time></a></span>
+</li>
+<li class="h-entry hentry as-note">
+<p class="article"><span class="reply-context" style="display:block">&#8627; In reply to <a href="https://github.com/w3c/w3process/issues/764#issuecomment-1562178753" class="u-in-reply-to h-cite">a comment on issue 764 of GitHub project &ldquo;w3process&rdquo;</a></span> <span class="p-name entry-title e-content entry-content">Thanks for the FO Council experiments reports citations <a class="auto-link" href="https://github.com/frivoal">https://github.com/frivoal</a>.<br class="auto-break"/><br class="auto-break"/>&gt; <a class="auto-link" href="https://www.w3.org/2023/03/council-ttwg-report.html">https://www.w3.org/2023/03/council-ttwg-report.html</a><br class="auto-break"/>&gt; <a class="auto-link" href="https://www.w3.org/2022/11/council-das-report.html">https://www.w3.org/2022/11/council-das-report.html</a><br class="auto-break"/><br class="auto-break"/>These two make it clear that Tim Berners-Lee was a member of at least two FO Council experiments, despite not participating in their final decisions.<br class="auto-break"/><br class="auto-break"/>From these examples, we retract the premise of the second paragraph of this issue that "We believe the opposite was intended", and thus also the specific fix in that paragraph.<br class="auto-break"/><br class="auto-break"/>We still think it would be better for the W3C Process for any "life member" of any group to be a non-voting member at most, however we will raise a separate new issue for that for consideration in the normal workflow of triaging &amp; handling Process CG issues.<br class="auto-break"/><br class="auto-break"/>Given the resolution of the semantics of the first two paragraphs for this issue, no Pull Request (PR) is necessary for those.<br class="auto-break"/><br class="auto-break"/>For the remaining "consistency and to reduce the chance of confusion" point, as noted, that can go in a separate purely editorial issue/PR and is thus unnecessary to resolve this specific issue.<br class="auto-break"/><br class="auto-break"/>Ok to close this issue without waiting for those separate issues/PRs to be filed.</span></p>
+<span class="info footer"><a href="/2023/144/t4/" class="dt-published published dt-updated updated u-url u-uid"><time class="value" datetime="22:37-0700">22:37</time> on <time class="value">2023-05-24</time></a></span>
+</li>
+<li class="h-entry hentry as-note">
+<p class="article"><span class="reply-context" style="display:block">&#8627; In reply to <a href="https://github.com/w3c/w3process/issues/764#issuecomment-1562177663" class="u-in-reply-to h-cite">a comment on issue 764 of GitHub project &ldquo;w3process&rdquo;</a></span> <span class="p-name entry-title e-content entry-content">Thanks <a class="auto-link" href="https://github.com/fantasai">https://github.com/fantasai</a>, despite multiple reviews, somehow missed that <a class="auto-link" href="https://www.w3.org/Consortium/Process/Drafts/snapshots/2023-04#groups">https://www.w3.org/Consortium/Process/Drafts/snapshots/2023-04#groups</a> line:<br class="auto-break"/>&gt; &#x2026; and a participant is a member of such a group.<br class="auto-break"/><br class="auto-break"/>This resolves the semantics of the first paragraph of this issue as invalid, leaving only potential editorial confusion from the use of multiple terms for the same thing, which is not a MUSTFIX (issue title adjusted accordingly).</span></p>
+<span class="info footer"><a href="/2023/144/t3/" class="dt-published published dt-updated updated u-url u-uid"><time class="value" datetime="22:31-0700">22:31</time> on <time class="value">2023-05-24</time></a></span>
+</li>
+<li class="h-entry hentry as-note">
+<p class="article"><span class="p-name entry-title e-content entry-content">&#128077;</span><span class="reply-context"> to <a href="https://github.com/w3c/w3process/issues/764#issuecomment-1562178753" class="u-in-reply-to h-cite">a comment on issue 764 of GitHub project &ldquo;w3process&rdquo;</a></span></p>
+<span class="info footer"><a href="/2023/144/t2/" class="dt-published published dt-updated updated u-url u-uid"><time class="value" datetime="22:14-0700">22:14</time> on <time class="value">2023-05-24</time></a></span>
+</li>
+<li class="h-entry hentry as-note">
+<p class="article"><span class="p-name entry-title e-content entry-content">&#128077;</span><span class="reply-context"> to <a href="https://github.com/w3c/w3process/issues/764#issuecomment-1562177663" class="u-in-reply-to h-cite">a comment on issue 764 of GitHub project &ldquo;w3process&rdquo;</a></span></p>
+<span class="info footer"><a href="/2023/144/t1/" class="dt-published published dt-updated updated u-url u-uid"><time class="value" datetime="22:13-0700">22:13</time> on <time class="value">2023-05-24</time></a></span>
+</li>
+<li class="h-entry hentry as-article">
+<div class="article">
+<span class="reply-context" style="display:block">New issue on <a href="https://github.com/w3c/w3process/issues" class="u-in-reply-to h-cite">GitHub project &ldquo;w3process&rdquo;</a></span> <a href="/2023/143/b2/" rel="bookmark" class="u-url u-uid"><h1 class="entry-title p-name">
+Normative prose for role of Chair / Team Contact cites informative reference for description
+</h1></a><div class="entry-content e-content">
+<p>
+There are two sentences of normative prose that cite the informative 
+<a href="https://www.w3.org/Guide/">Art of Consensus</a> 
+as [GUIDE] in the 
+<a href="https://www.w3.org/Consortium/Process/Drafts/snapshots/2023-04#informative">Informative References</a>. 
+</p>
+<p>The two sentences are in the 
+<a href="https://www.w3.org/Consortium/Process/Drafts/snapshots/2023-04#ReqsAllGroups">Requirements for All Chartered Groups</a>, specifically these two:
+</p>
+<blockquote>The role of the Chair [CHAIR] is described in the Art of Consensus [GUIDE].</blockquote>
+<p>...</p>
+<blockquote>
+The role of the Team Contact [TEAM-CONTACT] is described in the Art of Consensus [GUIDE].
+</blockquote>
+<p>
+It is inconsistent and misleading for a normative sentence to claim that a description (implied to be normative from that context) is written in an informative reference.
+</p>
+<p>
+It also seems like a bad practice to import via prose "is described in " and essentially upgrade-by-reference external informative content into normative context.
+</p>
+<p>
+The relatively quick short-term fix would be to mark those quoted sentences of prose non-normative. E.g. move the above quoted sentences to their own class="note" role="note" paragraphs as:
+</p>
+<blockquote>
+Note: The role of the Chair [CHAIR] is described in the Art of Consensus [GUIDE].
+</blockquote>
+<blockquote>
+Note: The role of the Team Contact [TEAM-CONTACT] is described in the Art of Consensus [GUIDE].
+</blockquote>
+<p>respectively. That way the inline prose is clearly non-normative, consistent with the informative imports from and citations of the Art of Consensus [GUIDE]. We will work on a Pull Request to address this.</p>
+<p>Label: <span class="p-category">Needs Proposed PR</span></p>
+</div>
+</div>
+<span class="info footer"><a href="/2023/143/b2/" class="dt-published published dt-updated updated u-url u-uid"><time class="value" datetime="17:43-0700">17:43</time> on <time class="value">2023-05-23</time></a></span>
+</li>
+<li class="h-entry hentry as-article">
+<div class="article">
+<span class="reply-context" style="display:block">New issue on <a href="https://github.com/w3c/w3process/issues" class="u-in-reply-to h-cite">GitHub project &ldquo;w3process&rdquo;</a></span> <a href="/2023/143/b1/" rel="bookmark" class="u-url u-uid"><h1 class="entry-title p-name">
+New W3C Council and updated TAG Composition section errantly only includes Tim Berners-Lee from the TAG, in W3C Council Composition
+</h1></a><div class="entry-content e-content">
+<ins datetime="2023-05-24">
+<p>Update: per comments 
+<a href="https://tantek.com/2023/144/t3/">https://tantek.com/2023/144/t3/</a> 
+and 
+<a href="https://tantek.com/2023/144/t4/">https://tantek.com/2023/144/t4/</a>,
+the semantic points in this issue have been addressed, and remaining editorial issues or desired changes can be filed as separate issues/PRs, and this issue can be closed without waiting for those.
+</p>
+</ins>
+<p>
+While this is clearly not what the Experimental Formal Objection Council has been doing in practice, nor what was intended in Process 2023, the current language in the definition of the 
+<a href="https://www.w3.org/Consortium/Process/Drafts/snapshots/2023-04#council-composition">W3C Council Composition</a> only includes "<em>members</em> of the Technical Architecture Group" (<em>emphasis</em> added), and the only literal <em>member</em> in the definition of the
+<a href="https://www.w3.org/Consortium/Process/Drafts/snapshots/2023-04#tag-participation">Composition of the Technical Architecture Group</a> is Tim Berners-Lee, while the elected &amp; appointed are labeled <em>participants</em>. By using different terms "member" and "participant" for disjoint sets of people, a literal reading must treat these as separate sets, and thus references elsewhere in the Process to "members" cannot be assumed to include "participants". This is not just ambiguity, a literal reading of the current Process 2023 draft <em>forces</em> an undesired composition of W3C Councils that only includes Tim Berners-Lee from the TAG in particular.
+</p>
+<p>
+We believe the opposite was intended, and this can be fixed by using the term "member" in the Composition of the Technical Architecture Group section to refer to the elected &amp; appointed, and separately listing Tim as a "life-time invited participant, but not a member of the TAG for purposes of this document."
+</p>
+<p>
+This requires a Pull Request (PR) and we will work on submitting one that we believe addresses this issue which we believe must be a blocker for Process 2023.
+</p>
+<p>
+Similarly, for consistency and to reduce the chance of confusion, only the term "member" should be used to refer to those 
+<a href="https://www.w3.org/Consortium/Process/Drafts/snapshots/2023-04#ABParticipation">elected to the Advisory Board</a>, rather than "participant". This can go in a separate PR, and we will work on providing this as well.
+</p>
+<p>Label: <span class="p-category">Needs Proposed PR</span></p>
+<p>Label: <span class="p-category">Director-free: FO/Council</span></p>
+</div>
+</div>
+<span class="info footer"><a href="/2023/143/b1/" class="dt-published published dt-updated updated u-url u-uid"><time class="value" datetime="17:04-0700">17:04</time> on <time class="value">2023-05-23</time></a></span>
+</li>
+<li class="h-entry hentry as-note">
+<p class="article"><span class="reply-context" style="display:block">&#8627; In reply to <a href="https://twitter.com/stolinski/status/1659678519813890049" class="u-in-reply-to h-cite">@stolinski&rsquo;s tweet</a></span> <span class="p-name entry-title e-content entry-content"><a class="auto-link h-cassis-username" href="https://twitter.com/stolinski">@stolinski</a><br class="auto-break"/>43 CSS V&amp;U length units<a id="t5Qw2_ref-1" href="#t5Qw2_note-1">&sup1;</a><br class="auto-break"/>em rem<br class="auto-break"/>ex rex<br class="auto-break"/>cap rcap<br class="auto-break"/>ch rch<br class="auto-break"/>ic ric<br class="auto-break"/>lh rlh<br class="auto-break"/>vw lvw svw dvw<br class="auto-break"/>vh lvh svh dvh<br class="auto-break"/>vi lvi svi dvi<br class="auto-break"/>vb lvb svb dvb<br class="auto-break"/>vmin lvmin svmin dvmin<br class="auto-break"/>vmax lvmax svmax dvmax<br class="auto-break"/>cm mm Q<br class="auto-break"/>in pc pt<br class="auto-break"/>px<br class="auto-break"/>+6 cont. q<a id="t5Qw2_ref-2" href="#t5Qw2_note-2">&sup2;</a><br class="auto-break"/>cqw cqh cqi cqb cqmin cqmax<br class="auto-break"/>+% = 50?<br class="auto-break"/><br class="auto-break"/><a id="t5Qw2_note-1" href="#t5Qw2_ref-1">&sup1;</a> CSS Values &amp; Units Level 4: <a class="auto-link" href="https://drafts.csswg.org/css-values/#lengths">https://drafts.csswg.org/css-values/#lengths</a><br class="auto-break"/><a id="t5Qw2_note-2" href="#t5Qw2_ref-2">&sup2;</a> <a class="auto-link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/length#container_query_length_units">https://developer.mozilla.org/en-US/docs/Web/CSS/length#container_query_length_units</a></span></p>
+<span class="info footer"><a href="/2023/139/t2/css-length-units" class="dt-published published dt-updated updated u-url u-uid"><time class="value" datetime="18:45-0700">18:45</time> on <time class="value">2023-05-19</time></a></span>
+</li>
+<li class="h-entry hentry as-note">
+<p class="article"><span class="p-name entry-title e-content entry-content"><a class="auto-link" href="http://Wikipedia.org">Wikipedia.org</a> (<a class="auto-link" href="https://wikis.world/@wikipedia">@wikipedia@wikis.world</a> <a class="auto-link h-cassis-username" href="https://twitter.com/wikipedia">@wikipedia</a>) now supports #<span class="p-category auto-tag">IndieWeb</span> rel-me!<a id="t5Qw1_ref-1" href="#t5Qw1_note-1">&sup1;</a><br class="auto-break"/>Thanks to <a class="auto-link" href="https://taavi.wtf">@taavi.wtf</a> (<a class="auto-link" href="https://wikis.world/@taavi">@taavi@wikis.world</a>) for the #<span class="p-category auto-tag">MediaWiki</span> RealMe extension<a id="t5Qw1_ref-2" href="#t5Qw1_note-2">&sup2;</a><br class="auto-break"/><br class="auto-break"/>Added it to my #<span class="p-category auto-tag">Wikipedia</span> User: page <a class="auto-link" href="https://en.wikipedia.org/wiki/User:Tantek">https://en.wikipedia.org/wiki/User:Tantek</a><br class="auto-break"/><br class="auto-break"/>View source and you can see the #<span class="p-category auto-tag">relMe</span> on a link tag:<br class="auto-break"/>&#xA0;&lt;link href="https://tantek.com/" rel="me"&gt;<br class="auto-break"/><br class="auto-break"/>Instructions to add yours here:<br class="auto-break"/>* <a class="auto-link" href="https://indieweb.org/rel-me#Wikipedia">https://indieweb.org/rel-me#Wikipedia</a><br class="auto-break"/><br class="auto-break"/><br class="auto-break"/>This is day 41 of #<span class="p-category auto-tag">100DaysOfIndieWeb</span>. #<span class="p-category auto-tag">100Days</span><br class="auto-break"/><br class="auto-break"/>&larr; Day 40: <a class="auto-link" href="https://tantek.com/2023/114/t1/venues-reviews-personal-pages">https://tantek.com/2023/114/t1/venues-reviews-personal-pages</a><br class="auto-break"/>&rarr; Day 42: <a class="auto-link" href="https://tantek.com/2023/160/t1/mastodon-activitypub-follow-form-bridgy-fed">https://tantek.com/2023/160/t1/mastodon-activitypub-follow-form-bridgy-fed</a><br class="auto-break"/><br class="auto-break"/><br class="auto-break"/>Previously:<br class="auto-break"/>* 2023-02-01 GitHub supports multiple rel=me links: <a class="auto-link" href="https://tantek.com/2023/032/t1/years-relmeauth-replace-openid">https://tantek.com/2023/032/t1/years-relmeauth-replace-openid</a><br class="auto-break"/><br class="auto-break"/><br class="auto-break"/><a id="t5Qw1_note-1" href="#t5Qw1_ref-1">&sup1;</a> <a class="auto-link" href="https://wikis.world/@wikipedia/110396865170645710">https://wikis.world/@wikipedia/110396865170645710</a><br class="auto-break"/><a id="t5Qw1_note-2" href="#t5Qw1_ref-2">&sup2;</a> <a class="auto-link" href="https://www.mediawiki.org/wiki/Extension:RealMe">https://www.mediawiki.org/wiki/Extension:RealMe</a></span></p>
+<span class="info footer"><a href="/2023/139/t1/wikipedia-supports-indieweb-rel-me" class="dt-published published dt-updated updated u-url u-uid"><time class="value" datetime="13:19-0700">13:19</time> on <time class="value">2023-05-19</time></a></span>
+</li>
+<li class="h-entry hentry as-note">
+<p class="article"><span class="p-name entry-title e-content entry-content">s/agenda bashing/agenda gardening/g<br class="auto-break"/><br class="auto-break"/>Replace all uses of &ldquo;agenda bashing&rdquo; with &ldquo;agenda gardening&rdquo;, e.g. in group meetings.<br class="auto-break"/><br class="auto-break"/>Language matters, metaphors affect framing and reinforce values. Replacing violent metaphors with caring or at least non-violent expressions can help create a more constructive context.<br class="auto-break"/><br class="auto-break"/>Recommended this particular replacement yesterday during day 2 of our #<span class="p-category auto-tag">W3C</span> Advisory Board (<a class="auto-link" href="https://w3c.social/@ab">@ab@w3c.social</a><a id="t5Qp1_ref-1" href="#t5Qp1_note-1">&sup1;</a> <a class="auto-link h-cassis-username" href="https://twitter.com/w3cab">@w3cab</a>) meeting, after the #<span class="p-category auto-tag">W3CAC</span> meeting earlier this week.<br class="auto-break"/><br class="auto-break"/>It&rsquo;s a small change, yet maybe it will inspire others.<br class="auto-break"/><br class="auto-break"/>Previously: <a class="auto-link" href="https://tantek.com/2018/365/t3/december-too-busy-post-days">https://tantek.com/2018/365/t3/december-too-busy-post-days</a><br class="auto-break"/><br class="auto-break"/><a id="t5Qp1_note-1" href="#t5Qp1_ref-1">&sup1;</a> Since the #<span class="p-category auto-tag">W3CTAG</span> (<a class="auto-link" href="https://w3c.social/@tag">@tag@w3c.social</a> <a class="auto-link h-cassis-username" href="https://twitter.com/w3ctag">@w3ctag</a>) has an account on <a class="auto-link" href="http://w3c.social">w3c.social</a>, I figured the #<span class="p-category auto-tag">W3CAB</span> should too. Freshly created this week.</span></p>
+<span class="info footer"><a href="/2023/132/t1/agenda-gardening-metaphors" class="dt-published published dt-updated updated u-url u-uid"><time class="value" datetime="23:15-0700">23:15</time> on <time class="value">2023-05-12</time></a></span>
+</li>
+<li class="h-entry hentry as-note">
+<p class="article"><span class="p-name entry-title e-content entry-content">Three ways we openly document the governance of W3C:<br class="auto-break"/><br class="auto-break"/>#<span class="p-category auto-tag">w3cAB:</span> As part of driving openness in the #<span class="p-category auto-tag">W3C</span> Advisory Board (AB) and W3C in general, when I joined the AB in 2013, I created a stub AB wiki page, and worked with the rest of the AB to expand it over time, to the present where it has quick navigation to both our tools and projects<a id="t5Qm2_ref-1" href="#t5Qm2_note-1">&sup1;</a>.<br class="auto-break"/><br class="auto-break"/>#<span class="p-category auto-tag">w3cBoD:</span> Shortly after the W3C Board of Directors (BoD) was elected last year, I similarly created a Board wiki page, with quick navigation to meetings, minutes, and other publicly available Board resources<a id="t5Qm2_ref-2" href="#t5Qm2_note-2">&sup2;</a>.<br class="auto-break"/><br class="auto-break"/>#<span class="p-category auto-tag">w3cAC:</span> Prior AB member Art Barstow created an AdvisoryCommittee (AC) wiki page in 2012. I expanded it in the past year with sections on Email Lists and Meetings to help make it easier (more discoverable) for AC representatives to participate &amp; contribute to the governance of W3C<a id="t5Qm2_ref-3" href="#t5Qm2_note-3">&sup3;</a>.<br class="auto-break"/><br class="auto-break"/>These are all good steps, but not complete by any measure. Collectively we can do better.<br class="auto-break"/><br class="auto-break"/>Openness must go beyond finding &amp; reading such resources.<br class="auto-break"/><br class="auto-break"/>As these are all on the W3C&rsquo;s public wiki, which any W3C member (or invited expert) may edit, my hope is that anyone involved with W3C may help update such pages, and further improve them. Encouraging this kind of direct participation in how an organization is run goes hand-in-hand with openness &amp; transparency.<br class="auto-break"/><br class="auto-break"/><a id="t5Qm2_note-1" href="#t5Qm2_ref-1">&sup1;</a> <a class="auto-link" href="https://www.w3.org/wiki/AB">https://www.w3.org/wiki/AB</a><br class="auto-break"/><a id="t5Qm2_note-2" href="#t5Qm2_ref-2">&sup2;</a> <a class="auto-link" href="https://www.w3.org/wiki/Board">https://www.w3.org/wiki/Board</a><br class="auto-break"/><a id="t5Qm2_note-3" href="#t5Qm2_ref-3">&sup3;</a> <a class="auto-link" href="https://www.w3.org/wiki/AdvisoryCommittee">https://www.w3.org/wiki/AdvisoryCommittee</a></span></p>
+<span class="info footer"><a href="/2023/129/t2/openness-w3c-ab-bod-ac-participation" class="dt-published published dt-updated updated u-url u-uid"><time class="value" datetime="02:03-0700">02:03</time> on <time class="value">2023-05-09</time></a></span>
+</li>
+<li class="h-entry hentry as-note">
+<p class="article"><span class="p-name entry-title e-content entry-content">Good morning from Sophia Antipolis, France, where myself and many other #<span class="p-category auto-tag">W3C</span> Advisory Committee (AC), Advisory Board (AB), &amp; Board of Directors (BoD) members, and members of the W3C Team are here for two days of 2023 #<span class="p-category auto-tag">w3cAC</span> meetings<a id="t5Qm1_ref-1" href="#t5Qm1_note-1">&sup1;</a>.<br class="auto-break"/><br class="auto-break"/>Lots of great presentations this morning.<br class="auto-break"/><br class="auto-break"/><a class="auto-link" href="https://cwilso.com">@cwilso.com</a> (<a class="auto-link" href="https://mastodon.social/@cdub">@cdub@mastodon.social</a> <a class="auto-link h-cassis-username" href="https://twitter.com/cwilso">@cwilso</a>) is now providing an overview of the Advisory Board<a id="t5Qm1_ref-2" href="#t5Qm1_note-2">&sup2;</a> and where we are with our 2023 Priority Projects<a id="t5Qm1_ref-3" href="#t5Qm1_note-3">&sup3;</a>, which are done for the most part in the open, on the wiki and GitHub. <br class="auto-break"/><br class="auto-break"/>Our (AB) practice of developing our projects in the open for both W3C Members and the broader web community to see is something that myself and Chris Wilson (<a class="auto-link" href="https://cwilso.com">@cwilso.com</a>) have been championing, leading, and driving since our first AB terms in 2013.<br class="auto-break"/><br class="auto-break"/>We strongly believe in continuing this level of transparency (or better) in the #<span class="p-category auto-tag">w3cAB</span>, and there is more work to do on the AB to make this practice an institutional default at W3C, especially in matters of governance.<br class="auto-break"/><br class="auto-break"/>Related: both Chris and I are running for re-election<a id="t5Qm1_ref-4" href="#t5Qm1_note-4">&#8308;</a> for the Advisory Board, and this is one of the reasons we want your support to continue serving on the AB.<br class="auto-break"/><br class="auto-break"/><a id="t5Qm1_note-1" href="#t5Qm1_ref-1">&sup1;</a> <a class="auto-link" href="https://web.archive.org/web/20230509090512/https://www.w3.org/participate/meetings">https://web.archive.org/web/20230509090512/https://www.w3.org/participate/meetings</a><br class="auto-break"/><a id="t5Qm1_note-2" href="#t5Qm1_ref-2">&sup2;</a> <a class="auto-link" href="https://www.w3.org/wiki/AB">https://www.w3.org/wiki/AB</a><br class="auto-break"/><a id="t5Qm1_note-3" href="#t5Qm1_ref-3">&sup3;</a> <a class="auto-link" href="https://www.w3.org/wiki/AB/2023_Priorities">https://www.w3.org/wiki/AB/2023_Priorities</a><br class="auto-break"/><a id="t5Qm1_note-4" href="#t5Qm1_ref-4">&#8308;</a> <a class="auto-link" href="https://tantek.com/2023/128/t1/w3c-advisory-board-election-support">https://tantek.com/2023/128/t1/w3c-advisory-board-election-support</a></span></p>
+<span class="info footer"><a href="/2023/129/t1/w3c-ac-meetings" class="dt-published published dt-updated updated u-url u-uid"><time class="value" datetime="02:03-0700">02:03</time> on <time class="value">2023-05-09</time></a></span>
+</li>
+<li class="h-entry hentry as-note">
+<p class="article"><span class="p-name entry-title e-content entry-content">I am running for election in this month&rsquo;s #<span class="p-category auto-tag">W3C</span> (<a class="auto-link" href="https://w3.org">@w3.org</a> <a class="auto-link" href="https://w3c.social/@w3c">@w3c@w3c.social</a> <a class="auto-link h-cassis-username" href="https://twitter.com/w3c">@w3c</a>) Advisory Board (AB) election<a id="t5Qk1_ref-1" href="#t5Qk1_note-1">&sup1;</a> and blogged my personal statement: <a class="auto-link" href="https://tantek.com/2023/128/b1/running-for-w3c-advisory-board-ab-election">https://tantek.com/2023/128/b1/running-for-w3c-advisory-board-ab-election</a><br class="auto-break"/><br class="auto-break"/><a class="auto-link" href="https://fantasai.inkedblade.net">@fantasai.inkedblade.net</a> (<a class="auto-link" href="https://w3c.social/@fantasai">@fantasai@w3c.social</a> <a class="auto-link h-cassis-username" href="https://twitter.com/fantasai">@fantasai</a>) is also running for the #<span class="p-category auto-tag">W3CAB</span>, and admirably blogged her imminent affiliation change *before* the election started: <a class="auto-link" href="https://fantasai.inkedblade.net/weblog/2023/affiliation-change/">https://fantasai.inkedblade.net/weblog/2023/affiliation-change/</a> &#x2014; Congrats Elika! Your new affiliation is lucky to have you.<br class="auto-break"/><br class="auto-break"/>In addition to the two of us, <a class="auto-link" href="https://cwilso.com">@cwilso.com</a> (<a class="auto-link" href="https://mastodon.social/@cdub">@cdub@mastodon.social</a> <a class="auto-link h-cassis-username" href="https://twitter.com/cwilso">@cwilso</a>) also posts on his own blog and is running for the AB.<br class="auto-break"/><br class="auto-break"/>Those are the three candidates I know have their own personal #<span class="p-category auto-tag">website</span>, and was able to verify by searching for candidates on the web, #<span class="p-category auto-tag">socialMedia</span>, etc.<br class="auto-break"/><br class="auto-break"/>Three out of the nine candidates<a id="t5Qk1_ref-2" href="#t5Qk1_note-2">&sup2;</a> running for election to the World Wide Web Consortium&rsquo;s Advisory Board.<br class="auto-break"/><br class="auto-break"/>As I wrote in my statement:<br class="auto-break"/><br class="auto-break"/>&gt; &ldquo;I believe governance of W3C, and advising thereof, is most effectively done by those &#x2026; who directly use &amp; create on the web using W3C standards. This direct connection to the actual work of the web and W3C is essential to prioritizing the purpose &amp; scope of governance thereof.&rdquo;<br class="auto-break"/><br class="auto-break"/>I firmly believe that direct hands-on experience with using the web, beyond reading the web or using someone else&rsquo;s apps, actually writing to the web, posting on the web, creating for the web, provides better insight into the technologies &amp; standards necessary to evolve the web, how to improve them and represent the communities working on them.<br class="auto-break"/><br class="auto-break"/>I ask for your support for the Advisory Board, and support for those who create on the web.<br class="auto-break"/><br class="auto-break"/>If any other candidates have their own #<span class="p-category auto-tag">IndieWeb</span> site (or set one up!), and especially if they blog their personal statements, I will gladly link to them as well.<br class="auto-break"/><br class="auto-break"/>Thanks for your consideration.<br class="auto-break"/><br class="auto-break"/><a id="t5Qk1_note-1" href="#t5Qk1_ref-1">&sup1;</a> <a class="auto-link" href="https://www.w3.org/blog/news/archives/9903">https://www.w3.org/blog/news/archives/9903</a><br class="auto-break"/><a id="t5Qk1_note-2" href="#t5Qk1_ref-2">&sup2;</a> <a class="auto-link" href="https://www.w3.org/2023/04/ab-nominations.html">https://www.w3.org/2023/04/ab-nominations.html</a></span></p>
+<span class="info footer"><a href="/2023/128/t1/w3c-advisory-board-election-support" class="dt-published published dt-updated updated u-url u-uid"><time class="value" datetime="16:46-0700">16:46</time> on <time class="value">2023-05-08</time></a></span>
+</li>
+<li class="h-entry hentry as-article">
+<div class="article">
+<a href="/2023/128/b1/running-for-w3c-advisory-board-ab-election" rel="bookmark" class="u-url u-uid"><h1 class="entry-title p-name">
+Running For Re-election in the W3C Advisory Board (AB) Election
+</h1></a><div class="entry-content e-content">
+<aside><div class="aside">
+<h2>Foreword</h2>
+<p>The <a class="h-card" href="https://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a> is holding its regular annual Advisory Board (<abbr>AB</abbr>) election this month. I was elected in the 
+<a href="https://tantek.com/2022/334/b1/running-for-w3c-advisory-board-special-election">special election</a> about six months ago to fill seats for departing AB members who were elected to the W3C Board of Directors. This is my 2023 AB election personal statement posted on my blog, in addition to the 
+<a href="https://www.w3.org/2023/04/ab-nominations#tc">official Nominations and Statements for W3C Advisory Board 2023 Election</a> page.</p>
+</div></aside>
+<p>
+Hi, I&rsquo;m <a class="h-card" href="https://tantek.com/">Tantek &#xC7;elik</a> and I&rsquo;m running for the <abbr title="World Wide Web Consortium">W3C</abbr> Advisory Board (<abbr>AB</abbr>) to help continue transitioning W3C to a community-led, values-driven, and more effective organization. I have been participating in and contributing to W3C groups and specifications for over 25 years.
+</p>
+<p>
+I am Mozilla&rsquo;s Advisory Committee (<abbr>AC</abbr>) representative and have previously served on the AB for several terms, starting in 2013. In the early years I advanced the movement to offer open licensing of W3C standards, and make it more responsive to the needs of independent websites and open source implementers.
+</p>
+<p>
+At the same time I co-chaired the <a href="https://www.w3.org/wiki/Socialwg">W3C Social Web Working Group</a> that produced several widely interoperably deployed <a href="https://www.w3.org/wiki/Socialwg#Recommendations">Social Web Standards</a>, most notably the ActivityPub specification, which has received renewed attention as the technology behind Mastodon and other social web implementations.
+</p>
+<p> 
+In my most recent AB terms I <a href="https://www.w3.org/wiki/AB/2022_Priorities#Vision.2C_principles_and_strategy">led the AB&rsquo;s Priority Project for an updated W3C Vision</a>, drove consensus in issues &amp; meetings, and submitted &amp; reviewed pull requests to advance our Vision draft.
+</p>
+<p>
+Environmental sustainability is a global concern, and the impacts of technologies, services, and standards are important for W3C to consider in all of its work, as the <a href="https://www.w3.org/TR/ethical-web-principles/#sustainable">TAG has summarized in the W3C TAG Ethical Web Principles</a>. To raise the importance of sustainability (<abbr>s12y</abbr>) at W3C, last year I established the <a href="https://tantek.com/2022/113/t1/w3c-sustainability-community-group">W3C Sustainability Community Group</a>, and subsequently <a href="https://tantek.com/2022/267/b1/w3c-tpac-sustainability-cg-meeting">organized interested participants at <abbr title="Technical Plenary and Advisory Committee meeting">TPAC</abbr> 2022 into asynchronous work areas</a>, such as working on Sustainability Horizontal Reviews.
+</p>
+<p>
+The next two years of the Advisory Board are a critical transition period, and will require experienced &amp; active AB members to work in coordination with the TAG and the Board of Directors to establish new models and procedures for sustainable community-driven leadership and governance of W3C.
+</p>
+<p>
+I believe governance of W3C, and advising thereof, is most effectively done by those who have the experience of actively working in W3C working groups on specifications, and especially those who directly use &amp; create on the web using W3C standards. This direct connection to the actual work of the web and W3C is essential to prioritizing the purpose &amp; scope of governance thereof.
+</p>
+<p>
+I post on my personal site <a href="https://tantek.com/">tantek.com</a>. You may follow my posts there or from Mastodon: <kbd>@tantek.com@tantek.com</kbd>.
+</p>
+<p>
+I have Mozilla&rsquo;s financial support to spend my time pursuing these goals, and ask for your support to build the broad consensus required to achieve them.
+</p>
+<p>
+If you have any questions or want to chat about the W3C Advisory Board, Values &amp; Vision, or anything else W3C related, please reach out by email: <kbd>tantek at mozilla.com</kbd>. Thank you for your consideration. This statement is also 
+<a href="https://tantek.com/2023/128/b1/running-for-w3c-advisory-board-ab-election">published publicly on my blog</a>.
+</p>
+</div>
+</div>
+<span class="info footer"><a href="/2023/128/b1/running-for-w3c-advisory-board-ab-election" class="dt-published published dt-updated updated u-url u-uid"><time class="value" datetime="15:30-0700">15:30</time> on <time class="value">2023-05-08</time></a></span>
+</li>
+<li class="h-entry hentry as-note">
+<p class="article"><span class="reply-context" style="display:block">&#8627; In reply to <a href="https://github.com/w3c/AB-public/issues/62" class="u-in-reply-to h-cite">issue 62 of GitHub project &ldquo;AB-public&rdquo;</a></span> <span class="p-name entry-title e-content entry-content">Thanks for raising this issue <a class="auto-link" href="https://github.com/michaelchampion">https://github.com/michaelchampion</a>.<br class="auto-break"/><br class="auto-break"/>As co-chair of the Sustainability Community Group (<a class="auto-link" href="https://www.w3.org/community/sustainability/participants">https://www.w3.org/community/sustainability/participants</a>) I am happy to champion it.<br class="auto-break"/><br class="auto-break"/>I believe the first of your proposals is sufficient to resolve the specific subject of this issue, which is to add a sustainability principle or value in the Vision, and link to the TAG Ethical Web Principle of Sustainability accordingly.<br class="auto-break"/><br class="auto-break"/>In particular, PROPOSED:<br class="auto-break"/><br class="auto-break"/>* Add "The Web must be an environmentally sustainable platform" as a fifth item in the "Vision for the World-Wide Web" section, and link the phrase &ldquo;environmentally sustainable platform&rdquo; to <a class="auto-link" href="https://www.w3.org/TR/ethical-web-principles/#sustainable">https://www.w3.org/TR/ethical-web-principles/#sustainable</a><br class="auto-break"/><br class="auto-break"/>I suggest this proposal be considered in the context of my proposed resolution to #<span class="p-category auto-tag">5:</span> <a class="auto-link" href="https://github.com/w3c/AB-public/issues/5#issuecomment-1524210555">https://github.com/w3c/AB-public/issues/5#issuecomment-1524210555</a> as I believe it is consistent with and adds to that proposal.<br class="auto-break"/><br class="auto-break"/>If the Vision Task Force RESOLVES on this proposal, I am happy to create a PR for the edit accordingly.<br class="auto-break"/><br class="auto-break"/>For the remaining points <a class="auto-link" href="https://github.com/michaelchampion">https://github.com/michaelchampion</a> raised of adding specific text for &ldquo;energy consumed by web infrastructure&rdquo; and crafting new text for the "We will do this by" section, I&rsquo;d like to do that as subsequent proposals and edits, presuming the task force resolves on the above granular proposal, if that&lsquo;s ok with <a class="auto-link" href="https://github.com/michaelchampion">https://github.com/michaelchampion</a>.<br class="auto-break"/><br class="auto-break"/>I&rsquo;m ok with keeping this issue open for that, or (preferably) closing this issue per the title being resolved, and opening new issues for considering creating "how to" text for sustainability.</span></p>
+<span class="info footer"><a href="/2023/116/t3/" class="dt-published published dt-updated updated u-url u-uid"><time class="value" datetime="16:51-0700">16:51</time> on <time class="value">2023-04-26</time></a></span>
+</li>
+<li class="h-entry hentry as-note">
+<p class="article"><span class="reply-context" style="display:block">&#8627; In reply to <a href="https://github.com/w3c/AB-public/issues/5" class="u-in-reply-to h-cite">issue 5 of GitHub project &ldquo;AB-public&rdquo;</a></span> <span class="p-name entry-title e-content entry-content">Since it is now past the end of 2022, and no further async comments were made on this issue, I am PROPOSING as promised more specifically to resolve this issue:<br class="auto-break"/><br class="auto-break"/>* link the phrase &ldquo;good of its users&rdquo; to <a class="auto-link" href="https://www.w3.org/TR/ethical-web-principles/#noharm">https://www.w3.org/TR/ethical-web-principles/#noharm</a><br class="auto-break"/>* link the phrase &ldquo;safe for its users&rdquo; to <a class="auto-link" href="https://www.w3.org/TR/ethical-web-principles/#privacy">https://www.w3.org/TR/ethical-web-principles/#privacy</a> (which includes security)<br class="auto-break"/><br class="auto-break"/>In addition, since those are only two of the four items in the &ldquo;Vision for the World-Wide Web&rdquo; section, and it would read more consistently if all four items were linked to respective TAG EWP points, I PROPOSE to make these two additional changes in the same edit:<br class="auto-break"/><br class="auto-break"/>* link the phrase &ldquo;all humanity&rdquo; to <a class="auto-link" href="https://www.w3.org/TR/ethical-web-principles/#allpeople">https://www.w3.org/TR/ethical-web-principles/#allpeople</a><br class="auto-break"/>* link the phrase &ldquo;one interoperable world-wide Web&rdquo; to <a class="auto-link" href="https://www.w3.org/TR/ethical-web-principles/#oneweb">https://www.w3.org/TR/ethical-web-principles/#oneweb</a><br class="auto-break"/><br class="auto-break"/>While we may want to consider linking other TAG EWP points in other parts of the document, for the purposes of resolving this issue in a discrete manner, I believe it is sufficient and correct to incrementally make this set of four edits as a net improvement (and close out an old issue), while allowing other issues to be filed for additional discrete improvements.<br class="auto-break"/><br class="auto-break"/>If the Vision Task Force RESOLVES on these proposals, I am happy to create a PR for the edits accordingly.</span></p>
+<span class="info footer"><a href="/2023/116/t2/" class="dt-published published dt-updated updated u-url u-uid"><time class="value" datetime="16:24-0700">16:24</time> on <time class="value">2023-04-26</time></a></span>
+</li>
+<li class="h-entry hentry as-note">
+<p class="article"><span class="reply-context" style="display:block">&#8627; In reply to <a href="https://github.com/w3c/AB-public/pull/49" class="u-in-reply-to h-cite">pull request 49 to GitHub project &ldquo;AB-public&rdquo;</a></span> <span class="p-name entry-title e-content entry-content">Closing this PR as lacking consensus, and shifting discussion to an issue as suggested.</span></p>
+<span class="info footer"><a href="/2023/116/t1/" class="dt-published published dt-updated updated u-url u-uid"><time class="value" datetime="16:12-0700">16:12</time> on <time class="value">2023-04-26</time></a></span>
+</li>
+<li class="h-entry hentry as-article">
+<div class="article">
+<span class="reply-context" style="display:block">New issue on <a href="https://github.com/w3c/AB-public/issues" class="u-in-reply-to h-cite">GitHub project &ldquo;AB-public&rdquo;</a></span> <a href="/2023/116/b1/" rel="bookmark" class="u-url u-uid"><h1 class="entry-title p-name">
+Vision: add malvertising to explicit mentions of known web harms
+</h1></a><div class="entry-content e-content">
+<p>
+Filing this as an issue for discussion since we did not have immediate consensus on a minor edit PR (and closing that PR accordingly 
+<a href="https://github.com/w3c/AB-public/pull/49">https://github.com/w3c/AB-public/pull/49</a>, to shift discussion here). As part of the goal of transparently admitting significant existing harms of the web, it makes sense to add &ldquo;malvertising&rdquo; somewhere near misinformation to the Introduction, per <a href="https://arstechnica.com/information-technology/2023/02/until-further-notice-think-twice-before-using-google-to-download-software/">https://arstechnica.com/information-technology/2023/02/until-further-notice-think-twice-before-using-google-to-download-software/</a> 
+for example. Note this is a "modern" (year 2000+) problem, and the term itself is clearly defined in Wikipedia: 
+<a href="https://en.wikipedia.org/wiki/Malvertising">https://en.wikipedia.org/wiki/Malvertising</a> 
+(which we could add as a reference in the glossary as part of work on 
+<a href="https://github.com/w3c/AB-public/issues/1">https://github.com/w3c/AB-public/issues/1</a>).
+</p>
+<p>
+The PR discussion had a few suggestions for how to add &ldquo;malvertising&rdquo; as a known harm, and they are worth considering in my opinion.
+</p>
+<p>
+From <a href="https://github.com/frivoal">https://github.com/frivoal</a>:
+</p>
+<blockquote>&#x2026; generalize a little, for example by grouping this for instance with phishing as well. Both problems seem to be somewhat similar in that they take advantage of the web's broad reach, as well as its general (but imperfect) trustworthiness to show deceptive and harmful content to vast amounts of unsuspecting viewers, some of whom will fall for the trick and cause themselves harm in the process.
+</blockquote>
+<p>
+From <a href="https://github.com/cwilso">https://github.com/cwilso</a>:
+</p>
+<blockquote>
+&#x2026; malvertising is a harm, but I believe it should come in the "how" section - in fact, I'm not clear how we would directly be addressing malvertising. The most I'd be comfortable with here is adding the suggestion of "deceptive practices" after misinformation, but I still don't think that's an improvement.
+</blockquote>
+<p>Label: <span class="p-category">Vision</span></p>
+</div>
+</div>
+<span class="info footer"><a href="/2023/116/b1/" class="dt-published published dt-updated updated u-url u-uid"><time class="value" datetime="15:53-0700">15:53</time> on <time class="value">2023-04-26</time></a></span>
+</li>
+<li class="h-entry hentry as-note">
+<p class="article"><span class="p-name entry-title e-content entry-content">&#127793; I have long been a fan of <a class="auto-link" href="https://Foursquare.com">@Foursquare.com</a> and <a class="auto-link" href="https://Swarmapp.com">@Swarmapp.com</a>, having created many venues, posted many tips, and (checks profile) over 45,000 checkins. I recently joined <a class="auto-link" href="https://happycow.net">@happycow.net</a> and before I start posting new vegan (friendly) venues or reviews there, I really need to figure out my own personal site venue pages (including URL design) and review posts design and authoring workflow.<br class="auto-break"/><br class="auto-break"/>I&rsquo;m pretty sure I can and should post h-review posts as a variant of articles (with usual h-entry markup) with an explicit article name, since most review destinations request a title (name) for the review (e.g. HappyCow, TripAdvisor), and for others with only review text (e.g. Google Maps), I can include the name at the start.<br class="auto-break"/><br class="auto-break"/>Different review destinations have different text requirements (minimum and/or maximum lengths), and I&rsquo;ll take time to document those first.<br class="auto-break"/><br class="auto-break"/>The first destination I&rsquo;ll likely try automatically syndicating to is a site created by #<span class="p-category auto-tag">IndieWeb</span> community member <a class="auto-link" href="https://jamesg.blog">@jamesg.blog</a> (<a class="auto-link" href="https://indieweb.social/@capjamesg">@capjamesg@indieweb.social</a>): <a class="auto-link" href="https://breakfastand.coffee">@breakfastand.coffee</a><br class="auto-break"/><br class="auto-break"/>It&rsquo;s still quite new, but the thing that makes Breakfast &amp; Coffee innovative and unique is that it encourages you to post your venue (e.g. cafe) description or review on your own site with a meaningful slug, link to <a class="auto-link" href="https://breakfastand.coffee/">https://breakfastand.coffee/</a> and then send a Webmention to indicate that you&rsquo;d like to syndicate your venue or review into Breakfast &amp; Coffee, like into an aggregator.<br class="auto-break"/><br class="auto-break"/>Before I get to that point however, I feel there&rsquo;s quite a few challenges in publishing a &ldquo;decent&rdquo; restaurant / cafe venue page, because there really is a dearth of good examples of doing so with simple semantic HTML + CSS. You really don&rsquo;t need JS to post info about a restaurant.<br class="auto-break"/><br class="auto-break"/>Setting aside the economic / intermediation challenges of "delivery apps" for now, people really want a few simple things from a restaurant site / page that could all be marked up with simple semantic HTML (thus resulting in good web search rankings) and styled in a quickly readable and mobile-friendly way.<br class="auto-break"/><br class="auto-break"/>* hours open (perhaps kitchen hours if different)<br class="auto-break"/>* location (address that links to a map UI or map embed w/o cookies/tracking)<br class="auto-break"/>* nearest bus/tram/rail stop<br class="auto-break"/>* payment restrictions (e.g. if only cash, or only credit) or options if you prefer<br class="auto-break"/>* contact info (including a note about catering if that&rsquo;s an option)<br class="auto-break"/>* links to social media profiles<br class="auto-break"/>* links to restaurant review sites/aggregator pages (e.g. venue permalink on Google Maps, TripAdvisor, Foursquare, Swarm, HappyCow)<br class="auto-break"/>* menu with item name, description, price, optional-thumbnail, and dietary/allergy notations<br class="auto-break"/><br class="auto-break"/>No you really don&rsquo;t need the full mess of made-up things at schema-org.<br class="auto-break"/><br class="auto-break"/>The community at OpenStreetMap has done A LOT (most? nearly all?) of the work figuring out the ways to express the above types of information, e.g.:<br class="auto-break"/><br class="auto-break"/><a class="auto-link" href="https://wiki.openstreetmap.org/wiki/Key:opening_hours">https://wiki.openstreetmap.org/wiki/Key:opening_hours</a><br class="auto-break"/><br class="auto-break"/>Yet has anyone actually seen a simple semantic HTML page that publishes this kind of information? <br class="auto-break"/><br class="auto-break"/>I&rsquo;ve web searched many search terms and phrases and found nothing good. <br class="auto-break"/><br class="auto-break"/>Stylistically dated templates for sale. Examples with numerous unnecessary scripts (no your typical user does not care about your clever animated 3D-carousel of pretty photos, certainly not waiting for a megabyte of framework scripts for it). Something built on Bootstrap, unnecessary for today&rsquo;s mobile-friendly HTML+CSS.<br class="auto-break"/><br class="auto-break"/>I did find one (ONE) blog post from 2007 (those were the days) for semantic markup for a restaurant menu: <a class="auto-link" href="https://jonchristopher.us/blog/a-semantic-breakdown-of-restaurant-menus/">https://jonchristopher.us/blog/a-semantic-breakdown-of-restaurant-menus/</a> <br class="auto-break"/><br class="auto-break"/>Unless I find an existing solution soon, I&rsquo;m going to create something from scratch with h-card (since a restaurant is an organization / venue) and add semantic HTML &amp; class names for various fields, re-using from OpenStreetMap Keys whenever possible.<br class="auto-break"/><br class="auto-break"/>That leaves the URL design, where to publish my restaurant pages on my own site, and rather than rethink it, I will likely go with what I decided in my Whistle short URL design<a id="t5QX1_ref-1" href="#t5QX1_note-1">&sup1;</a> many years ago, which is /v/ at the top level of my site, followed by a slug of my short name for the venue. This way I can play with static HTML pages there, with a shared style sheet in that same directory, without impacting anything else on my site.<br class="auto-break"/><br class="auto-break"/>I have some other thoughts around iconography for various diet preferences / allergen warnings for menu items that I&rsquo;ve tried (or considered), though perhaps I&rsquo;ll leave those for another post. <br class="auto-break"/><br class="auto-break"/>Or maybe I&rsquo;ll braindump them now, however incomplete, to see if they resonate or anyone has better suggestions (restaurants and menus really have no standard for these)<br class="auto-break"/><br class="auto-break"/>Edit: already updated lists &amp; descriptions based on feedback:<br class="auto-break"/><br class="auto-break"/>Individual icons/emoji:<br class="auto-break"/>&#127793; &#x2014; plant-based (no animal meat or meat broth/oils whatsover)<br class="auto-break"/>+&#127806; &#x2014; has gluten<br class="auto-break"/>+&#129372; &#x2014; has nuts<br class="auto-break"/>+&#127851; &#x2014; has chocolate<br class="auto-break"/>+&#127798; &#x2014; is spicy<br class="auto-break"/>+&#127855; &#x2014; has honey<br class="auto-break"/>+&#129480; &#x2014; has butter<br class="auto-break"/>+&#129371; &#x2014; has milk, cream, or yogurt<br class="auto-break"/>+&#129472; &#x2014; has cheese<br class="auto-break"/>+&#129370; &#x2014; has egg<br class="auto-break"/><br class="auto-break"/>When present in a menu item (with no other food-related icons)<br class="auto-break"/>&#127793; = vegan &amp; gluten-free<br class="auto-break"/>&#127793;&#127806; = vegan with gluten<br class="auto-break"/>&#127793;&#129372; = vegan with nuts<br class="auto-break"/>&#127793;&#127851; = vegan with chocolate<br class="auto-break"/>&#127793;&#127798; = vegan and spicy<br class="auto-break"/>&#127793;&#127855; = vegetarian with honey<br class="auto-break"/>&#127793;&#129480; = vegetarian with butter<br class="auto-break"/>&#127793;&#129371; = vegetarian with milk, cream, or yogurt<br class="auto-break"/>&#127793;&#129472; = vegetarian with cheese<br class="auto-break"/>&#127793;&#129370; = vegetarian with egg<br class="auto-break"/><br class="auto-break"/>with additional combinations as necessary. <br class="auto-break"/><br class="auto-break"/>For example:<br class="auto-break"/><br class="auto-break"/>A breakfast sandwich at Devil&rsquo;s Teeth Bakery<a id="t5QX1_ref-2" href="#t5QX1_note-2">&sup2;</a>:<br class="auto-break"/>* Regular Breakfast Sandwich (no bacon!) $10.00 &#127793;&#127806;&#129480;&#129472;&#129370;<br class="auto-break"/><br class="auto-break"/>Or a chocolate croissant at Arsicault<a id="t5QX1_ref-3" href="#t5QX1_note-3">&sup3;</a>:<br class="auto-break"/>* Chocolate Croissant $5.75 &#127793;&#127806;&#129480;&#127851;<br class="auto-break"/><br class="auto-break"/>Judahlicious<a id="t5QX1_ref-4" href="#t5QX1_note-4">&#8308;</a> jungle a&#xE7;ai bowl:<br class="auto-break"/>* Jungle Style A&#xE7;a&iacute; Bowl $12.75 &#127793;<br class="auto-break"/><br class="auto-break"/>Arizmendi<a id="t5QX1_ref-5" href="#t5QX1_note-5">&#8309;</a> mint chocolate cookie:<br class="auto-break"/>* Mint Chocolate Chip Cookie $2.75 &#127793;&#127806;<br class="auto-break"/><br class="auto-break"/><br class="auto-break"/>Non-vegetarian items would omit the plant &#127793; icon/emoji, but could still include allergen icons.<br class="auto-break"/><br class="auto-break"/>If you are posting restaurants (or any other venues) to your personal site, please add a few of their permalinks to the IndieWeb Examples here: <a class="auto-link" href="https://indieweb.org/venue#Indieweb_Examples">https://indieweb.org/venue#Indieweb_Examples</a><br class="auto-break"/><br class="auto-break"/><br class="auto-break"/>This is day 40 of #<span class="p-category auto-tag">100DaysOfIndieWeb</span>. #<span class="p-category auto-tag">100Days</span><br class="auto-break"/><br class="auto-break"/>&larr; Day 39: <a class="auto-link" href="https://tantek.com/2023/112/t2/account-migration-post-blog-archive-format">https://tantek.com/2023/112/t2/account-migration-post-blog-archive-format</a><br class="auto-break"/>&rarr; Day 41: <a class="auto-link" href="https://tantek.com/2023/139/t1/wikipedia-supports-indieweb-rel-me">https://tantek.com/2023/139/t1/wikipedia-supports-indieweb-rel-me</a><br class="auto-break"/><br class="auto-break"/><br class="auto-break"/>Glossary<br class="auto-break"/><br class="auto-break"/>article<br class="auto-break"/>&#xA0;<a class="auto-link" href="https://indieweb.org/article">https://indieweb.org/article</a><br class="auto-break"/>checkin<br class="auto-break"/>&#xA0;<a class="auto-link" href="https://indieweb.org/checkin">https://indieweb.org/checkin</a><br class="auto-break"/>h-card<br class="auto-break"/>&#xA0;<a class="auto-link" href="https://microformats.org/wiki/h-card">https://microformats.org/wiki/h-card</a><br class="auto-break"/>h-entry<br class="auto-break"/>&#xA0;<a class="auto-link" href="https://microformats.org/wiki/h-entry">https://microformats.org/wiki/h-entry</a><br class="auto-break"/>h-review<br class="auto-break"/>&#xA0;<a class="auto-link" href="https://microformats.org/wiki/h-review">https://microformats.org/wiki/h-review</a><br class="auto-break"/>POSSE<br class="auto-break"/>&#xA0;<a class="auto-link" href="https://indieweb.org/POSSE">https://indieweb.org/POSSE</a><br class="auto-break"/>review <br class="auto-break"/>&#xA0;<a class="auto-link" href="https://indieweb.org/review">https://indieweb.org/review</a><br class="auto-break"/>URL design<br class="auto-break"/>&#xA0;<a class="auto-link" href="https://indieweb.org/URL_design">https://indieweb.org/URL_design</a><br class="auto-break"/>venue<br class="auto-break"/>&#xA0;<a class="auto-link" href="https://indieweb.org/venue">https://indieweb.org/venue</a><br class="auto-break"/><br class="auto-break"/>References<br class="auto-break"/><br class="auto-break"/><a id="t5QX1_note-1" href="#t5QX1_ref-1">&sup1;</a> <a class="auto-link" href="https://tantek.com/w/Whistle#design">https://tantek.com/w/Whistle#design</a> <br class="auto-break"/><a id="t5QX1_note-2" href="#t5QX1_ref-2">&sup2;</a> <a class="auto-link" href="https://www.devilsteethbakingcompany.com/menu">https://www.devilsteethbakingcompany.com/menu</a><br class="auto-break"/><a id="t5QX1_note-3" href="#t5QX1_ref-3">&sup3;</a> <a class="auto-link" href="https://arsicault-bakery.com/menus">https://arsicault-bakery.com/menus</a><br class="auto-break"/><a id="t5QX1_note-4" href="#t5QX1_ref-4">&#8308;</a> <a class="auto-link" href="https://judahlicious.com/menu/">https://judahlicious.com/menu/</a><br class="auto-break"/><a id="t5QX1_note-5" href="#t5QX1_ref-5">&#8309;</a> <a class="auto-link" href="https://store.arizmendibakery.com/menu-today">https://store.arizmendibakery.com/menu-today</a></span></p>
+<span class="info footer"><a href="/2023/114/t1/venues-reviews-personal-pages" class="dt-published published dt-updated updated u-url u-uid"><time class="value" datetime="13:34-0700">13:34</time> on <time class="value">2023-04-24</time></a></span>
+</li>
+<li class="h-entry hentry as-article">
+<div class="article">
+<span class="reply-context" style="display:block">New issue on <a href="https://github.com/mozilla-mobile/firefox-ios/issues" class="u-in-reply-to h-cite">GitHub project &ldquo;firefox-ios&rdquo;</a></span> <a href="/2023/114/b1/" rel="bookmark" class="u-url u-uid"><h1 class="entry-title p-name">
+Feature request: support "Add to Home Screen" on iOS/iPadOS 16.4
+</h1></a><div class="entry-content e-content">
+<p>
+iOS/iPadOS 16.4 (released 2023-03-27) have APIs for third-party browsers to support an &ldquo;Add to Home Screen&rdquo; menu item / share option like the same feature in Mobile Safari. Several iOS browsers have already shipped with support including Microsoft Edge for iOS, according to:
+<a href="https://ios.gadgethacks.com/how-to/these-browsers-let-you-add-web-apps-and-bookmarks-your-iphones-home-screen-0385351/">https://ios.gadgethacks.com/how-to/these-browsers-let-you-add-web-apps-and-bookmarks-your-iphones-home-screen-0385351/</a>. Firefox for iOS &amp; iPadOS should similarly support "Add to Home Screen", preferably as a menu item in the existing menu shown after choosing "Share" from the main &equiv; menu in the bottom right corner.
+</p>
+<p>
+See prototype and implementation details explored in discussion
+<a href="https://github.com/mozilla-mobile/firefox-ios/discussions/13281">Add to Home Screen support in iOS 16.4 #13281</a> for feasibility.
+</p>
+<p>
+Chrome on iOS does not yet (as of version 112) have an "Add to Home Screen" feature. I would expect it to be implemented soon however, as it&rsquo;s a path to installable web apps which Chrome on Android and desktop already support: 
+<a href="https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Installing#add_to_home_screen">MDN: Installing and uninstalling web apps: Add to home screen</a>.
+</p>
+<p>
+This feature is both useful for users and helps incremental user interface parity with Safari and Edge on iOS (and likely soon Chrome).
+</p>
+<p>
+In addition, adding a web app to the home screen is a necessary step towards implementing the user interaction aspects of Web Push API and Notifications API support for web apps launched in Firefox. These two APIs were recently added to WebKit, also in iOS 16.4: 
+<a href="https://webkit.org/blog/13878/web-push-for-web-apps-on-ios-and-ipados/">2023-02-16 Web Push for Web Apps on iOS and iPadOS</a>
+</p>
+</div>
+</div>
+<span class="info footer"><a href="/2023/114/b1/" class="dt-published published dt-updated updated u-url u-uid"><time class="value" datetime="06:32-0700">06:32</time> on <time class="value">2023-04-24</time></a></span>
+</li>
+<li class="h-entry hentry as-note">
+<p class="article"><span class="reply-context" style="display:block">&#8627; In reply to <a href="https://mastodon.social/@spreadmastodon/110249767459591081" class="u-in-reply-to h-cite">mastodon.social user spreadmastodon&rsquo;s post</a></span> <span class="p-name entry-title e-content entry-content"><a class="auto-link" href="https://mastodon.social/@spreadmastodon">@spreadmastodon@mastodon.social</a> it is one of the more amazing examples of emergent distributed alignment that I have seen. There is so much overlap across efforts, principles<a id="t5QW4_ref-1" href="#t5QW4_note-1">&sup1;</a>, and goals that it makes sense that we are finding ways of making things seamlessly work together at the edges.<br class="auto-break"/><br class="auto-break"/>I also see a common desire for enabling more user-owned use of and creating for the web, independent of big corporate ownership (or control), and without any reliance or need for surveillance capitalism.<br class="auto-break"/><br class="auto-break"/>#<span class="p-category auto-tag">Fediverse</span> #<span class="p-category auto-tag">IndieWeb</span> #<span class="p-category auto-tag">Mastodon</span> #<span class="p-category auto-tag">OpenWeb</span> #<span class="p-category auto-tag">SpreadMastodon</span> projects do not depend on tracking &amp; profiling users for targeted advertising.<br class="auto-break"/><br class="auto-break"/>A better web is possible.<br class="auto-break"/><br class="auto-break"/><a id="t5QW4_note-1" href="#t5QW4_ref-1">&sup1;</a> <a class="auto-link" href="https://indieweb.org/principles">https://indieweb.org/principles</a></span></p>
+<span class="info footer"><a href="/2023/113/t4/" class="dt-published published dt-updated updated u-url u-uid"><time class="value" datetime="17:00-0700">17:00</time> on <time class="value">2023-04-23</time></a></span>
+</li>
+<li class="h-entry hentry as-note">
+<p class="article"><span class="reply-context" style="display:block">&#8627; In reply to <a href="https://hachyderm.io/@maegul/110247571428373383" class="u-in-reply-to h-cite">hachyderm.io user maegul&rsquo;s post</a></span> <span class="p-name entry-title e-content entry-content"><a class="auto-link" href="https://hachyderm.io/@maegul">@maegul@hachyderm.io</a> <a class="auto-link" href="https://octodon.social/@torb">@torb@octodon.social</a> #<span class="p-category auto-tag">BlueSky</span> is a fascinating experiment to watch, and if there&rsquo;s one thing we&rsquo;ve learned from all the work on decentralized/federated social web systems over the past 13+ years (certainly since the first Federated Social Web Summit<a id="t5QW3_ref-1" href="#t5QW3_note-1">&sup1;</a>), there&rsquo;s LOTS of room for and benefits to many folks working on solving many hard problems in parallel, even if with totally different approaches, which can learn from each other.<br class="auto-break"/><br class="auto-break"/>We learned this lesson in the #<span class="p-category auto-tag">W3C</span> Social Web Working Group<a id="t5QW3_ref-2" href="#t5QW3_note-2">&sup2;</a>.<br class="auto-break"/><br class="auto-break"/>Also a key reason the #<span class="p-category auto-tag">IndieWeb</span> community adopted a core principle of Plurality<a id="t5QW3_ref-3" href="#t5QW3_note-3">&sup3;</a>.<br class="auto-break"/><br class="auto-break"/>I have a lot of sympathy for "so many non-techies bounce off Mastodon because it&rsquo;s just too technically difficult for them", it&rsquo;s one of the reasons I send most folks directly to <a class="auto-link" href="https://micro.blog/">https://micro.blog/</a> &#x2014; it supports following / #<span class="p-category auto-tag">federating</span> with #<span class="p-category auto-tag">Mastodon</span>, and it supports core IndieWeb W3C standards like Webmention and Micropub.<br class="auto-break"/><br class="auto-break"/>Regarding what portability requires, I for one disagree that account or post portability needs "signed data repositories and DIDs". I believe that cooperative server-to-server portability can be achieved without it, and frankly, if you&lsquo;re wanting to design for uncooperative servers, what expectation can you have that they&rsquo;ll support any standards or interop whatsoever?<br class="auto-break"/><br class="auto-break"/>Beyond Mastodon-to-Mastodon account migration, we already have Mastodon-to-BridgyFed (IndieWeb) and Mastodon - to - <a class="auto-link" href="http://Micro.blog">Micro.blog</a>, and I expect we&rsquo;ll see that grow to include all directions of all combinations thereof.<br class="auto-break"/><br class="auto-break"/>I am also optimistic that the &ldquo;fediverse&rdquo; will continue evolving various solutions that put users first in different ways, because there are users with different needs. <br class="auto-break"/><br class="auto-break"/>There&rsquo;s certainly a current #<span class="p-category auto-tag">fediverse</span> hierarchy that puts a lot of power (and burden of responsibility) in the hands of &rdquo;server/instance&rdquo; admins &#x2014; &ldquo;feudalverse&rdquo; was a running joke for a while, reflecting a #<span class="p-category auto-tag">federation</span> of instance admin feudal lords and their user serfs. <br class="auto-break"/><br class="auto-break"/>Ironically, the more that account+posts migration/portability is supported, the more incentive there will be for harmonious and respectful relationships between instance admins and users, so I only see this situation improving in the future.<br class="auto-break"/><br class="auto-break"/>Long reply summarized: I think the folks innovating at BlueSky are charting interesting waters, the Mastodon development community continues show through improvements that they prioritize users and their identity &amp; data ownership, and the IndieWeb community continues to support &amp; play with those and many other solutions, building bridges<a id="t5QW3_ref-4" href="#t5QW3_note-4">&#8308;</a> between<a id="t5QW3_ref-5" href="#t5QW3_note-5">&#8309;</a> them<a id="t5QW3_ref-6" href="#t5QW3_note-6">&#8310;</a> to interconnect all the things.<br class="auto-break"/><br class="auto-break"/>Glossary<br class="auto-break"/><br class="auto-break"/>BridgyFed<br class="auto-break"/>&#xA0;<a class="auto-link" href="https://fed.brid.gy/">https://fed.brid.gy/</a><br class="auto-break"/>Micropub<br class="auto-break"/>&#xA0;<a class="auto-link" href="https://indieweb.org/Micropub">https://indieweb.org/Micropub</a><br class="auto-break"/>Webmention<br class="auto-break"/>&#xA0;<a class="auto-link" href="https://indieweb.org/Webmention">https://indieweb.org/Webmention</a><br class="auto-break"/><br class="auto-break"/>References<br class="auto-break"/><br class="auto-break"/><a id="t5QW3_note-1" href="#t5QW3_ref-1">&sup1;</a> <a class="auto-link" href="https://indieweb.org/Federated_Social_Web_Summit#Portland_2010">https://indieweb.org/Federated_Social_Web_Summit#Portland_2010</a><br class="auto-break"/><a id="t5QW3_note-2" href="#t5QW3_ref-2">&sup2;</a> <a class="auto-link" href="https://tantek.com/2023/051/t1/five-years-ago-w3c-social-web">https://tantek.com/2023/051/t1/five-years-ago-w3c-social-web</a><br class="auto-break"/><a id="t5QW3_note-3" href="#t5QW3_ref-3">&sup3;</a> <a class="auto-link" href="https://indieweb.org/plurality">https://indieweb.org/plurality</a><br class="auto-break"/><a id="t5QW3_note-4" href="#t5QW3_ref-4">&#8308;</a> <a class="auto-link" href="https://brid.gy/">https://brid.gy/</a><br class="auto-break"/><a id="t5QW3_note-5" href="#t5QW3_ref-5">&#8309;</a> <a class="auto-link" href="https://fed.brid.gy/">https://fed.brid.gy/</a><br class="auto-break"/><a id="t5QW3_note-6" href="#t5QW3_ref-6">&#8310;</a> <a class="auto-link" href="https://github.com/snarfed/bridgy-fed/issues/381">https://github.com/snarfed/bridgy-fed/issues/381</a></span></p>
+<span class="info footer"><a href="/2023/113/t3/" class="dt-published published dt-updated updated u-url u-uid"><time class="value" datetime="16:43-0700">16:43</time> on <time class="value">2023-04-23</time></a></span>
+</li>
+<li class="h-entry hentry as-note">
+<p class="article"><span class="reply-context" style="display:block">&#8627; In reply to <a href="https://fosstodon.org/@VincentTunru/110246807314630123" class="u-in-reply-to h-cite">fosstodon.org user VincentTunru&rsquo;s post</a></span> <span class="p-name entry-title e-content entry-content"><a class="auto-link" href="https://fosstodon.org/@VincentTunru">@VincentTunru@fosstodon.org</a> how can an account boost without broadcasting? Isn&rsquo;t that built into how boosts work and what they mean? And yes, otherwise a new account boosting/reposting all the old posts would probably annoy all the followers who were migrated.<br class="auto-break"/><br class="auto-break"/>From a user experience perspective, this also seems odd and a bit misleading, even if only viewed on someone&rsquo;s profile page. Boosts/reposts usually imply someone promoting someone else&rsquo;s posts. Self-boosting from a new account feels a bit like spam / sockpuppetry, while boosting/reposting from the same account is at least transparent about what you are doing.</span></p>
+<span class="info footer"><a href="/2023/113/t2/" class="dt-published published dt-updated updated u-url u-uid"><time class="value" datetime="16:11-0700">16:11</time> on <time class="value">2023-04-23</time></a></span>
+</li>
+</ol>
+</div>
+
+<aside><div class="aside" id="contact">
+
+<div class="p-note note">
+<div class="section hello" id="hello">
+<h2>Hello</h2>
+<p>Hi. I work on web standards and the indie web. I run trails at sunrise, practice yoga movement &amp; philosophy, code &amp; design my website, and write when I can. 
+My pronouns are 
+<span class="p-pronouns"><a class="p-pronoun h-pronoun">he</a>/<a class="p-pronoun h-pronoun">him</a></span>.
+<a href="?" rel="nofollow" title="Choose default theme">&#127968;</a> 
+<a href="?skin=vtx" rel="nofollow" title="Choose Terminal theme">&#128250;</a> 
+<a href="?skin=trn" rel="nofollow" title="Choose TRON:Legacy theme">&#129359;</a></p>
+</div>
+
+<div class="section interact">
+<ul>
+<li><a href="//tantek.com/contact">&#128172; Contact</a></li>
+<li><a href="//tantek.com/tip/1" title="Did you read something of value here and want to encourage more posts like that? Feel free to tip a small amount and mention which topics you enjoyed! (Just please avoid specific products or services. Thanks! -t)">&#128079; Tip</a></li>
+</ul>
+</div>
+
+<div class="section information">
+<ul>
+<li>
+<a href="https://indieweb.org/founders">Founder</a> at <a href="https://indieweb.org/" class="p-org org h-card">IndieWeb</a>
+</li>
+<li>
+<a href="http://microformats.org/about/people">Founder</a> at <a href="http://microformats.org/" class="p-org org h-card">microformats.org</a>
+</li>
+<li>
+<a class="p-role" href="https://wiki.mozilla.org/Standards">Web Standards Lead</a> at <a href="https://mozilla.org/" class="p-org org h-card">Mozilla</a>
+</li>
+<li>
+<a href="https://www.w3.org/Consortium/membership-faq#ACRep"><abbr title="W3C Advisory Committee">AC</abbr></a> <a href="https://www.w3.org/2002/ab/"><abbr title="W3C Advisory Board">AB</abbr></a> &amp; <a class="p-role" href="https://www.w3.org/Style/CSS/members"><abbr title="W3C Cascading Style Sheets Working Group">CSS WG</abbr></a> member at <a href="https://www.w3.org/" class="p-org org h-card">W3C</a>
+</li>
+<li>BSCS &amp; MSCS <a href="https://stanford.edu/" class="p-category category h-card">Stanford University</a>
+</li>
+</ul>
+</div>
+</div>
+
+<div class="section elsewhere">
+<h2 id="follow">Follow</h2>
+<ul class="facets">
+<li><indie-action do="follow" with="https://tantek.com/"><a href="https://tantek.com/" rel="canonical" title="follow tantek.com in your favorite Social Reader"><abbr title="world wide web">&#127760;</abbr> <kbd>tantek.com</kbd></a></indie-action></li>
+<li><form style="margin:0.2em 0 1em; color:#000" method="post" action="https://fed.brid.gy/remote-follow">
+<label for="follow-address"><abbr title="at-at">&#128024;</abbr> Follow <kbd title="copy my at-at address to follow from Mastodon">@tantek.com@tantek.com</kbd>:<br> enter your @-@ fediverse address:</label>
+ <input id="follow-address" name="address" type="text" required="required" placeholder="@you@instance.social" alt="fediverse address" size="23" value="">
+ <input name="domain" type="hidden" value="tantek.com">
+ <input name="protocol" type="hidden" value="web">
+ <button type="submit">Follow</button>
+</form></li>
+<li>
+<a rel="me" class="u-url url" href="https://micro.blog/t" title="follow me on micro.blog"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 480 480" focusable="false" aria-hidden="true">
+  <defs>
+    <linearGradient id="a" x1="50%" x2="50%" y1="0" y2="78%">
+      <stop offset="0%" stop-color="#fb0"></stop>
+      <stop offset="100%" stop-color="#f80"></stop>
+    </linearGradient>
+    <linearGradient id="b" x1="50%" x2="50%" y1="0" y2="100%">
+      <stop offset="0%" stop-color="#ffc"></stop>
+      <stop offset="100%" stop-color="#ff6"></stop>
+    </linearGradient>
+  </defs>
+  <path fill="url(#a)" d="M427 354c31-37 53-84 53-135C480 98 371 0 240 0 108 0 0 98 0 219s108 219 240 219c28 0 57-5 84-14 3-1 7 0 9 2 20 27 51 46 85 54l5-2v-6a93 93 0 0 1 4-118z"></path>
+  <path fill="url(#b)" d="M352 194l-61 46 22 72c1 3 0 6-3 8h-8l-63-43-63 43h-8c-3-2-4-5-3-8l22-72-61-46c-3-2-4-5-3-8 1-2 4-4 7-4l77-2 25-71c1-3 4-5 7-5s6 2 7 5l25 71 77 2c3 0 6 2 7 4 1 3 0 6-3 8z"></path>
+</svg> micro.blog @t</a>
+<a rel="me" href="https://xoxo.zone/@t" aria-hidden="true"/></a>
+<a rel="me" href="https://fed.brid.gy/r/https://tantek.com/" aria-hidden="true"/></a>
+</li>
+<!--<li><a rel="me" class="u-url url" href="https://www.flickr.com/people/tantek/" title="photos on Flickr"><img src="images/flickr-16x16.png" alt="" /> Flickr</a></li>-->
+<li><a rel="me" class="u-url url" href="https://instagram.com/tantek/" title="Instagram account where I cross-post my photos"><img src="images/instagram-16x16.png" alt=""/> Instagram @tantek</a></li>
+<li><a rel="me" class="u-url url" href="https://twitter.com/intent/user?screen_name=t" title="follow me on Twitter"><img src="images/twitter-16x16.png" alt=""/> Twitter @t</a></li>
+</ul>
+</div>
+
+<!-- h-feed filled in dynamically -->
+<div id="recent-articles" class="section recent-articles h-feed">
+<h2 class="p-name">Recent Articles</h2>
+<ul>
+<li class="h-entry"><a href="/2023/128/b1/running-for-w3c-advisory-board-ab-election">Running For Re-election in the W3C Advisory Board (AB) Election</a></li>
+<li class="h-entry"><a href="/2022/334/b1/running-for-w3c-advisory-board-special-election">Running For The @W3C Advisory Board (@W3CAB) Special Election</a></li>
+<li class="h-entry"><a href="/2022/267/b1/w3c-tpac-sustainability-cg-meeting">W3C TPAC 2022 Sustainability Community Group Meeting</a></li>
+</ul>
+</div>
+
+<!-- h-feed filled in dynamically -->
+<div id="recent-photos" class="section recent-photos h-feed">
+<h2 class="p-name">Recent Photos</h2>
+<ul>
+<li class="h-entry" style="display:inline;margin:0;padding:0"><a href="/2022/289/t1/hot-skyline50k-ultra-finish"><img style="max-width:32%;width:7em;height:7em;object-fit:cover;margin-bottom:0.2em" src="https://fastly.4sqi.net/img/general/width960/476_tjk6ja88e3mjglC50lmeeMAwpr4Pozk_yVhAIuNgq3E.jpg" alt="Tantek running with a focused look in a 2020 MUC50 cap, black singlet &amp; shorts, on a dirt trail with grass, bushes, &amp; trees on both sides, and two runners out of focus ~20 meters behind him."/></a></li>
+<li class="h-entry" style="display:inline;margin:0;padding:0"><a href="/2021/221/t1/finished-rodeovalley-trailrace"><img style="max-width:32%;width:7em;height:7em;object-fit:cover;margin-bottom:0.2em" src="https://fastly.4sqi.net/img/general/width960/476_9_gqB6h_tK8iyjBEb886XpboOcF8bsEgT_wl76vckqI.jpg" alt="Fogged-in view of a lush green hillside, narrow singletrack trail cutting up from the right and approaching the center, with Tantek power hiking uphill, grinning, water bottle in right hand, holding his side with his left."/></a></li>
+<li class="h-entry" style="display:inline;margin:0;padding:0"><a href="/2021/218/t1/running-rodeovalley"><img style="max-width:32%;width:7em;height:7em;object-fit:cover;margin-bottom:0.2em" src="https://fastly.4sqi.net/img/general/width960/476_gChM9nrNNko-1aMouw-x74imp7kzUzJKLomkEQ4u8qQ.jpg" alt="White yoga mat on a hardwood floor with running shoes, clothes, gear, fuel laid out in an orderly fashion."/></a></li>
+<li class="h-entry" style="display:inline;margin:0;padding:0"><a href="/2021/019/t1/marin-trailrun"><img style="max-width:32%;width:7em;height:7em;object-fit:cover;margin-bottom:0.2em" src="https://fastly.4sqi.net/img/general/width960/476_nJH-uVKVhefvOPmfi3mPSlI9MqpeN6WLmS6EbWdKNC0.jpg" alt="Tantek running downhill on a trail with mountains, hills, and an ocean shore in the distant background, under a sunny blue sky."/></a></li>
+<li class="h-entry" style="display:inline;margin:0;padding:0"><a href="/2021/017/t3/seven-years-ago-npsf-hills"><img style="max-width:32%;width:7em;height:7em;object-fit:cover;margin-bottom:0.2em" src="https://fastly.4sqi.net/img/general/width960/476_fkcHgLiQBPvCLZJHKYdX7CaTedWH8UbLwL1AQuOZV9A.jpg" alt="View of sunset-lit downtown San Francisco in the distance as viewed from Twin Peaks, with the hairpin turn below, and immediately below the green hill slope of Twin Peaks summit."/></a></li>
+<li class="h-entry" style="display:inline;margin:0;padding:0"><a href="/2021/017/t2/january"><img style="max-width:32%;width:7em;height:7em;object-fit:cover;margin-bottom:0.2em" src="https://fastly.4sqi.net/img/general/width960/476_M152uOnalZ6QfPsz9YMHd2sNPt-U7s2Twx2Lj26gryA.jpg" alt="January of 2021 month calendar built from LEGO bricks, on a hexagonal white on gray blanket background."/></a></li>
+<li class="h-entry" style="display:inline;margin:0;padding:0"><a href="/2020/364/t1/last-track"><img style="max-width:32%;width:7em;height:7em;object-fit:cover;margin-bottom:0.2em" src="https://fastly.4sqi.net/img/general/width960/476_77tgUdgL2xYzHOEFYLIf1-kATkEom1PWrqzIEja6Bww.jpg" alt="Multicolored heart painting with a few sequine pieces, outlined in pink with bits of turquoise, paint dripping downward, on a piece of plywood at a construction site, signed KATE_TOVA."/></a></li>
+<li class="h-entry" style="display:inline;margin:0;padding:0"><a href="/2020/359/t1/tam-summit"><img style="max-width:32%;width:7em;height:7em;object-fit:cover;margin-bottom:0.2em" src="https://fastly.4sqi.net/img/general/width960/476_OguOnR4ZRWSfkf4xrKwqIhVCw6Fmp8zJZT1reWJclls.jpg" alt="Tantek wearing a buff taking a selfie at the Mill Valley Depot with Nick, Paddy, Olivia, and Emma safely distanced in the background."/></a></li>
+<li class="h-entry" style="display:inline;margin:0;padding:0"><a href="/2020/356/t1/december-winter-solstice"><img style="max-width:32%;width:7em;height:7em;object-fit:cover;margin-bottom:0.2em" src="https://fastly.4sqi.net/img/general/width960/476_crDev05xDJVnmxPsasFbdxMvdxDA1tuItOUPEaTVogA.jpg" alt="December of 2020 month calendar built from LEGO bricks, on an hardwood floor background."/></a></li>
+<li class="h-entry" style="display:inline;margin:0;padding:0"><a href="/2020/153/t1/justice-for-george"><img style="max-width:32%;width:7em;height:7em;object-fit:cover;margin-bottom:0.2em" src="https://fastly.4sqi.net/img/general/width960/476_wiYEJTxjdxLl_vZFlLefP9O8b-Jv9R12Q92ANKZXhSA.jpg" alt="Stencil street art of George Floyd on a red wall with the word JUSTICE above his head, and FOR GEORGE below."/></a></li>
+<li class="h-entry" style="display:inline;margin:0;padding:0"><a href="/2020/137/t3/sf-distancing-day-twelve"><img style="max-width:32%;width:7em;height:7em;object-fit:cover;margin-bottom:0.2em" src="https://fastly.4sqi.net/img/general/width960/476_SpwXl5ANk0Pyg5xBFSovR5qUkMoaEE_6uak0acFKU8w.jpg" alt="Intersection of Frederick and Ashbury streets at night, looking westward, everything is dark except for streetlamps, lights outside a boarded up Ashbury Market, and a second floor corner apartment on the other side, above a lit bus stop for the number 6 outbound bus."/></a></li>
+<li class="h-entry" style="display:inline;margin:0;padding:0"><a href="/2020/130/t1/ahmaudarbery-blacklivesmatter"><img style="max-width:32%;width:7em;height:7em;object-fit:cover;margin-bottom:0.2em" src="https://fastly.4sqi.net/img/general/width960/476_RLIxPGQ2v_yOJcsVnDalcK2pZETJNnYbZSr1I4VhrBc.jpg" alt="Strava map showing a roundtrip running route in red from Haight Ashbury to near a hairpin turn on Twin Peaks and back."/></a></li>
+</ul>
+</div>
+
+<div class="section elsewhere">
+<h2 id="elsewhere">Elsewhere</h2>
+<ul class="facets">
+<li><a rel="me" class="u-url url" href="https://github.com/tantek" title="open source on Github"><img src="images/github-16x16.png" alt=""/> Github @tantek</a></li>
+<!--<li><a rel="me" class="u-url url" href="http://tantek.pbwiki.com/" title="projects, notes, and events on PBWiki">PBworks wiki</a></li>-->
+<li><a href="http://www.imdb.com/name/nm8414793" title="film appearance(s)on IMDB"><img src="images/imdb-16x16.png" alt=""/> IMDB</a></li>
+<li><a rel="me" class="u-url url" href="https://indieweb.org/User:Tantek.com" title="contributions to IndieWeb wiki"><img src="images/wikipedia-16x16.png" alt=""/> IndieWeb User:Tantek.com</a></li>
+<li><a rel="me" class="u-url url" href="https://en.wikipedia.org/wiki/User:Tantek" title="contributions to Wikipedia"><img src="images/wikipedia-16x16.png" alt=""/> Wikipedia User:Tantek</a></li>
+</ul>
+</div>
+
+<!-- <div class="section">
+<h2>Contact</h2>
+<ul>
+<li><a href="http://tantek.com/w/CommunicationProtocols">Preferred</a>: <a class="u-url url u-impp" href="aim:goim?screenname=tantekc"><img src="images/aim-16x16.png" alt="" /> aim:tantekc</a></li>
+<li><a class="u-url url" type="text/directory" href="http://h2vx.com/vcf/tantek.com/" title="Download my vCard to add my contact information to your Address Book"><img src="images/vcard-16x16.png" alt="" /> download vCard</a></li>
+</ul>
+</div>-->
+
+<div class="section">
+<h2>Buy my book!</h2>
+<a href="//tantek.com/html5now"><img src="images/html5nowdvd.jpg" alt="HTML5 Now!"/></a>
+<p>A step-by-step tutorial for getting started with HTML5 today. Includes reference guide and DVD with 2.5 hours of video plus 100 page searchable full-color PDF eBook.</p>
+<p><a href="//tantek.com/html5now">Buy at Amazon.com</a></p>
+</div>
+
+</div></aside>
+
+<footer><div class="footer">
+
+<div class="section">
+<h2>Launched &amp; Live</h2>
+<ul>
+<li>
+<a href="//tantek.com/html5now">HTML5 Now! book &amp; DVD</a> (<a href="https://twitter.com/html5now">@html5now</a>) - quickly learn how to write HTML5, from simple documents to video and vector graphics.</li>
+<li>
+<a href="https://asin.cc" title="Amazon product link shortener">ASIN.cc</a> (<a href="https://twitter.com/asindotcc">@asindotcc</a>) - a handy URL shortener for books and Amazon products</li>
+<li>
+<a href="https://h2vx.com/" title="hCard to vCard, hCalendar to iCalendar conversion services">H2VX</a> (<a href="https://twitter.com/h2vx">@h2vx</a>) - add hCard contacts and hCalendar events from web pages to your address book and calendar programs</li>
+<li class="h-card">
+<a class="p-name u-url" href="http://microformats.org/wiki">microformats.org</a> (<a class="u-url" href="https://twitter.com/microformats">@microformats</a>) - <span class="p-note">the fastest way to turn your web pages into simple APIs and simultaneously look better in search engines</span>
+</li>
+</ul>
+</div>
+<div class="section">
+<h2>Currently Working On</h2>
+<ul>
+<li>
+<a href="https://wiki.mozilla.org/Tantek-Mozilla-projects">Mozilla projects</a> - open standards: 
+<a class="p-category category" href="http://microformats.org/wiki/microformats2">microformats2</a> (e.g. <a class="p-category category" href="http://microformats.org/wiki/h-card">h-card</a>, 
+<a class="p-category category" href="http://microformats.org/wiki/h-cite">h-cite</a>, 
+<a class="p-category category" href="http://microformats.org/wiki/h-entry">h-entry</a>, &amp;
+<a class="p-category category" href="http://microformats.org/wiki/h-event">h-event</a>),
+some <span class="p-category category">HTML5</span> &amp;
+<span class="p-category category">CSS3</span>,
+growing the <a class="p-category category p-org org h-org" href="https://indieweb.org/">IndieWeb</a> &amp; <a href="https://indieweb.org/events/next-hwc">Homebrew Website</a> communities.</li>
+<li>
+<a href="https://indieweb.org/">IndieWeb community</a> (<a href="https://twitter.com/indiewebcamp">@indiewebcamp</a>) <a href="https://indieweb.org/events">events</a>, 
+<a href="//tantek.com/2014/067/b1/building-blocks-people-focused-mobile-communication">people-focused mobile communication</a>, 
+<a class="p-category category" href="https://indieweb.org/authorship">authorship</a>, 
+<a class="p-category category" href="https://indieweb.org/POSSE">POSSE</a>, 
+<a class="p-category category" href="https://indieweb.org/post-type-discovery">post type discovery</a>,
+<a class="p-category category" href="https://indieweb.org/webactions">webactions</a>, and measuring progress with <a class="p-category category" href="https://indieweb.org/IndieMark">IndieMark</a>.
+</li>
+<li>
+<a class="p-category category" href="http://cassisproject.com" title="CASSIS language and library"><abbr title="Client And Server Scripting Implementation Subset for Javascript and PHP">CASSIS</abbr></a> 
+(<a href="https://github.com/tantek/cassis/">on github</a>, <a href="https://twitter.com/cassisjs">@cassisjs</a>) - a functional programming language and framework for  code that natively executes in PHP and Javascript.</li>
+<!-- 
+need help with this: https://indieweb.org/User:Tantek.com#RelMeAuth_PHP_library
+<li><a class="p-category category" href="http://microformats.org/wiki/RelMeAuth" title="Simplified personal logins with rel-me and OAuth">RelMeAuth</a> - use a personal site and rel="me" hyperlinks to profiles on popular OAuth supporting services like <a href="https://twitter.com/t">Twitter</a>, <a href="https://github.com/tantek">Github</a> etc. to sign-in with your own URL.
+</li> -->
+<li>
+<a class="p-category category" href="https://indieweb.org/Falcon">Falcon</a> (<a href="https://twitter.com/falcon">@falcon</a>) - server-based personal tweeting/blogging application. See in particular, what <a href="https://indieweb.org/Falcon#Working_On">I'm currently working on</a>.
+</li>
+<li>
+<a href="//tantek.com/w/Whistle">Whistle</a> - personal algorithmically reversible URL shortener.</li>
+</ul>
+</div>
+
+<div class="section h-feed" id="events">
+<h2 class="p-name">Speaking &amp; Events</h2>
+<ol>
+
+<li class="h-event vevent">
+<span class="dt-start dtstart"><time>2023-06-03</time></span> <a class="u-url url" href="http://insidetrail.com/calendar/marin-ultra-challenge/"><abbr class="p-name summary" title="Inside Trail&rsquo;s Marin Ultra Challenge 50k trail race">MUC 50k race</abbr> <abbr class="p-location location" title="Rodeo Beach, Marin Headlands, California, USA">Marin</abbr></a>
+</li>
+
+<li class="h-event vevent">
+<span class="dt-start dtstart"><time>2023-06-18</time></span> <a class="u-url url" href="https://www.brokenarrowskyrace.com/23k"><abbr class="p-name summary" title="23K Broken Arrow Skyrace">BA 23k race</abbr> <abbr class="p-location location" title="Palisades, Tahoe, California, USA">Palisades</abbr></a>
+</li>
+
+<li class="h-event vevent">
+<span class="dt-start dtstart"><time>2023-07-23</time></span> <a class="u-url url" href="https://www.thesfmarathon.com/2nd-half-marathon/"><abbr class="p-name summary" title="San Francisco 2nd Half Marathon / City Half">SF 2nd half race</abbr> <abbr class="p-location location" title="San Francisco, California, USA">San Francisco</abbr></a>
+</li>
+
+<li class="h-event vevent">
+<span class="dt-start dtstart"><time>2023-08-06</time></span> <a class="u-url url" href="https://scenaperformance.com/events/skyline-50k/"><abbr class="p-name summary" title="Scena Performance&rsquo;s Skyeline 50km trail race">Skyline 50k race</abbr> <abbr class="p-location location" title="Lake Chabot Marina, Castro Valley, California, USA">Lake Chabot</abbr></a>
+</li>
+
+<li class="h-event vevent">
+<span class="dt-start dtstart"><time>2023-09-11</time></span>&#x2026;<abbr class="dt-end dtend" title="2023-09-15"><time datetime="2023-09-15">15</time></abbr> <a class="u-url url" href="https://www.w3.org/wiki/TPAC/2023"><span class="p-name summary">W3C TPAC</span> <abbr class="p-location location" title="Seville, Spain">Seville</abbr></a>
+</li>
+
+<li class="h-event vevent">
+<span class="dt-start dtstart"><time>2023-10-26</time></span>&#x2026;<abbr class="dt-end dtend" title="2023-10-27"><time datetime="2023-10-27">27</time></abbr> <a class="u-url url" href="https://border-none.net/2023/"><span class="p-name summary">border:none</span> <abbr class="p-location location" title="Nuremberg, Germany">Nuremberg</abbr></a>
+</li>
+
+<li class="h-event vevent">
+<span class="dt-start dtstart"><time>2023-10-28</time></span>&#x2026;<abbr class="dt-end dtend" title="2023-10-29"><time datetime="2023-10-29">29</time></abbr> <a class="u-url url" href="https://indieweb.org/2023/Nuremberg"><object class="u-attach attach" data="https://indieweb.org/images/6/67/indiewebcamp-logo-lockup-color%403x.png" type="image/png"><span class="p-name summary">IndieWebCamp</span></object> <abbr class="p-location location" title="Nuremberg, Germany">Nuremberg</abbr></a>
+</li>
+</ol>
+<!-- <p>See <a href="http://lanyrd.com/profile/t/future/">my Lanyrd</a> for more.</p>-->
+<p>
+<a href="webcal://dev.h2vx.com/ics/tantek.com">Subscribe to events</a>
+</p>
+</div>
+
+<div class="favorite-quotes" id="favorite-quotes" style="padding-top:2em;clear:both">
+<blockquote>I always had a repulsive sort of need to be something more than human. I felt very very puny as a human. I thought, &ldquo;Fuck that. I want to be a superman.&rdquo; <br/>
+&#x2014; <a href="https://en.wikiquote.org/wiki/David_Bowie#Quotes">David Bowie</a>, 1976</blockquote>
+<blockquote>There are two wolves and they are always fighting. One is darkness and despair, the other is light and hope. Which wolf wins? </blockquote>
+<blockquote>I get things are bad. But what are we doing to fix it?<br/>
+&#x2014; Casey Newton (<a href="https://en.wikiquote.org/wiki/Tomorrowland_%28film%29#Casey_Newton">Tomorrowland, 2015</a>)</blockquote>
+
+</div>
+
+<address class="copyright">&#xA9; <time>1996</time>-<time>2023</time> 
+<span lang="tr">Tantek &#xC7;elik</span>, 
+<span class="c">All Rights Reserved.</span>
+<span style="display:block" class="photo-credit">
+Icon photo by <span class="h-card">Rebecca Daniels</span>.
+</span>
+<span><a href="https://xn--sr8hvo.ws/%F0%9F%93%8A/previous">&larr;</a>
+Member of IndieWeb Webring &#128376;&#128141;
+<a href="https://xn--sr8hvo.ws/%F0%9F%93%8A/next">&rarr;</a>
+</span>
+</address>
+
+</div></footer>
+<script type="text/javascript" src="cassis.js"></script>
+<script type="text/javascript">/**/ 
+var es = document.getElementById("link");
+if (es) {
+  es.onclick = function() {
+   var e = targetelement();
+   e.focus();
+   e.select();
+  };
+}
+/**/</script>
+<script>{var s=navigator.serviceWorker;if(s){s.register('/serviceworker.js');}}</script>
+</body>
+</html>
