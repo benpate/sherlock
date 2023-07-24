@@ -43,7 +43,6 @@ func (client Client) actor_Feed(acc *actorAccumulator) {
 	feed, err := gofeed.NewParser().ParseString(acc.body.String())
 
 	if err != nil {
-		spew.Dump(err)
 		return
 	}
 
@@ -114,6 +113,7 @@ func feedActivity(feed *gofeed.Feed) func(*gofeed.Item) any {
 			result[vocab.PropertyAttributedTo] = attributedTo
 		}
 
+		spew.Dump(result)
 		return result
 	}
 }
@@ -122,16 +122,7 @@ func feedAuthor(feed *gofeed.Feed, item *gofeed.Item) mapof.Any {
 
 	result := mapof.Any{}
 
-	if feed.Author != nil {
-		result[vocab.PropertyName] = html.ToText(feed.Author.Name)
-		result[vocab.PropertySummary] = feed.Author.Email
-	}
-
-	if item.Author != nil {
-		result[vocab.PropertyName] = html.ToText(item.Author.Name)
-		result[vocab.PropertySummary] = item.Author.Email
-	}
-
+	// Try to find the image from the feed.  It's weird, but easier this way.
 	if feed.Image != nil {
 		result[vocab.PropertyImage] = feed.Image.URL
 
@@ -146,7 +137,41 @@ func feedAuthor(feed *gofeed.Feed, item *gofeed.Item) mapof.Any {
 		}
 	}
 
-	return nil
+	// Try to find the author from various sources in the item
+	if item.Author != nil {
+		result[vocab.PropertyName] = html.ToText(item.Author.Name)
+		result[vocab.PropertySummary] = item.Author.Email
+		return result
+	}
+
+	if len(item.Authors) > 0 {
+		if itemAuthor := item.Authors[0]; itemAuthor != nil {
+			result[vocab.PropertyName] = itemAuthor.Name
+			result[vocab.PropertySummary] = itemAuthor.Email
+			return result
+		}
+	}
+
+	// Try to find the author from various sources in the feed
+	if feed.Author != nil {
+		result[vocab.PropertyName] = html.ToText(feed.Author.Name)
+		result[vocab.PropertySummary] = feed.Author.Email
+		return result
+	}
+
+	if len(feed.Authors) > 0 {
+		if feedAuthor := feed.Authors[0]; feedAuthor != nil {
+			result[vocab.PropertyName] = feedAuthor.Name
+			result[vocab.PropertySummary] = feedAuthor.Email
+			return result
+		}
+	}
+
+	// Fallback to use the Feed information as the Author
+	result[vocab.PropertyName] = feed.Title
+	result[vocab.PropertySummary] = feed.Description
+
+	return result
 }
 
 // feedSummary returns a summary of the item in plain text format
