@@ -22,11 +22,10 @@ func (client Client) actor_FindLinks(acc *actorAccumulator) {
 	}
 
 	// Get "relevant" links from the document
-	links := htmlDocument.Find("[rel=alternate],[rel=self],[rel=hub],[rel=feed]").Nodes
+	links := htmlDocument.Find("[rel=alternate],[rel=self],[rel=feed],[rel=hub],[rel=icon]").Nodes
 
 	// Add links to the accumulator
 	for _, link := range links {
-
 		acc.links = append(acc.links, digit.Link{
 			RelationType: nodeAttribute(link, "rel"),
 			MediaType:    nodeAttribute(link, "type"),

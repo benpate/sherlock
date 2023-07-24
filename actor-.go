@@ -5,6 +5,7 @@ import (
 
 	"github.com/benpate/derp"
 	"github.com/benpate/hannibal/streams"
+	"github.com/benpate/hannibal/vocab"
 	"github.com/benpate/remote"
 	"github.com/benpate/sherlock/pipe"
 	"github.com/davecgh/go-spew/spew"
@@ -14,8 +15,6 @@ import (
 // If and ActivityPub Actor cannot be found, it attempts to create a fake one
 // using RSS/Atom feeds, and MicroFormats instead.
 func (client Client) LoadActor(url string) (streams.Document, error) {
-
-	spew.Dump("sherlock.LoadActor")
 
 	acc := newActorAccumulator(url)
 
@@ -53,6 +52,20 @@ func (client Client) LoadActor(url string) (streams.Document, error) {
 
 	// If we have a complete result, then we're done!
 	if acc.Complete() {
+
+		// Use magic values from pre-defined links
+		for _, link := range acc.links {
+			switch link.RelationType {
+			case "hub":
+				acc.meta.SetString("hub", link.Href)
+			case "icon":
+				if _, ok := acc.result.GetStringOK(vocab.PropertyIcon); !ok {
+					acc.result.SetString(vocab.PropertyIcon, link.Href)
+				}
+			}
+		}
+
+		// Use values from http response headers (et al)
 		header := acc.httpResponse.Header
 		result := streams.NewDocument(
 			acc.result,
