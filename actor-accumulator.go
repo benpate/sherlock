@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/benpate/digit"
+	"github.com/benpate/hannibal/vocab"
 	"github.com/benpate/rosetta/mapof"
 	"github.com/benpate/sherlock/pipe"
 )
@@ -42,7 +43,7 @@ func (acc actorAccumulator) Header(name string) string {
 
 func (acc actorAccumulator) Complete() bool {
 
-	if acc.result.NotEmpty() {
+	if acc.result.GetString(vocab.PropertyID) != "" {
 		return true
 	}
 
