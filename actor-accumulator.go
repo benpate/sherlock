@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/benpate/digit"
-	"github.com/benpate/hannibal/vocab"
 	"github.com/benpate/rosetta/mapof"
 	"github.com/benpate/sherlock/pipe"
 )
@@ -18,16 +17,16 @@ type actorAccumulator struct {
 	links        digit.LinkSet
 	body         bytes.Buffer
 	result       mapof.Any
-	meta         mapof.Any
 	format       string
-	error        error
+	cacheControl string
+	webSub       string
 }
 
 func newActorAccumulator(url string) actorAccumulator {
 	return actorAccumulator{
 		url:          url,
 		httpResponse: new(http.Response),
-		meta:         mapof.NewAny(),
+		links:        digit.NewLinkSet(4),
 		result:       mapof.NewAny(),
 	}
 }
@@ -39,21 +38,4 @@ func (acc actorAccumulator) Header(name string) string {
 	}
 
 	return ""
-}
-
-func (acc actorAccumulator) Complete() bool {
-
-	if acc.result.GetString(vocab.PropertyID) != "" {
-		return true
-	}
-
-	if acc.error != nil {
-		return true
-	}
-
-	return false
-}
-
-func (acc actorAccumulator) Error() error {
-	return acc.error
 }

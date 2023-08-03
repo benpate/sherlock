@@ -30,7 +30,7 @@ func TestActor_Atom(t *testing.T) {
 	}
 
 	client := Client{}
-	client.actor_AtomFeed(&acc)
+	client.actor_RSSFeed(&acc)
 
 	require.Equal(t, acc.result["name"], "FYI Center for Software Developers")
 	require.Equal(t, acc.result["type"], "Service")

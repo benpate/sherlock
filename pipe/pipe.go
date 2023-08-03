@@ -1,26 +1,15 @@
 package pipe
 
-type Step[T Accumulator] func(T)
+type Step[T any] func(T) bool
 
-type Steps[T Accumulator] []Step[T]
+type Steps[T any] []Step[T]
 
-type Accumulator interface {
-	Complete() bool
-	Error() error
-}
-
-func Run[T Accumulator](accumulator T, steps ...Step[T]) {
-
+func Run[T any](accumulator T, steps ...Step[T]) bool {
 	for _, step := range steps {
-
-		step(accumulator)
-
-		if accumulator.Error() != nil {
-			return
-		}
-
-		if accumulator.Complete() {
-			return
+		if step(accumulator) {
+			return true
 		}
 	}
+
+	return false
 }

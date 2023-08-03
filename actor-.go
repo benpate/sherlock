@@ -34,30 +34,24 @@ func (client Client) LoadActor(url string) (streams.Document, error) {
 
 		// Parse various feed formats
 		client.actor_JSONFeed,
-		client.actor_AtomFeed,
 		client.actor_RSSFeed,
-		client.actor_XMLFeed,
 
 		// Use MicroFormats as last resort
 		// client.actor_MicroFormats,
 	}
 
 	// Try to execute the pipe
-	pipe.Run(&acc, steps...)
-
-	// Handle execution errors
-	if err := acc.Error(); err != nil {
-		return streams.NilDocument(), derp.Wrap(err, "sherlock.Client.Actor", "Error loading actor", url)
-	}
-
-	// If we have a complete result, then we're done!
-	if acc.Complete() {
+	if done := pipe.Run(&acc, steps...); done {
 
 		// Use magic values from pre-defined links
 		for _, link := range acc.links {
 			switch link.RelationType {
+
+			// If a hub is defined, then use it for WebSub
 			case "hub":
-				acc.meta.SetString("hub", link.Href)
+				acc.webSub = link.Href
+
+			// If we don't already have an Icon, try using the icon link header
 			case "icon":
 				if _, ok := acc.result.GetStringOK(vocab.PropertyIcon); !ok {
 					acc.result.SetString(vocab.PropertyIcon, link.Href)
@@ -66,19 +60,13 @@ func (client Client) LoadActor(url string) (streams.Document, error) {
 		}
 
 		// Use values from http response headers (et al)
-		header := acc.httpResponse.Header
 		result := streams.NewDocument(
 			acc.result,
 			streams.WithClient(client),
 			streams.WithMeta("format", acc.format),
-			streams.WithMeta("content-type", header.Get("Content-Type")),
-			streams.WithMeta("etag", header.Get("ETag")),
-			streams.WithMeta("last-modified", header.Get("Last-Modified")),
-			streams.WithMeta("cache-control", header.Get("Cache-Control")),
+			streams.WithMeta("cache-control", acc.cacheControl),
+			streams.WithMeta("websub", acc.webSub),
 		)
-
-		// Apply other metadata to the document.
-		result.MetaAdd(acc.meta)
 
 		// Success-a-mundo !!
 		return result, nil
@@ -88,20 +76,20 @@ func (client Client) LoadActor(url string) (streams.Document, error) {
 	return streams.NilDocument(), derp.NewNotFoundError("sherlock.Client.Actor", "Unable to load actor", url)
 }
 
-func (client Client) actor_GetHTTP_Atom(acc *actorAccumulator) {
-	client.actor_GetHTTP(ContentTypeAtom)(acc)
+func (client Client) actor_GetHTTP_Atom(acc *actorAccumulator) bool {
+	return client.actor_GetHTTP(ContentTypeAtom)(acc)
 }
 
-func (client Client) actor_GetHTTP_RSS(acc *actorAccumulator) {
-	client.actor_GetHTTP(ContentTypeRSS)(acc)
+func (client Client) actor_GetHTTP_RSS(acc *actorAccumulator) bool {
+	return client.actor_GetHTTP(ContentTypeRSS)(acc)
 }
 
-func (client Client) actor_GetHTTP_JSONFeed(acc *actorAccumulator) {
-	client.actor_GetHTTP(ContentTypeJSONFeed)(acc)
+func (client Client) actor_GetHTTP_JSONFeed(acc *actorAccumulator) bool {
+	return client.actor_GetHTTP(ContentTypeJSONFeed)(acc)
 }
 
 func (client Client) actor_GetHTTP(contentTypes ...string) pipe.Step[*actorAccumulator] {
-	return func(acc *actorAccumulator) {
+	return func(acc *actorAccumulator) bool {
 
 		var body bytes.Buffer
 
@@ -113,13 +101,17 @@ func (client Client) actor_GetHTTP(contentTypes ...string) pipe.Step[*actorAccum
 		// Try to send the transaction.  If successful, the populate the accumulator
 		if err := txn.Send(); err == nil {
 			acc.httpResponse = txn.ResponseObject
+			acc.cacheControl = txn.ResponseObject.Header.Get("Cache-Control")
 			acc.body = body
 		}
+
+		return false
 	}
 }
 
-func debugAccumulator(label string) pipe.Step[*actorAccumulator] {
-	return func(acc *actorAccumulator) {
-		spew.Dump(label+" -----------------------", acc.url, acc.meta, acc.result, acc.links)
+func debug(label string) pipe.Step[*actorAccumulator] {
+	return func(acc *actorAccumulator) bool {
+		spew.Dump(label+" -----------------------", acc.url, acc.result, acc.links, acc.format)
+		return false
 	}
 }

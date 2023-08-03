@@ -11,14 +11,14 @@ import (
 	"golang.org/x/net/html"
 )
 
-func (client Client) actor_FindLinks(acc *actorAccumulator) {
+func (client Client) actor_FindLinks(acc *actorAccumulator) bool {
 
 	// Scan the HTML document for relevant links
 	newReader := bytes.NewReader(acc.body.Bytes())
 	htmlDocument, err := goquery.NewDocumentFromReader(newReader)
 
 	if err != nil {
-		return
+		return false
 	}
 
 	// Get "relevant" links from the document
@@ -32,14 +32,16 @@ func (client Client) actor_FindLinks(acc *actorAccumulator) {
 			Href:         getRelativeURL(acc.url, nodeAttribute(link, "href")),
 		})
 	}
+
+	return false
 }
 
 // actor_ScanHTMLForWebMentions tries to load/use any linked feeds
-func (client Client) actor_FollowLinks(acc *actorAccumulator) {
+func (client Client) actor_FollowLinks(acc *actorAccumulator) bool {
 
 	// If there are no links, then there's nothing to do in this step
 	if len(acc.links) == 0 {
-		return
+		return false
 	}
 
 	// Make a list of content types and pipelines to run.  This is an array
@@ -55,7 +57,7 @@ func (client Client) actor_FollowLinks(acc *actorAccumulator) {
 	}{
 		{ContentTypeActivityPub, actorAccumulatorPipe{client.actor_ActivityStream}},
 		{ContentTypeJSONFeed, actorAccumulatorPipe{client.actor_GetHTTP_JSONFeed, client.actor_JSONFeed}},
-		{ContentTypeAtom, actorAccumulatorPipe{client.actor_GetHTTP_Atom, client.actor_AtomFeed}},
+		{ContentTypeAtom, actorAccumulatorPipe{client.actor_GetHTTP_Atom, client.actor_RSSFeed}},
 		{ContentTypeRSS, actorAccumulatorPipe{client.actor_GetHTTP_RSS, client.actor_RSSFeed}},
 	}
 
@@ -66,20 +68,19 @@ func (client Client) actor_FollowLinks(acc *actorAccumulator) {
 		if link := findLink(LinkRelationAlternate, row.mediaType, acc.links); !link.IsEmpty() {
 
 			sub := newActorAccumulator(link.Href)
-			pipe.Run(&sub, row.pipe...)
 
-			if err := sub.Error(); err != nil {
-				acc.error = err
-				return
-			}
-
-			// If the call was successful, then boost the result up to the primary accumulator
-			if sub.Complete() {
+			if done := pipe.Run(&sub, row.pipe...); done {
 				acc.result = sub.result
-				return
+				acc.webSub = sub.webSub
+				acc.format = sub.format
+				acc.cacheControl = sub.cacheControl
+				return true
 			}
+
 		}
 	}
+
+	return false
 }
 
 /******************************************

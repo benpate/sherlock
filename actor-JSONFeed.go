@@ -13,21 +13,21 @@ import (
 	"github.com/kr/jsonfeed"
 )
 
-func (client Client) actor_JSONFeed(acc *actorAccumulator) {
+func (client Client) actor_JSONFeed(acc *actorAccumulator) bool {
 
 	const location = "sherlock.actor_JSONFeed"
 
 	// JSONFeed content only
 	if !isJSONFeedContentType(acc.Header("Content-Type")) {
-		return
+		return false
 	}
 
 	var feed jsonfeed.Feed
 
 	// Parse the JSON feed
 	if err := json.Unmarshal(acc.body.Bytes(), &feed); err != nil {
-		acc.error = derp.Wrap(err, location, "Error parsing JSON Feed", acc.body.String())
-		return
+		derp.Report(derp.Wrap(err, location, "Error parsing JSON Feed", acc.body.String()))
+		return false
 	}
 
 	// Before inserting, sort the items chronologically so that new feeds appear correctly in the UX
@@ -64,14 +64,20 @@ func (client Client) actor_JSONFeed(acc *actorAccumulator) {
 
 	actor[vocab.PropertyOutbox] = outbox
 
-	// Return success
 	acc.format = "JSONFeed"
 	acc.result = actor
+	acc.cacheControl = "max-age=86400, public" // Force JSON feeds to cache for 1 day
 
+	// Scan for WebSub hubs
 	for _, hub := range feed.Hubs {
-		hubType := "hub_" + strings.ToLower(hub.Type)
-		acc.meta[hubType] = hub.URL
+		if strings.ToLower(hub.Type) == "websub" {
+			acc.webSub = hub.URL
+			break
+		}
 	}
+
+	// Success!
+	return true
 }
 
 // Returns TRUE if the contentType is application/activity+json or application/ld+json

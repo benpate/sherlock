@@ -6,11 +6,11 @@ import (
 	"github.com/benpate/digit"
 )
 
-func (client Client) actor_WebFinger(acc *actorAccumulator) {
+func (client Client) actor_WebFinger(acc *actorAccumulator) bool {
 
 	// If the ID doesn't look like an email/username then skip this step
 	if !strings.Contains(acc.url, "@") {
-		return
+		return false
 	}
 
 	// Try to load the resource/account via WebFinger
@@ -18,9 +18,11 @@ func (client Client) actor_WebFinger(acc *actorAccumulator) {
 
 	// On errors, just continue processing the pipeline
 	if err != nil {
-		return
+		return false
 	}
 
 	// Save the links into the accumulator
 	acc.links = resource.Links
+
+	return false
 }

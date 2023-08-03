@@ -1,49 +1,28 @@
 package sherlock
 
 import (
-	"net/http"
 	"sort"
 
+	"github.com/benpate/derp"
 	"github.com/benpate/hannibal/vocab"
 	"github.com/benpate/rosetta/html"
 	"github.com/benpate/rosetta/list"
 	"github.com/benpate/rosetta/mapof"
 	"github.com/benpate/rosetta/slice"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/mmcdole/gofeed"
-	"github.com/tomnomnom/linkheader"
 )
 
-// actor_AtomFeed tries to read and Atom feed from the accumulator
-func (client Client) actor_AtomFeed(acc *actorAccumulator) {
-	if acc.Header("Content-Type") == ContentTypeAtom {
-		client.actor_Feed(acc)
-	}
-}
-
-// actor_RSSFeed tries to read and RSS feed from the accumulator
-func (client Client) actor_RSSFeed(acc *actorAccumulator) {
-	if acc.Header("Content-Type") != ContentTypeRSS {
-		client.actor_Feed(acc)
-	}
-}
-
-// actor_XMLFeed tries to read and XML(RSS) feed from the accumulator
-func (client Client) actor_XMLFeed(acc *actorAccumulator) {
-	if acc.Header("Content-Type") != ContentTypeXML {
-		client.actor_Feed(acc)
-	}
-}
-
 // actor_Feed tries to read and RSS or Atom feed from the accumulator
-func (client Client) actor_Feed(acc *actorAccumulator) {
+func (client Client) actor_RSSFeed(acc *actorAccumulator) bool {
 
 	// Try to find the RSS feed associated with this link
 	feed, err := gofeed.NewParser().ParseString(acc.body.String())
 
 	if err != nil {
-		return
+		// nolint:errcheck // This is a debug statement, so we don't care if it fails.
+		derp.Report(derp.Wrap(err, "sherlock.actor_Feed", "Error parsing feed", acc.body.String()))
+		return false
 	}
 
 	// Sort the feed items (newest first)
@@ -52,7 +31,7 @@ func (client Client) actor_Feed(acc *actorAccumulator) {
 	})
 
 	// Create the result object
-	actor := mapof.Any{
+	acc.result = mapof.Any{
 		vocab.PropertyContext: vocab.ContextTypeActivityStreams,
 		vocab.PropertyType:    vocab.ActorTypeService,
 		vocab.PropertyID:      acc.url,
@@ -65,25 +44,12 @@ func (client Client) actor_Feed(acc *actorAccumulator) {
 		},
 	}
 
-	// Return in Triumph
-	acc.result = actor
+	// Populate metadata
 	acc.format = "RSS"
+	acc.cacheControl = "max-age=86400, public" // Force RSS feeds to cache for 1 day
 
-	parseLinkHeaders(acc.httpResponse, acc.meta)
-}
-
-func parseLinkHeaders(response *http.Response, meta mapof.Any) {
-
-	// Scan the response headers for WebSub links
-	// TODO: LOW: Are RSS links ever put into the headers?
-	// TODO: LOW: Are RSSCloud links ever put into the headers?
-	linkHeaders := linkheader.ParseMultiple(response.Header["Link"])
-
-	for _, link := range linkHeaders {
-		if link.Rel == "hub" {
-			meta["hub_websub"] = link.URL
-		}
-	}
+	// Return in Triumph
+	return true
 }
 
 // feedActivity populates an Activity object from a gofeed.Feed and gofeed.Item
@@ -113,7 +79,6 @@ func feedActivity(feed *gofeed.Feed) func(*gofeed.Item) any {
 			result[vocab.PropertyAttributedTo] = attributedTo
 		}
 
-		spew.Dump(result)
 		return result
 	}
 }
