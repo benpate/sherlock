@@ -5,7 +5,6 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/benpate/derp"
 	"github.com/benpate/hannibal/streams"
 	"github.com/benpate/hannibal/vocab"
 	"github.com/benpate/rosetta/html"
@@ -15,10 +14,8 @@ import (
 
 func (client Client) actor_JSONFeed(acc *actorAccumulator) bool {
 
-	const location = "sherlock.actor_JSONFeed"
-
 	// JSONFeed content only
-	if !isJSONFeedContentType(acc.Header("Content-Type")) {
+	if !isJSONFeedContentType(acc.Header(ContentType)) {
 		return false
 	}
 
@@ -26,7 +23,6 @@ func (client Client) actor_JSONFeed(acc *actorAccumulator) bool {
 
 	// Parse the JSON feed
 	if err := json.Unmarshal(acc.body.Bytes(), &feed); err != nil {
-		derp.Report(derp.Wrap(err, location, "Error parsing JSON Feed", acc.body.String()))
 		return false
 	}
 
@@ -64,7 +60,7 @@ func (client Client) actor_JSONFeed(acc *actorAccumulator) bool {
 
 	actor[vocab.PropertyOutbox] = outbox
 
-	acc.format = "JSONFeed"
+	acc.format = FormatJSONFeed
 	acc.result = actor
 	acc.cacheControl = "max-age=86400, public" // Force JSON feeds to cache for 1 day
 

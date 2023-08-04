@@ -39,7 +39,7 @@ func (client Client) actor_MicroFormats(acc *actorAccumulator) {
 
 			if len(items) > 0 {
 
-				result := mapof.Any{
+				acc.result = mapof.Any{
 					vocab.PropertyID:           acc.url,
 					vocab.PropertyName:         microformat_Property(feed, "name"),
 					vocab.PropertyImage:        microformat_Property(feed, "photo"),
@@ -47,8 +47,7 @@ func (client Client) actor_MicroFormats(acc *actorAccumulator) {
 					vocab.PropertyOutbox:       microformat_Outbox(items),
 				}
 
-				acc.result = result
-				acc.format = "MicroFormats"
+				acc.format = FormatMicroFormats
 				return
 			}
 		}

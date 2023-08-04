@@ -45,7 +45,7 @@ func (client Client) actor_RSSFeed(acc *actorAccumulator) bool {
 	}
 
 	// Populate metadata
-	acc.format = "RSS"
+	acc.format = FormatRSS
 	acc.cacheControl = "max-age=86400, public" // Force RSS feeds to cache for 1 day
 
 	// Return in Triumph

@@ -4,6 +4,7 @@ import (
 	"mime"
 )
 
+// isActivityStream returns TRUE if the MIME type is either activity+json or ld+json
 func isActivityStream(value string) bool {
 
 	// ActivityStreams have their own MIME type, but we have to check some alternates, too.

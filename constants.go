@@ -44,11 +44,25 @@ const ContentTypeRSS = "application/rss+xml"
 const ContentTypeXML = "application/xml"
 
 /******************************************
+ * Document Formats
+ ******************************************/
+
+const FormatActivityStream = "ACTIVITYSTREAM"
+
+const FormatRSS = "RSS"
+
+const FormatJSONFeed = "JSONFEED"
+
+const FormatMicroFormats = "MICROFORMATS"
+
+/******************************************
  * HTTP Headers
  ******************************************/
 
 // HTTPHeaderAccept is the string used in the HTTP header to request a response be encoded as a MIME type
 const HTTPHeaderAccept = "Accept"
+
+const HTTPHeaderCacheControl = "Cache-Control"
 
 /******************************************
  * Link Relations
