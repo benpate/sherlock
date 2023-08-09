@@ -5,7 +5,6 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/benpate/hannibal/streams"
 	"github.com/benpate/hannibal/vocab"
 	"github.com/benpate/rosetta/html"
 	"github.com/benpate/rosetta/mapof"
@@ -32,22 +31,10 @@ func (client Client) actor_JSONFeed(acc *actorAccumulator) bool {
 	})
 
 	// Create an ActivityStream document
-
-	actor := mapof.Any{
-		vocab.PropertyContext: vocab.ContextTypeActivityStreams,
-		vocab.PropertyType:    vocab.ActorTypeService,
-		vocab.PropertyName:    feed.Title,
-		vocab.PropertySummary: feed.Description,
-		vocab.PropertyURL:     feed.HomePageURL,
-	}
-
-	outbox := streams.OrderedCollection{
-		TotalItems:   len(feed.Items),
-		OrderedItems: make([]any, 0, len(feed.Items)),
-	}
+	orderedItems := make([]any, 0, len(feed.Items))
 
 	for _, item := range feed.Items {
-		outbox.OrderedItems = append(outbox.OrderedItems, mapof.Any{
+		orderedItems = append(orderedItems, mapof.Any{
 			vocab.PropertyID:           item.URL,
 			vocab.PropertyName:         item.Title,
 			vocab.PropertySummary:      item.Summary,
@@ -58,7 +45,18 @@ func (client Client) actor_JSONFeed(acc *actorAccumulator) bool {
 		})
 	}
 
-	actor[vocab.PropertyOutbox] = outbox
+	actor := mapof.Any{
+		vocab.PropertyContext: vocab.ContextTypeActivityStreams,
+		vocab.PropertyType:    vocab.ActorTypeService,
+		vocab.PropertyName:    feed.Title,
+		vocab.PropertySummary: feed.Description,
+		vocab.PropertyURL:     feed.HomePageURL,
+		vocab.PropertyOutbox: mapof.Any{
+			vocab.PropertyType:         vocab.CoreTypeOrderedCollection,
+			vocab.PropertyTotalItems:   len(feed.Items),
+			vocab.PropertyOrderedItems: orderedItems,
+		},
+	}
 
 	acc.format = FormatJSONFeed
 	acc.result = actor

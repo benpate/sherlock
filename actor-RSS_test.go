@@ -4,7 +4,8 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/benpate/hannibal/streams"
+	"github.com/benpate/hannibal/vocab"
+	"github.com/benpate/rosetta/mapof"
 	"github.com/stretchr/testify/require"
 )
 
@@ -35,9 +36,9 @@ func TestActor_Atom(t *testing.T) {
 	require.Equal(t, acc.result["name"], "FYI Center for Software Developers")
 	require.Equal(t, acc.result["type"], "Service")
 
-	outbox := acc.result["outbox"].(streams.OrderedCollection)
-	require.Equal(t, outbox.TotalItems, 3)
-	require.Equal(t, len(outbox.OrderedItems), 3)
+	outbox := acc.result["outbox"].(mapof.Any)
+	require.Equal(t, outbox[vocab.PropertyTotalItems], 3)
+	require.Equal(t, len(outbox[vocab.PropertyOrderedItems].([]any)), 3)
 }
 
 func testValidateFeed(t *testing.T, url string) {
@@ -46,8 +47,8 @@ func testValidateFeed(t *testing.T, url string) {
 	require.Nil(t, err)
 
 	value := result.Value().(map[string]any)
-	collection := value["outbox"].(streams.OrderedCollection)
-	require.Greater(t, collection.TotalItems, 0)
-	require.Equal(t, collection.TotalItems, len(collection.OrderedItems))
+	collection := value[vocab.PropertyOutbox].(mapof.Any)
+	require.Greater(t, collection[vocab.PropertyTotalItems], 0)
+	require.Equal(t, collection[vocab.PropertyTotalItems], len(collection[vocab.PropertyOrderedItems].([]any)))
 	// spew.Dump(collection)
 }

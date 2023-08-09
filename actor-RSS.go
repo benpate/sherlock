@@ -39,6 +39,7 @@ func (client Client) actor_RSSFeed(acc *actorAccumulator) bool {
 		vocab.PropertySummary: feed.Description,
 		vocab.PropertyURL:     acc.url,
 		vocab.PropertyOutbox: mapof.Any{
+			vocab.PropertyType:         vocab.CoreTypeOrderedCollection,
 			vocab.PropertyTotalItems:   len(feed.Items),
 			vocab.PropertyOrderedItems: slice.Map(feed.Items, feedActivity(feed)),
 		},
