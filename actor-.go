@@ -109,6 +109,8 @@ func (client Client) actor_GetHTTP(contentTypes ...string) pipe.Step[*actorAccum
 	}
 }
 
+// This is a debugging step, so it's okay if it's not always used.
+// nolint: unused
 func debug(label string) pipe.Step[*actorAccumulator] {
 	return func(acc *actorAccumulator) bool {
 		spew.Dump(label+" -----------------------", acc.url, acc.result, acc.links, acc.format)
