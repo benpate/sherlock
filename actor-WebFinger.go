@@ -21,8 +21,16 @@ func (client Client) actor_WebFinger(acc *actorAccumulator) bool {
 		return false
 	}
 
-	// Save the links into the accumulator
-	acc.links = resource.Links
+	acc.links = make([]digit.Link, 0, len(resource.Links))
+
+	// Add links to the accumulator
+	for _, link := range resource.Links {
+		acc.links = append(acc.links, digit.Link{
+			RelationType: link.RelationType,
+			MediaType:    link.MediaType,
+			Href:         getRelativeURL(acc.url, link.Href),
+		})
+	}
 
 	return false
 }

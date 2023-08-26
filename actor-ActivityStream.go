@@ -7,8 +7,13 @@ import (
 
 func (client Client) actor_ActivityStream(acc *actorAccumulator) bool {
 
+	// spew.Dump("actor_ActivityStream", acc.url)
+
 	result := mapof.NewAny()
-	txn := remote.Get(acc.url).Accept(ContentTypeActivityPub).Response(&result, nil)
+	txn := remote.Get(acc.url).
+		Accept(ContentTypeActivityPub).
+		// Use(middleware.Debug()).
+		Response(&result, nil)
 
 	// Try to load the data from the remote server
 	if err := txn.Send(); err == nil {

@@ -3,7 +3,6 @@ package sherlock
 import (
 	"testing"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/stretchr/testify/require"
 )
 
@@ -27,5 +26,5 @@ func testActor(t *testing.T, filename string) {
 	client := Client{}
 	client.actor_MicroFormats(&acc)
 
-	spew.Dump(acc.result)
+	// spew.Dump(acc.result)
 }

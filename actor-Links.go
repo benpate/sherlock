@@ -8,8 +8,27 @@ import (
 	"github.com/PuerkitoBio/goquery"
 	"github.com/benpate/digit"
 	"github.com/benpate/sherlock/pipe"
+	"github.com/tomnomnom/linkheader"
 	"golang.org/x/net/html"
 )
+
+func (client Client) actor_FindLinksInHeader(acc *actorAccumulator) bool {
+
+	headerValue := acc.httpResponse.Header.Get(HTTPHeaderLink)
+	links := linkheader.Parse(headerValue)
+
+	// spew.Dump(links)
+
+	for _, link := range links {
+		acc.links = append(acc.links, digit.Link{
+			RelationType: link.Rel,
+			MediaType:    link.Param("type"),
+			Href:         getRelativeURL(acc.url, link.URL),
+		})
+	}
+
+	return false
+}
 
 func (client Client) actor_FindLinks(acc *actorAccumulator) bool {
 
@@ -32,6 +51,8 @@ func (client Client) actor_FindLinks(acc *actorAccumulator) bool {
 			Href:         getRelativeURL(acc.url, nodeAttribute(link, "href")),
 		})
 	}
+
+	// spew.Dump("FindLinks", acc.links)
 
 	return false
 }
@@ -65,7 +86,9 @@ func (client Client) actor_FollowLinks(acc *actorAccumulator) bool {
 	for _, row := range table {
 
 		// If we have a valid link for this mime type, then run its pipeline
-		if link := findLink(LinkRelationAlternate, row.mediaType, acc.links); !link.IsEmpty() {
+		if link := findSelfOrAlternateLink(acc.links, row.mediaType); !link.IsEmpty() {
+
+			// spew.Dump("FOUND LINK", link)
 
 			sub := newActorAccumulator(link.Href)
 
@@ -74,6 +97,8 @@ func (client Client) actor_FollowLinks(acc *actorAccumulator) bool {
 				acc.webSub = sub.webSub
 				acc.format = sub.format
 				acc.cacheControl = sub.cacheControl
+
+				// spew.Dump("SUCCESS", acc.result)
 				return true
 			}
 
@@ -130,11 +155,15 @@ func getRelativeURL(baseURL string, relativeURL string) string {
 	return baseURLParsed.String()
 }
 
-func findLink(relationType string, mediaType string, links []digit.Link) digit.Link {
+func findSelfOrAlternateLink(links []digit.Link, mediaType string) digit.Link {
 
 	for _, link := range links {
-		if link.RelationType == relationType && link.MediaType == mediaType {
-			return link
+
+		switch link.RelationType {
+		case LinkRelationSelf, LinkRelationAlternate:
+			if link.MediaType == mediaType {
+				return link
+			}
 		}
 	}
 

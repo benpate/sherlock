@@ -64,6 +64,8 @@ const HTTPHeaderAccept = "Accept"
 
 const HTTPHeaderCacheControl = "Cache-Control"
 
+const HTTPHeaderLink = "Link"
+
 /******************************************
  * Link Relations
  ******************************************/

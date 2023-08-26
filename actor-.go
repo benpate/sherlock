@@ -29,6 +29,7 @@ func (client Client) LoadActor(url string) (streams.Document, error) {
 
 		// Try to load document as HTML and look for links in the <head>
 		client.actor_GetHTTP(ContentTypeHTML, ContentTypeJSONFeed, ContentTypeRSS, ContentTypeAtom, ContentTypeXML),
+		client.actor_FindLinksInHeader,
 		client.actor_FindLinks,
 		client.actor_FollowLinks,
 
