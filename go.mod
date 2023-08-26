@@ -4,17 +4,18 @@ go 1.19
 
 require (
 	github.com/PuerkitoBio/goquery v1.8.1
-	github.com/benpate/derp v0.27.2
-	github.com/benpate/digit v0.10.4
-	github.com/benpate/hannibal v0.5.0
-	github.com/benpate/remote v0.10.6
-	github.com/benpate/rosetta v0.17.0
+	github.com/benpate/derp v0.28.0
+	github.com/benpate/digit v0.10.5
+	github.com/benpate/hannibal v0.6.0
+	github.com/benpate/remote v0.10.7
+	github.com/benpate/rosetta v0.18.0
 	github.com/davecgh/go-spew v1.1.1
 	github.com/dyatlov/go-opengraph/opengraph v0.0.0-20220524092352-606d7b1e5f8a
 	github.com/kr/jsonfeed v0.1.1
 	github.com/microcosm-cc/bluemonday v1.0.24
 	github.com/mmcdole/gofeed v1.2.1
 	github.com/stretchr/testify v1.8.4
+	github.com/tomnomnom/linkheader v0.0.0-20180905144013-02ca5825eb80
 	golang.org/x/net v0.11.0
 	willnorris.com/go/microformats v1.2.0
 )
