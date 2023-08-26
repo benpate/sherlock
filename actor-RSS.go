@@ -20,7 +20,6 @@ func (client Client) actor_RSSFeed(acc *actorAccumulator) bool {
 	feed, err := gofeed.NewParser().ParseString(acc.body.String())
 
 	if err != nil {
-		// nolint:errcheck // This is a debug statement, so we don't care if it fails.
 		derp.Report(derp.Wrap(err, "sherlock.actor_Feed", "Error parsing feed", acc.body.String()))
 		return false
 	}
