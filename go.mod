@@ -16,7 +16,7 @@ require (
 	github.com/mmcdole/gofeed v1.2.1
 	github.com/stretchr/testify v1.8.4
 	github.com/tomnomnom/linkheader v0.0.0-20180905144013-02ca5825eb80
-	golang.org/x/net v0.12.0
+	golang.org/x/net v0.14.0
 	willnorris.com/go/microformats v1.2.0
 )
 
