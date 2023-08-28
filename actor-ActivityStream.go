@@ -7,8 +7,6 @@ import (
 
 func (client Client) actor_ActivityStream(acc *actorAccumulator) bool {
 
-	// spew.Dump("actor_ActivityStream", acc.url)
-
 	result := mapof.NewAny()
 	txn := remote.Get(acc.url).
 		Accept(ContentTypeActivityPub).

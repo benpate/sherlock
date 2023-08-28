@@ -25,6 +25,4 @@ func testActor(t *testing.T, filename string) {
 	// Try to parse the file
 	client := Client{}
 	client.actor_MicroFormats(&acc)
-
-	// spew.Dump(acc.result)
 }

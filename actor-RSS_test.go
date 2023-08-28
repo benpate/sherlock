@@ -50,5 +50,4 @@ func testValidateFeed(t *testing.T, url string) {
 	collection := value[vocab.PropertyOutbox].(mapof.Any)
 	require.Greater(t, collection[vocab.PropertyTotalItems], 0)
 	require.Equal(t, collection[vocab.PropertyTotalItems], len(collection[vocab.PropertyOrderedItems].([]any)))
-	// spew.Dump(collection)
 }

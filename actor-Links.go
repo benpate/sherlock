@@ -17,8 +17,6 @@ func (client Client) actor_FindLinksInHeader(acc *actorAccumulator) bool {
 	headerValue := acc.httpResponse.Header.Get(HTTPHeaderLink)
 	links := linkheader.Parse(headerValue)
 
-	// spew.Dump(links)
-
 	for _, link := range links {
 		acc.links = append(acc.links, digit.Link{
 			RelationType: link.Rel,
@@ -51,8 +49,6 @@ func (client Client) actor_FindLinks(acc *actorAccumulator) bool {
 			Href:         getRelativeURL(acc.url, nodeAttribute(link, "href")),
 		})
 	}
-
-	// spew.Dump("FindLinks", acc.links)
 
 	return false
 }
@@ -88,8 +84,6 @@ func (client Client) actor_FollowLinks(acc *actorAccumulator) bool {
 		// If we have a valid link for this mime type, then run its pipeline
 		if link := findSelfOrAlternateLink(acc.links, row.mediaType); !link.IsEmpty() {
 
-			// spew.Dump("FOUND LINK", link)
-
 			sub := newActorAccumulator(link.Href)
 
 			if done := pipe.Run(&sub, row.pipe...); done {
@@ -98,7 +92,6 @@ func (client Client) actor_FollowLinks(acc *actorAccumulator) bool {
 				acc.format = sub.format
 				acc.cacheControl = sub.cacheControl
 
-				// spew.Dump("SUCCESS", acc.result)
 				return true
 			}
 
