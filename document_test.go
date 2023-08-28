@@ -1,4 +1,4 @@
-/// go:build local
+//go:build localonly
 
 package sherlock
 
