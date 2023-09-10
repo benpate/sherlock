@@ -8,7 +8,7 @@ import (
 	"github.com/benpate/hannibal/vocab"
 	"github.com/benpate/remote"
 	"github.com/benpate/sherlock/pipe"
-	"github.com/davecgh/go-spew/spew"
+	"github.com/rs/zerolog/log"
 )
 
 // Actor returns an ActivityPub Actor representation of the provided URL.
@@ -114,7 +114,12 @@ func (client Client) actor_GetHTTP(contentTypes ...string) pipe.Step[*actorAccum
 // nolint: unused
 func debug(label string) pipe.Step[*actorAccumulator] {
 	return func(acc *actorAccumulator) bool {
-		spew.Dump(label+" -----------------------", acc.url, acc.result, acc.links, acc.format)
+		log.Debug().
+			Str("url", acc.url).
+			Interface("result", acc.result).
+			Interface("links", acc.links).
+			Str("format", acc.format).
+			Msg(label)
 		return false
 	}
 }

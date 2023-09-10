@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/benpate/rosetta/mapof"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/stretchr/testify/require"
 )
 
@@ -25,7 +24,7 @@ func TestLoad_IndieWeb(t *testing.T) {
 	meta, err := client.LoadDocument("https://indieweb.org", mapof.NewAny())
 
 	require.Nil(t, err)
-	spew.Dump(meta.Value())
+	t.Log(meta.Value())
 }
 
 func TestLoad_NickSimpson(t *testing.T) {
@@ -34,7 +33,7 @@ func TestLoad_NickSimpson(t *testing.T) {
 	meta, err := client.LoadDocument("https://nicksimson.com/posts/2022-never/", mapof.NewAny())
 
 	require.Nil(t, err)
-	spew.Dump(meta.Value())
+	t.Log(meta.Value())
 }
 
 func TestLoad_OpenGraph(t *testing.T) {
@@ -43,7 +42,7 @@ func TestLoad_OpenGraph(t *testing.T) {
 	meta, err := client.LoadDocument("https://opengraphtester.com", mapof.NewAny())
 
 	require.Nil(t, err)
-	spew.Dump(meta.Value())
+	t.Log(meta.Value())
 }
 
 func TestLoad_MastodonProfile(t *testing.T) {
@@ -52,7 +51,7 @@ func TestLoad_MastodonProfile(t *testing.T) {
 	meta, err := client.LoadDocument("https://mastodon.social/@benpate", mapof.NewAny())
 
 	require.Nil(t, err)
-	spew.Dump(meta.Value())
+	t.Log(meta.Value())
 }
 
 func TestLoad_MastodonProfile_Redirect(t *testing.T) {
@@ -61,7 +60,7 @@ func TestLoad_MastodonProfile_Redirect(t *testing.T) {
 	meta, err := client.LoadDocument("https://mastodon.social/users/benpate", mapof.NewAny())
 
 	require.Nil(t, err)
-	spew.Dump(meta.Value())
+	t.Log(meta.Value())
 }
 
 func TestLoad_MastodonToot(t *testing.T) {
@@ -70,5 +69,5 @@ func TestLoad_MastodonToot(t *testing.T) {
 	meta, err := client.LoadDocument("https://mastodon.social/@benpate/109596019301374311", mapof.NewAny())
 
 	require.Nil(t, err)
-	spew.Dump(meta.Value())
+	t.Log(meta.Value())
 }

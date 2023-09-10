@@ -3,7 +3,6 @@ package sherlock
 import (
 	"sort"
 
-	"github.com/benpate/derp"
 	"github.com/benpate/hannibal/vocab"
 	"github.com/benpate/rosetta/html"
 	"github.com/benpate/rosetta/list"
@@ -20,7 +19,7 @@ func (client Client) actor_RSSFeed(acc *actorAccumulator) bool {
 	feed, err := gofeed.NewParser().ParseString(acc.body.String())
 
 	if err != nil {
-		derp.Report(derp.Wrap(err, "sherlock.actor_Feed", "Error parsing feed", acc.body.String()))
+		// derp.Report(derp.Wrap(err, "sherlock.actor_Feed", "Error parsing feed", acc.url, acc.body.String()))
 		return false
 	}
 

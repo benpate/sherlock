@@ -13,7 +13,11 @@ import (
 // RSS, Atom, JSONFeed, and HTML MicroFormats.
 func (client Client) LoadDocument(uri string, defaultValue map[string]any) (streams.Document, error) {
 
-	const location = "sherlock.Cient.Load"
+	const location = "sherlock.Client.LoadDocument"
+
+	if uri == "" {
+		return streams.NilDocument(), derp.New(derp.CodeBadRequestError, "sherlock.Client.LoadDocument", "Empty URI")
+	}
 
 	// Load the document
 	var body bytes.Buffer
