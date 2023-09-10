@@ -1,6 +1,13 @@
 # Sherlock
 
-<img alt="AI Generated Sherlock Holmes" src="https://github.com/benpate/sherlock/raw/main/meta/The_Adventure_of_Silver_Blaze.jpg" style="width:100%; display:block; margin-bottom:20px;">
+<img alt="Illustration of Sherlock Holmes and Watson in a train car, by Sidney Paget. From Arthur Conan Doyle's 1892 book 'The Adventure of Silver Blaze'" src="https://github.com/benpate/sherlock/raw/main/meta/The_Adventure_of_Silver_Blaze.jpg" style="width:100%; display:block; margin-bottom:20px;">
+
+[![GoDoc](https://img.shields.io/badge/go-documentation-blue.svg?style=flat-square)](http://pkg.go.dev/github.com/benpate/sherlock)
+[![Version](https://img.shields.io/github/v/release/benpate/sherlock?include_prereleases&style=flat-square&color=brightgreen)](https://github.com/benpate/sherlock/releases)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/benpate/sherlock/go.yml?style=flat-square)](https://github.com/benpate/sherlock/actions/workflows/go.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/benpate/sherlock?style=flat-square)](https://goreportcard.com/report/github.com/benpate/sherlock)
+[![Codecov](https://img.shields.io/codecov/c/github/benpate/sherlock.svg?style=flat-square)](https://codecov.io/gh/benpate/sherlock)
+
 
 Sherlock is a Go library that inspects a URL for any and all available metadata, pulling from whatever metadata formats are available, and returning it as an [ActivityStreams 2.0](https://www.w3.org/TR/activitystreams-core/) document.
 
@@ -10,7 +17,7 @@ The goal is to have a standard interface into all web content, regardless of com
 
 ✅ [ActivityPub](https://www.w3.org/TR/activitypub/)/[ActivityStreams](https://www.w3.org/TR/activitystreams-core/)
 
-✅ [Microformats](https://microformats.org)
+✅ [MicroFormats](https://microformats.org)
 
 ✅ [Open Graph](https://ogp.me)
 
