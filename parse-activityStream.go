@@ -5,16 +5,20 @@ import (
 	"encoding/json"
 
 	"github.com/benpate/derp"
-	"github.com/benpate/rosetta/mapof"
+	"github.com/benpate/hannibal/streams"
 )
 
-func ParseActivityStream(body *bytes.Buffer) (mapof.Any, error) {
+func ParseActivityStream(document *streams.Document, body *bytes.Buffer) error {
 
-	result := mapof.NewAny()
+	// Get the (map) value from the document
+	result := document.Map()
 
+	// Try to unmarshal additional JSON into the map
 	if err := json.Unmarshal(body.Bytes(), &result); err != nil {
-		return nil, derp.Wrap(err, "sherlock.ParseActivityStream", "Error parsing JSON", body.String())
+		return derp.Wrap(err, "sherlock.ParseActivityStream", "Error parsing JSON", body.String())
 	}
 
-	return result, nil
+	// Re-apply the map to the original document and success...
+	document.SetValue(result)
+	return nil
 }

@@ -15,8 +15,10 @@ func (client Client) LoadDocument(uri string, defaultValue map[string]any) (stre
 
 	const location = "sherlock.Client.LoadDocument"
 
+	result := streams.NewDocument(defaultValue, streams.WithClient(client))
+
 	if uri == "" {
-		return streams.NilDocument(), derp.New(derp.CodeBadRequestError, "sherlock.Client.LoadDocument", "Empty URI")
+		return result, derp.New(derp.CodeBadRequestError, "sherlock.Client.LoadDocument", "Empty URI")
 	}
 
 	// Load the document
@@ -29,28 +31,29 @@ func (client Client) LoadDocument(uri string, defaultValue map[string]any) (stre
 
 	// Try to retrieve the document from the remote server
 	if err := transaction.Send(); err != nil {
-		return streams.NilDocument(), derp.Wrap(err, location, "Error loading URL", uri)
+		return result, derp.Wrap(err, location, "Error loading URL", uri)
 	}
 
 	// If Content-Type is valid, try to parse as ActivityStreams JSON
 	header := transaction.ResponseObject.Header
+
+	result.WithOptions(
+		streams.WithMeta("cache-control", header.Get("cache-control")),
+		streams.WithMeta("etag", header.Get("etag")),
+		streams.WithMeta("expires", header.Get("expires")),
+	)
+
 	if contentType := header.Get("Content-Type"); isActivityStream(contentType) {
-		if result, err := ParseActivityStream(&body); err == nil {
-			return streams.NewDocument(result, streams.WithClient(client)), nil
+		if err := ParseActivityStream(&result, &body); err == nil {
+			return result, nil
 		}
 	}
 
 	// Try to parse the document as HTML
 	if err := Parse(uri, &body, defaultValue); err != nil {
-		return streams.NilDocument(), derp.Wrap(err, location, "Error parsing HTML page")
+		return result, derp.Wrap(err, location, "Error parsing HTML page")
 	}
 
 	// Populate and return the resulting document
-	return streams.NewDocument(
-		defaultValue,
-		streams.WithClient(client),
-		streams.WithMeta("cache-control", header.Get("cache-control")),
-		streams.WithMeta("etag", header.Get("etag")),
-		streams.WithMeta("expires", header.Get("expires")),
-	), nil
+	return result, nil
 }
