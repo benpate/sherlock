@@ -24,6 +24,9 @@ func (client Client) LoadActor(url string) (streams.Document, error) {
 		client.actor_WebFinger,
 		client.actor_FollowLinks,
 
+		// Add HTTPS to the URL (if needed)
+		defaultHTTPS,
+
 		// Try to load ActivityPub documents first.
 		client.actor_ActivityStream,
 
@@ -38,7 +41,7 @@ func (client Client) LoadActor(url string) (streams.Document, error) {
 		client.actor_RSSFeed,
 
 		// Use MicroFormats as last resort
-		// client.actor_MicroFormats,
+		client.actor_MicroFormats,
 	}
 
 	// Try to execute the pipe

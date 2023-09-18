@@ -12,13 +12,13 @@ import (
 )
 
 // actor_MicroFormats searches and HTML document for for an h-feed Microformat
-func (client Client) actor_MicroFormats(acc *actorAccumulator) {
+func (client Client) actor_MicroFormats(acc *actorAccumulator) bool {
 
 	// Parse the document URL
 	parsedURL, err := url.Parse(acc.url)
 
 	if err != nil {
-		return
+		return false
 	}
 
 	// Parse the HTML document
@@ -48,10 +48,12 @@ func (client Client) actor_MicroFormats(acc *actorAccumulator) {
 				}
 
 				acc.format = FormatMicroFormats
-				return
+				return true
 			}
 		}
 	}
+
+	return false
 }
 
 // microformat_Outbox wraps a slice of items in an ActivityStreams OrderedCollection
