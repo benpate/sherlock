@@ -25,7 +25,7 @@ func ParseLinkedJSONLD(document *goquery.Document, result mapof.Any) bool {
 				transaction := remote.
 					Get(linkHref).
 					Header("Accept", linkType).
-					Response(&result, nil)
+					Result(&result)
 
 				if err := transaction.Send(); err == nil {
 					success = true

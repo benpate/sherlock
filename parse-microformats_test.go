@@ -21,7 +21,7 @@ func TestMicroformats(t *testing.T) {
 	var body bytes.Buffer
 	uri, _ := url.Parse(urlString)
 
-	if err := remote.Get(urlString).Response(&body, nil).Send(); err != nil {
+	if err := remote.Get(urlString).Result(&body).Send(); err != nil {
 		t.Error(err)
 	}
 

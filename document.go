@@ -27,7 +27,7 @@ func (client Client) LoadDocument(uri string, defaultValue map[string]any) (stre
 	// Load the document from the URL (preferr ActivityStreams over HTML)
 	transaction := remote.Get(uri).
 		Header("Accept", "application/activity+json;q=1.0,text/html;q=0.9").
-		Response(&body, nil)
+		Result(&body)
 
 	// Try to retrieve the document from the remote server
 	if err := transaction.Send(); err != nil {
@@ -35,7 +35,7 @@ func (client Client) LoadDocument(uri string, defaultValue map[string]any) (stre
 	}
 
 	// If Content-Type is valid, try to parse as ActivityStreams JSON
-	header := transaction.ResponseObject.Header
+	header := transaction.ResponseRaw().Header
 
 	result.WithOptions(
 		streams.WithMeta("cache-control", header.Get("cache-control")),

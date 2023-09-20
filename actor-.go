@@ -100,12 +100,13 @@ func (client Client) actor_GetHTTP(contentTypes ...string) pipe.Step[*actorAccum
 		// Try to load the ID as an ActivityPub object
 		txn := remote.Get(acc.url).
 			Accept(contentTypes...).
-			Response(&body, nil)
+			Result(&body)
 
 		// Try to send the transaction.  If successful, the populate the accumulator
 		if err := txn.Send(); err == nil {
-			acc.httpResponse = txn.ResponseObject
-			acc.cacheControl = txn.ResponseObject.Header.Get("Cache-Control")
+			response := txn.ResponseRaw()
+			acc.httpResponse = response
+			acc.cacheControl = response.Header.Get("Cache-Control")
 			acc.body = body
 		}
 
