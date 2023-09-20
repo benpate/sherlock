@@ -46,7 +46,7 @@ func (client Client) actor_JSONFeed(acc *actorAccumulator) bool {
 	}
 
 	actor := mapof.Any{
-		vocab.PropertyContext: vocab.ContextTypeActivityStreams,
+		vocab.AtContext:       vocab.ContextTypeActivityStreams,
 		vocab.PropertyType:    vocab.ActorTypeService,
 		vocab.PropertyName:    feed.Title,
 		vocab.PropertySummary: feed.Description,

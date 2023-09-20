@@ -30,7 +30,7 @@ func (client Client) actor_RSSFeed(acc *actorAccumulator) bool {
 
 	// Create the result object
 	acc.result = mapof.Any{
-		vocab.PropertyContext: vocab.ContextTypeActivityStreams,
+		vocab.AtContext:       vocab.ContextTypeActivityStreams,
 		vocab.PropertyType:    vocab.ActorTypeService,
 		vocab.PropertyID:      acc.url,
 		vocab.PropertyName:    feed.Title,
