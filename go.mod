@@ -14,7 +14,7 @@ require (
 	github.com/kr/jsonfeed v0.1.1
 	github.com/microcosm-cc/bluemonday v1.0.25
 	github.com/mmcdole/gofeed v1.2.1
-	github.com/rs/zerolog v1.30.0
+	github.com/rs/zerolog v1.31.0
 	github.com/stretchr/testify v1.8.4
 	github.com/tomnomnom/linkheader v0.0.0-20180905144013-02ca5825eb80
 	golang.org/x/net v0.15.0
