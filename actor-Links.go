@@ -1,104 +1,110 @@
 package sherlock
 
 import (
-	"bytes"
 	"net/url"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/benpate/digit"
-	"github.com/benpate/sherlock/pipe"
+	"github.com/benpate/hannibal/streams"
+	"github.com/benpate/remote"
 	"github.com/tomnomnom/linkheader"
 	"golang.org/x/net/html"
 )
 
-func (client Client) actor_FindLinksInHeader(acc *actorAccumulator) bool {
+// loadActor_Links finds and follows all relevant links for an http.Response.
+// If it finds a link to an ActivityStream, RSS Feed, or similar, then it returns
+// the corresponding Actor document.
+// Otherwise, it returns an empty streams.Document that includes metadata for
+func (client *Client) loadActor_Links(txn *remote.Transaction, config *LoadConfig) streams.Document {
 
-	headerValue := acc.httpResponse.Header.Get(HTTPHeaderLink)
+	// Extranct all Links from the HTTP Header and HTML Document
+	links := client.loadActor_DiscoverLinks(txn)
+
+	// If links point directly to something we can use (ActivityPub, RSS, etc) then use it
+	if document := client.loadActor_FollowLinks(txn, links, config); document.NotNil() {
+		return document
+	}
+
+	// Otherwise, populate additional links (such as Hubs, Icons, etc)
+	// and return an empty streams.Document
+	// TODO: https://trello.com/c/t51YFiA2/234-sherlock-restore-websub-links
+	return streams.NilDocument()
+}
+
+// loadActor_DiscoverLinks finds all links in a transaction, from both the
+// http header and in the HTML document.
+func (client *Client) loadActor_DiscoverLinks(txn *remote.Transaction) digit.LinkSet {
+
+	// Retrieve Links in HTTP Header
+	headerValue := txn.ResponseHeader().Get(HTTPHeaderLink)
 	links := linkheader.Parse(headerValue)
+	result := make(digit.LinkSet, 0, len(links))
+	requestURL := txn.RequestURL()
 
 	for _, link := range links {
-		acc.links = append(acc.links, digit.Link{
+		result = append(result, digit.Link{
 			RelationType: link.Rel,
 			MediaType:    link.Param("type"),
-			Href:         getRelativeURL(acc.url, link.URL),
+			Href:         getRelativeURL(requestURL, link.URL),
 		})
 	}
 
-	return false
-}
+	// Retrieve Links in HTML Document
+	if htmlDocument, err := goquery.NewDocumentFromReader(txn.ResponseBodyReader()); err == nil {
 
-func (client Client) actor_FindLinks(acc *actorAccumulator) bool {
+		// Get "relevant" links from the document
+		selection := htmlDocument.Find("[rel=alternate],[rel=self],[rel=feed],[rel=hub],[rel=icon]")
 
-	// Scan the HTML document for relevant links
-	newReader := bytes.NewReader(acc.body.Bytes())
-	htmlDocument, err := goquery.NewDocumentFromReader(newReader)
-
-	if err != nil {
-		return false
-	}
-
-	// Get "relevant" links from the document
-	links := htmlDocument.Find("[rel=alternate],[rel=self],[rel=feed],[rel=hub],[rel=icon]").Nodes
-
-	// Add links to the accumulator
-	for _, link := range links {
-		acc.links = append(acc.links, digit.Link{
-			RelationType: nodeAttribute(link, "rel"),
-			MediaType:    nodeAttribute(link, "type"),
-			Href:         getRelativeURL(acc.url, nodeAttribute(link, "href")),
-		})
-	}
-
-	return false
-}
-
-// actor_ScanHTMLForWebMentions tries to load/use any linked feeds
-func (client Client) actor_FollowLinks(acc *actorAccumulator) bool {
-
-	// If there are no links, then there's nothing to do in this step
-	if len(acc.links) == 0 {
-		return false
-	}
-
-	// Make a list of content types and pipelines to run.  This is an array
-	// so that we can run the pipelines in a specific order, based on the
-	// priority of each protocol:
-	// 1. ActivityPub
-	// 2. JSONFeed
-	// 3. Atom
-	// 4. RSS.
-	table := []struct {
-		mediaType string
-		pipe      actorAccumulatorPipe
-	}{
-		{ContentTypeActivityPub, actorAccumulatorPipe{client.actor_ActivityStream}},
-		{ContentTypeJSONFeed, actorAccumulatorPipe{client.actor_GetHTTP_JSONFeed, client.actor_JSONFeed}},
-		{ContentTypeAtom, actorAccumulatorPipe{client.actor_GetHTTP_Atom, client.actor_RSSFeed}},
-		{ContentTypeRSS, actorAccumulatorPipe{client.actor_GetHTTP_RSS, client.actor_RSSFeed}},
-	}
-
-	// For each link in the accumulator, try to run a corresponding pipeline
-	for _, row := range table {
-
-		// If we have a valid link for this mime type, then run its pipeline
-		if link := findSelfOrAlternateLink(acc.links, row.mediaType); !link.IsEmpty() {
-
-			sub := newActorAccumulator(link.Href)
-
-			if done := pipe.Run(&sub, row.pipe...); done {
-				acc.result = sub.result
-				acc.webSub = sub.webSub
-				acc.format = sub.format
-				acc.cacheControl = sub.cacheControl
-
-				return true
-			}
-
+		// Add links to the accumulator
+		for _, link := range selection.Nodes {
+			result = append(result, digit.Link{
+				RelationType: nodeAttribute(link, "rel"),
+				MediaType:    nodeAttribute(link, "type"),
+				Href:         getRelativeURL(requestURL, nodeAttribute(link, "href")),
+			})
 		}
 	}
 
-	return false
+	return result
+}
+
+// actor_ScanHTMLForWebMentions tries to load/use any linked feeds
+func (client *Client) loadActor_FollowLinks(txn *remote.Transaction, links digit.LinkSet, config *LoadConfig) streams.Document {
+
+	// If the client is not allowed to follow redirects (or has used all of them already),
+	// then there is nothing to do here. Return an empty document instead.
+	if config.MaximumRedirects < 1 {
+		return streams.NilDocument()
+	}
+
+	// If we have one or more links, then search them in order...
+	if len(links) > 0 {
+
+		for _, mediaType := range []string{ContentTypeActivityPub, ContentTypeJSONFeed, ContentTypeAtom, ContentTypeRSS} {
+
+			link := findSelfOrAlternateLink(links, mediaType)
+
+			if link.IsEmpty() {
+				continue
+			}
+
+			// If the link points to the same URL as the original request, then we're
+			// already at the right place. So don't traverse the link.
+			if link.Href == txn.RequestURL() {
+				return streams.NilDocument()
+			}
+
+			if document, err := client.loadActor(link.Href, config); err == nil {
+				if document.NotNil() {
+					config.MaximumRedirects--
+					return document
+				}
+			}
+		}
+	}
+
+	return streams.NilDocument()
 }
 
 /******************************************

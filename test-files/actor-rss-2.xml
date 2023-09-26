@@ -1,0 +1,230 @@
+HTTP/1.1 200 OK
+Connection: close
+Content-Length: 20902
+x-content-type-options: nosniff
+content-type: application/rss+xml; charset=utf-8
+x-xss-protection: 0
+x-request-id: bcfe0c9e997fb6c9b920e9f3b476f0ed
+referrer-policy: same-origin
+via: 1.1 varnish, 1.1 varnish, 1.1 varnish
+etag: W/"ce45ff11588fbd2a5ce7f5a0d91648bf"
+x-runtime: 0.152926
+cache-control: max-age=60, public
+content-security-policy: base-uri 'none'; default-src 'none'; frame-ancestors 'none'; font-src 'self' https://mastodon.social; img-src 'self' https: data: blob: https://mastodon.social; style-src 'self' https://mastodon.social 'nonce-O/iaJB8hNZjEFaq5lcfejA=='; media-src 'self' https: data: https://mastodon.social; frame-src 'self' https:; manifest-src 'self' https://mastodon.social; form-action 'self'; child-src 'self' blob: https://mastodon.social; worker-src 'self' blob: https://mastodon.social; connect-src 'self' data: blob: https://mastodon.social https://files.mastodon.social wss://streaming.mastodon.social; script-src 'self' https://mastodon.social 'wasm-unsafe-eval'
+x-frame-options: DENY
+Accept-Ranges: bytes
+Date: Sat, 23 Sep 2023 21:39:49 GMT
+Age: 0
+X-Served-By: cache-fra-etou8220115-FRA, cache-fra-etou8220108-FRA, cache-den8266-DEN
+X-Cache: MISS, MISS, MISS
+X-Cache-Hits: 0, 0, 0
+X-Timer: S1695505189.097038,VS0,VE308
+Vary: Accept, Accept-Language, Cookie, Origin
+Strict-Transport-Security: max-age=31557600
+alt-svc: h3=":443";ma=86400,h3-29=":443";ma=86400,h3-27=":443";ma=86400
+
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:webfeeds="http://webfeeds.org/rss/1.0" xmlns:media="http://search.yahoo.com/mrss/">
+  <channel>
+    <title>Ben Pate 🤘</title>
+    <description>Public posts from @benpate@mastodon.social</description>
+    <link>https://mastodon.social/@benpate</link>
+    <image>
+      <url>https://files.mastodon.social/accounts/avatars/107/651/441/592/242/630/original/f74c431007e1fef3.png</url>
+      <title>Ben Pate 🤘</title>
+      <link>https://mastodon.social/@benpate</link>
+    </image>
+    <lastBuildDate>Fri, 04 Aug 2023 00:48:23 +0000</lastBuildDate>
+    <webfeeds:icon>https://files.mastodon.social/accounts/avatars/107/651/441/592/242/630/original/f74c431007e1fef3.png</webfeeds:icon>
+    <generator>Mastodon v4.2.0</generator>
+    <item>
+      <guid isPermaLink="true">https://mastodon.social/@benpate/110828591761734988</guid>
+      <link>https://mastodon.social/@benpate/110828591761734988</link>
+      <pubDate>Fri, 04 Aug 2023 00:48:23 +0000</pubDate>
+      <description>&lt;p&gt;The second &lt;a href="https://mastodon.social/tags/Golang" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;Golang&lt;/span&gt;&lt;/a&gt; library that makes &lt;a href="https://mastodon.social/tags/Emissary" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;Emissary&lt;/span&gt;&lt;/a&gt; unique is: &lt;a href="https://github.com/benpate/sherlock" target="_blank" rel="nofollow noopener noreferrer" translate="no"&gt;&lt;span class="invisible"&gt;https://&lt;/span&gt;&lt;span class=""&gt;github.com/benpate/sherlock&lt;/span&gt;&lt;span class="invisible"&gt;&lt;/span&gt;&lt;/a&gt;  &lt;/p&gt;&lt;p&gt;Sherlock converts HTML pages into &lt;a href="https://mastodon.social/tags/ActivityStreams" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;ActivityStreams&lt;/span&gt;&lt;/a&gt; documents using any and all meta-data available: &lt;a href="https://mastodon.social/tags/JSONLD" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;JSONLD&lt;/span&gt;&lt;/a&gt;, &lt;a href="https://mastodon.social/tags/WebFinger" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;WebFinger&lt;/span&gt;&lt;/a&gt;, &lt;a href="https://mastodon.social/tags/MicroFormats" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;MicroFormats&lt;/span&gt;&lt;/a&gt;, &lt;a href="https://mastodon.social/tags/RSS" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;RSS&lt;/span&gt;&lt;/a&gt;, &lt;a href="https://mastodon.social/tags/Atom" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;Atom&lt;/span&gt;&lt;/a&gt;, &lt;a href="https://mastodon.social/tags/JSONFeeds" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;JSONFeeds&lt;/span&gt;&lt;/a&gt; (with more coming soon).  Any format it can identify gets parsed and normalized into a standard-looking ActivityStreams doc, which gets passed up the toolchain to Hannibal.&lt;/p&gt;&lt;p&gt;I&amp;#39;m so excited to see this stack start to deliver real results soon.&lt;/p&gt;</description>
+      <category>golang</category>
+      <category>Emissary</category>
+      <category>activitystreams</category>
+      <category>jsonld</category>
+      <category>webfinger</category>
+      <category>microformats</category>
+      <category>rss</category>
+      <category>atom</category>
+      <category>jsonfeeds</category>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.social/@benpate/110828566143279187</guid>
+      <link>https://mastodon.social/@benpate/110828566143279187</link>
+      <pubDate>Fri, 04 Aug 2023 00:41:52 +0000</pubDate>
+      <description>&lt;p&gt;Hannibal is a composable &lt;a href="https://mastodon.social/tags/ActivityPub" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;ActivityPub&lt;/span&gt;&lt;/a&gt; library built in &lt;a href="https://mastodon.social/tags/Golang" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;Golang&lt;/span&gt;&lt;/a&gt; that works the way I want to work.  &lt;a href="https://github.com/benpate/hannibal" target="_blank" rel="nofollow noopener noreferrer" translate="no"&gt;&lt;span class="invisible"&gt;https://&lt;/span&gt;&lt;span class=""&gt;github.com/benpate/hannibal&lt;/span&gt;&lt;span class="invisible"&gt;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;My favorite part is chaining features into an ActivityStreams client, which turns the whole Internet into a single, local database record. Woot!&lt;/p&gt;</description>
+      <media:content url="https://files.mastodon.social/media_attachments/files/110/828/563/266/399/146/original/a195f4d5c2e54d19.png" type="image/png" fileSize="177336" medium="image">
+        <media:rating scheme="urn:simple">nonadult</media:rating>
+        <media:description type="plain">Go source code that demonstrates the Hannibal library.  The source code reads:
+
+// Start with an ActivityStreams client
+httpClient := sherlock.NewClient()
+
+// ...which is wrapped in a cache writer to save documents to the db
+writableCache := ascache.New(session, httpClient, ascache.WithWriteOnly())
+
+// ...which is wrapped in a crawler to find adjacent documents
+crawlerClient := asrecursor.New(writableCache, 3)
+
+// ... which is wrapped in a readOnly cache client
+topLevelClient := ascache.New(crawlerClient, session, ascache.WithReadOnly())
+
+
+// Now, use a doc from the Interwebs like a local database
+myProfile, err := topLevelClient.LoadDocument("@benpate@mastodon.social")
+fmt.Println(myProfile.Name())
+
+// Or iterate through multi-page collections via channels
+outboxChannel := collections.Documents(myProfile.Outbox(), nil)
+for outboxItem := range outboxChannel {
+	fmt.Println(outboxItem.Content())
+}</media:description>
+      </media:content>
+      <category>activitypub</category>
+      <category>golang</category>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.social/@benpate/110828265106950039</guid>
+      <link>https://mastodon.social/@benpate/110828265106950039</link>
+      <pubDate>Thu, 03 Aug 2023 23:25:19 +0000</pubDate>
+      <description>&lt;p&gt;I&amp;#39;ve been a little quiet about &lt;a href="https://mastodon.social/tags/Emissary" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;Emissary&lt;/span&gt;&lt;/a&gt; - in between moving and refactoring one of the core libraries, it&amp;#39;s honestly been pretty broken for a little bit.&lt;/p&gt;&lt;p&gt;But my desk is set back up and I&amp;#39;m excited at making some progress again.  Now, two libraries that power emissary are also nearing completion, so others can build on this work without having to implement the whole server.&lt;/p&gt;</description>
+      <category>Emissary</category>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.social/@benpate/110766814946914983</guid>
+      <link>https://mastodon.social/@benpate/110766814946914983</link>
+      <pubDate>Mon, 24 Jul 2023 02:57:44 +0000</pubDate>
+      <description>&lt;p&gt;TFW someone on the Internet is wrong, so you ignore your family on Sunday night to write a 2,000 word response with citations and footnotes.&lt;/p&gt;&lt;p&gt;Relevant XKCD? &lt;a href="https://xkcd.com/386/" target="_blank" rel="nofollow noopener noreferrer" translate="no"&gt;&lt;span class="invisible"&gt;https://&lt;/span&gt;&lt;span class=""&gt;xkcd.com/386/&lt;/span&gt;&lt;span class="invisible"&gt;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.social/@benpate/110725542327817930</guid>
+      <link>https://mastodon.social/@benpate/110725542327817930</link>
+      <pubDate>Sun, 16 Jul 2023 20:01:34 +0000</pubDate>
+      <description>&lt;p&gt;Thanks everyone for the replies and pointers.  Yes, I can usually work out the right thing to do, but it&amp;#39;s pretty frustrating to do without just coding straight to Mastodon&amp;#39;s quirksmode.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.social/@benpate/110725151204361974</guid>
+      <link>https://mastodon.social/@benpate/110725151204361974</link>
+      <pubDate>Sun, 16 Jul 2023 18:22:06 +0000</pubDate>
+      <description>&lt;p&gt;You can tell I&amp;#39;m getting a lot of &lt;a href="https://mastodon.social/tags/Emissary" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;Emissary&lt;/span&gt;&lt;/a&gt; work done today, because I&amp;#39;m non-stop whining about the &lt;a href="https://mastodon.social/tags/ActivityPub" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;ActivityPub&lt;/span&gt;&lt;/a&gt; spec. &lt;/p&gt;&lt;p&gt;Like, why isn&amp;#39;t there a simple way to tell how an outbox is sorted?  &lt;/p&gt;&lt;p&gt;Yeah, I know, just do what Mastodon does and get over it.  But the point of *a spec* is so I don&amp;#39;t have to guess at what the popular kids are doing.&lt;/p&gt;&lt;p&gt;There should be rules about where things go. But no, there&amp;#39;s no rules out here - only  thoughts and prayers.&lt;/p&gt;</description>
+      <category>Emissary</category>
+      <category>activitypub</category>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.social/@benpate/110724453030034191</guid>
+      <link>https://mastodon.social/@benpate/110724453030034191</link>
+      <pubDate>Sun, 16 Jul 2023 15:24:32 +0000</pubDate>
+      <description>&lt;p&gt;I&amp;#39;m just going to say again how awesome it is that the Fediverse is built on oStatus, and it uses a bunch of oStatus standards. &lt;/p&gt;&lt;p&gt;And how cool it would be if oStatus were actually documented somewhere instead of loading up an Indonesian gambling website.&lt;/p&gt;&lt;p&gt;At least it&amp;#39;s a life lesson in depending on centralized services and permanent URLs.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.social/@benpate/110571957913414353</guid>
+      <link>https://mastodon.social/@benpate/110571957913414353</link>
+      <pubDate>Mon, 19 Jun 2023 17:03:02 +0000</pubDate>
+      <description>&lt;p&gt;Next up, more polish for the &lt;a href="https://mastodon.social/tags/RSS" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;RSS&lt;/span&gt;&lt;/a&gt; reader and then the hard job of federating with other apps.&lt;/p&gt;</description>
+      <category>rss</category>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.social/@benpate/110571951900040685</guid>
+      <link>https://mastodon.social/@benpate/110571951900040685</link>
+      <pubDate>Mon, 19 Jun 2023 17:01:30 +0000</pubDate>
+      <description>&lt;p&gt;Here are Reactions (finally) working in &lt;a href="https://mastodon.social/tags/Emissary" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;Emissary&lt;/span&gt;&lt;/a&gt;.  It&amp;#39;s a silly little feature, but I&amp;#39;m excited to show it off.  &lt;/p&gt;&lt;p&gt;The hard part is sending out &lt;a href="https://mastodon.social/tags/ActivityPub" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;ActivityPub&lt;/span&gt;&lt;/a&gt;  notifications and IndieWeb &lt;a href="https://mastodon.social/tags/WebMentions" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;WebMentions&lt;/span&gt;&lt;/a&gt;.  The &lt;a href="https://mastodon.social/tags/htmx" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;htmx&lt;/span&gt;&lt;/a&gt; UX right was the icing on the cake.&lt;/p&gt;</description>
+      <media:content url="https://files.mastodon.social/media_attachments/files/110/571/938/269/826/007/original/37661a78063f20e1.mp4" type="video/mp4" fileSize="346560" medium="image">
+        <media:rating scheme="urn:simple">nonadult</media:rating>
+      </media:content>
+      <category>Emissary</category>
+      <category>activitypub</category>
+      <category>webmentions</category>
+      <category>htmx</category>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.social/@benpate/110534467909368811</guid>
+      <link>https://mastodon.social/@benpate/110534467909368811</link>
+      <pubDate>Tue, 13 Jun 2023 02:08:49 +0000</pubDate>
+      <description>&lt;p&gt;I’ll admit it. I still sign into the Twitter dumpster fire every now and then. I still have lots of great news feeds there. But ever since the enshitification began, my policy has been to block every single advertiser that reaches my feed. A few months in, digging deep into the complete trash-tier of advertisers has become an epic comedy, and I wait in wonder at what new, useless piece of garbage Twitter will try to sell me.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.social/@benpate/110120420074077898</guid>
+      <link>https://mastodon.social/@benpate/110120420074077898</link>
+      <pubDate>Fri, 31 Mar 2023 23:11:01 +0000</pubDate>
+      <description>&lt;p&gt;Can I winge once again that all the “at mentions” in my Mastodon notes count against the ridiculously low character limit? It makes joining a large conversation virtually impossible, unless the only thing I want to say is “yup.”&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.social/@benpate/110019948326516748</guid>
+      <link>https://mastodon.social/@benpate/110019948326516748</link>
+      <pubDate>Tue, 14 Mar 2023 05:19:44 +0000</pubDate>
+      <description>&lt;p&gt;I gotta say, &lt;a href="https://mastodon.social/tags/ActivityPub" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;ActivityPub&lt;/span&gt;&lt;/a&gt; or nah, I&amp;#39;m about to start using it as my daily &lt;a href="https://mastodon.social/tags/RSS" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;RSS&lt;/span&gt;&lt;/a&gt; Reader&lt;/p&gt;</description>
+      <category>activitypub</category>
+      <category>rss</category>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.social/@benpate/110019940525734614</guid>
+      <link>https://mastodon.social/@benpate/110019940525734614</link>
+      <pubDate>Tue, 14 Mar 2023 05:17:45 +0000</pubDate>
+      <description>&lt;p&gt;Wow. Big night of progress on &lt;a href="https://mastodon.social/tags/Emissary" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;Emissary&lt;/span&gt;&lt;/a&gt;.  I just updated the project status page for the first time in forever, and I&amp;#39;m pretty stoked about how far it&amp;#39;s come. Next steps: screenshots so you all can be as giddy as me 🤘&lt;/p&gt;&lt;p&gt;&lt;a href="https://emissary.dev/status" target="_blank" rel="nofollow noopener noreferrer" translate="no"&gt;&lt;span class="invisible"&gt;https://&lt;/span&gt;&lt;span class=""&gt;emissary.dev/status&lt;/span&gt;&lt;span class="invisible"&gt;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;</description>
+      <category>Emissary</category>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.social/@benpate/109912501478220200</guid>
+      <link>https://mastodon.social/@benpate/109912501478220200</link>
+      <pubDate>Thu, 23 Feb 2023 05:54:35 +0000</pubDate>
+      <description>&lt;p&gt;Here&amp;#39;s the latest with &lt;a href="https://mastodon.social/tags/Emissary" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;Emissary&lt;/span&gt;&lt;/a&gt;.  I&amp;#39;m really stoked about how folder sorting and filtering worked out&lt;/p&gt;</description>
+      <media:content url="https://files.mastodon.social/media_attachments/files/109/912/501/203/694/634/original/c78c18475b89f475.mp4" type="video/mp4" fileSize="1910671" medium="image">
+        <media:rating scheme="urn:simple">nonadult</media:rating>
+      </media:content>
+      <category>Emissary</category>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.social/@benpate/109803865482048961</guid>
+      <link>https://mastodon.social/@benpate/109803865482048961</link>
+      <pubDate>Sat, 04 Feb 2023 01:27:01 +0000</pubDate>
+      <description>&lt;p&gt;I’m trademarking it now.. the ultimate tool for agile development, sweep across the steppe and crush your story points: *The Genghis Khanban*&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.social/@benpate/109798847863280636</guid>
+      <link>https://mastodon.social/@benpate/109798847863280636</link>
+      <pubDate>Fri, 03 Feb 2023 04:10:58 +0000</pubDate>
+      <description>&lt;p&gt;Made some cool progress on Emissary today - downloadable themes now include resource “bundles” (&lt;a href="https://mastodon.social/tags/CSS" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;CSS&lt;/span&gt;&lt;/a&gt;, &lt;a href="https://mastodon.social/tags/Javascript" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;Javascript&lt;/span&gt;&lt;/a&gt;, and &lt;a href="https://mastodon.social/tags/Hyperscript" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;Hyperscript&lt;/span&gt;&lt;/a&gt;, and more) that are automatically combined and minified into a single download.&lt;br /&gt;The goal is to make something that’s safe, easy to extend, and super fast. I can’t wait to show it off 😎&lt;/p&gt;</description>
+      <category>css</category>
+      <category>javascript</category>
+      <category>Hyperscript</category>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.social/@benpate/109762737273061929</guid>
+      <link>https://mastodon.social/@benpate/109762737273061929</link>
+      <pubDate>Fri, 27 Jan 2023 19:07:34 +0000</pubDate>
+      <description>&lt;p&gt;Is this the right track? If anyone has (informed?) thoughts on ActivityPub in Go, I’m all ears.  In the meantime, my work-I’m-progress is on my GitHub now. If I get anywhere with them I’ll share them more widely.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.social/@benpate/109762737247601848</guid>
+      <link>https://mastodon.social/@benpate/109762737247601848</link>
+      <pubDate>Fri, 27 Jan 2023 19:07:34 +0000</pubDate>
+      <description>&lt;p&gt;Now I’m struggling with &lt;a href="https://mastodon.social/tags/ActivityPub" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;ActivityPub&lt;/span&gt;&lt;/a&gt;, the big bear, and while go-fed does a hell of a lot, it is its own bear to integrate. So I’m taking the plunge into building my own &lt;a href="https://mastodon.social/tags/JSON" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;JSON&lt;/span&gt;&lt;/a&gt;-LD and &lt;a href="https://mastodon.social/tags/activitystreams" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;activitystreams&lt;/span&gt;&lt;/a&gt; libraries.&lt;/p&gt;</description>
+      <category>activitypub</category>
+      <category>json</category>
+      <category>activitystreams</category>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.social/@benpate/109762737222775201</guid>
+      <link>https://mastodon.social/@benpate/109762737222775201</link>
+      <pubDate>Fri, 27 Jan 2023 19:07:34 +0000</pubDate>
+      <description>&lt;p&gt;One thing I love about working in &lt;a href="https://mastodon.social/tags/golang" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;golang&lt;/span&gt;&lt;/a&gt; is the tremendous set of high-quality libraries already out there. My design philosophy for emissary.social has been to build to every standard and protocol out there. That is only possible because I don’t have to write &lt;a href="https://mastodon.social/tags/SSE" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;SSE&lt;/span&gt;&lt;/a&gt;, &lt;a href="https://mastodon.social/tags/MicroFormats" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;MicroFormats&lt;/span&gt;&lt;/a&gt;, &lt;a href="https://mastodon.social/tags/WebSub" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;WebSub&lt;/span&gt;&lt;/a&gt;, &lt;a href="https://mastodon.social/tags/WebMentions" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;WebMentions&lt;/span&gt;&lt;/a&gt;, etc all from scratch.&lt;/p&gt;</description>
+      <category>golang</category>
+      <category>sse</category>
+      <category>microformats</category>
+      <category>websub</category>
+      <category>webmentions</category>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.social/@benpate/109748374505300820</guid>
+      <link>https://mastodon.social/@benpate/109748374505300820</link>
+      <pubDate>Wed, 25 Jan 2023 06:14:56 +0000</pubDate>
+      <description>&lt;p&gt;It&amp;#39;s slow progress, but I&amp;#39;m pretty stoked.  In addition to RSS, Atom, JSONFeed, &lt;a href="https://mastodon.social/tags/IndieWeb" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;IndieWeb&lt;/span&gt;&lt;/a&gt; WebMentions, and WebSub, Emissary now supports &amp;quot;Remote Follows&amp;quot; on the &lt;a href="https://mastodon.social/tags/Fediverse" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;Fediverse&lt;/span&gt;&lt;/a&gt;, which makes it tons easier to follow cool people and sites from around the web.&lt;/p&gt;&lt;p&gt;Next Steps: ActivityPub inbox/outbox and RSSCloud&lt;/p&gt;</description>
+      <category>indieweb</category>
+      <category>fediverse</category>
+    </item>
+  </channel>
+</rss>

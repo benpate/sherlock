@@ -1,0 +1,27 @@
+HTTP/1.1 200 OK
+Connection: close
+Content-Length: 2763
+x-content-type-options: nosniff
+content-type: application/activity+json; charset=utf-8
+x-xss-protection: 0
+x-request-id: 3a68261df33149a4d34d334e623132c5
+referrer-policy: same-origin
+via: 1.1 varnish, 1.1 varnish, 1.1 varnish
+etag: W/"d277a2b029269e2e5ae53c4bf47db584"
+x-runtime: 0.268733
+cache-control: max-age=180, public
+link: <https://mastodon.social/users/benpate/statuses/109596019301374311>; rel="alternate"; type="application/activity+json"
+content-security-policy: base-uri 'none'; default-src 'none'; frame-ancestors 'none'; font-src 'self' https://mastodon.social; img-src 'self' https: data: blob: https://mastodon.social; style-src 'self' https://mastodon.social 'nonce-5sMLX20tBwD8Dlfe5rIdYA=='; media-src 'self' https: data: https://mastodon.social; frame-src 'self' https:; manifest-src 'self' https://mastodon.social; form-action 'self'; child-src 'self' blob: https://mastodon.social; worker-src 'self' blob: https://mastodon.social; connect-src 'self' data: blob: https://mastodon.social https://files.mastodon.social wss://streaming.mastodon.social; script-src 'self' https://mastodon.social 'wasm-unsafe-eval'
+x-frame-options: DENY
+Accept-Ranges: bytes
+Date: Sat, 23 Sep 2023 17:22:36 GMT
+Age: 0
+X-Served-By: cache-fra-etou8220065-FRA, cache-fra-eddf8230127-FRA, cache-den8232-DEN
+X-Cache: MISS, MISS, MISS
+X-Cache-Hits: 0, 0, 0
+X-Timer: S1695489756.795859,VS0,VE489
+Vary: Accept, Accept-Language, Cookie
+Strict-Transport-Security: max-age=31557600
+alt-svc: h3=":443";ma=86400,h3-29=":443";ma=86400,h3-27=":443";ma=86400
+
+{"@context":["https://www.w3.org/ns/activitystreams",{"ostatus":"http://ostatus.org#","atomUri":"ostatus:atomUri","inReplyToAtomUri":"ostatus:inReplyToAtomUri","conversation":"ostatus:conversation","sensitive":"as:sensitive","toot":"http://joinmastodon.org/ns#","votersCount":"toot:votersCount","Hashtag":"as:Hashtag"}],"id":"https://mastodon.social/users/benpate/statuses/109596019301374311","type":"Note","summary":null,"inReplyTo":null,"published":"2022-12-29T08:29:00Z","url":"https://mastodon.social/@benpate/109596019301374311","attributedTo":"https://mastodon.social/users/benpate","to":["https://www.w3.org/ns/activitystreams#Public"],"cc":["https://mastodon.social/users/benpate/followers"],"sensitive":false,"atomUri":"https://mastodon.social/users/benpate/statuses/109596019301374311","inReplyToAtomUri":null,"conversation":"tag:mastodon.social,2022-12-29:objectId=367976636:objectType=Conversation","content":"\u003cp\u003eHey \u003ca href=\"https://mastodon.social/tags/IndieWeb\" class=\"mention hashtag\" rel=\"tag\"\u003e#\u003cspan\u003eIndieWeb\u003c/span\u003e\u003c/a\u003e -- I\u0026#39;m so close to getting \u003ca href=\"https://mastodon.social/tags/WebSub\" class=\"mention hashtag\" rel=\"tag\"\u003e#\u003cspan\u003eWebSub\u003c/span\u003e\u003c/a\u003e working in Emissary.  I started on it first because it seemed easier than ActivityPub.  \u003c/p\u003e\u003cp\u003eIt\u0026#39;s a great spec, but wow, it\u0026#39;s been a lot tougher than I\u0026#39;d expected.  Can\u0026#39;t wait to show it off, though!\u003c/p\u003e","contentMap":{"en":"\u003cp\u003eHey \u003ca href=\"https://mastodon.social/tags/IndieWeb\" class=\"mention hashtag\" rel=\"tag\"\u003e#\u003cspan\u003eIndieWeb\u003c/span\u003e\u003c/a\u003e -- I\u0026#39;m so close to getting \u003ca href=\"https://mastodon.social/tags/WebSub\" class=\"mention hashtag\" rel=\"tag\"\u003e#\u003cspan\u003eWebSub\u003c/span\u003e\u003c/a\u003e working in Emissary.  I started on it first because it seemed easier than ActivityPub.  \u003c/p\u003e\u003cp\u003eIt\u0026#39;s a great spec, but wow, it\u0026#39;s been a lot tougher than I\u0026#39;d expected.  Can\u0026#39;t wait to show it off, though!\u003c/p\u003e"},"attachment":[],"tag":[{"type":"Hashtag","href":"https://mastodon.social/tags/indieweb","name":"#indieweb"},{"type":"Hashtag","href":"https://mastodon.social/tags/websub","name":"#websub"}],"replies":{"id":"https://mastodon.social/users/benpate/statuses/109596019301374311/replies","type":"Collection","first":{"type":"CollectionPage","next":"https://mastodon.social/users/benpate/statuses/109596019301374311/replies?only_other_accounts=true\u0026page=true","partOf":"https://mastodon.social/users/benpate/statuses/109596019301374311/replies","items":[]}}}

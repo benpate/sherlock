@@ -4,33 +4,44 @@ import (
 	"strings"
 
 	"github.com/benpate/digit"
+	"github.com/benpate/hannibal/streams"
 )
 
-func (client Client) actor_WebFinger(acc *actorAccumulator) bool {
+func (client *Client) loadActor_WebFinger(uri string, config *LoadConfig) streams.Document {
 
 	// If the ID doesn't look like an email/username then skip this step
-	if !strings.Contains(acc.url, "@") {
-		return false
+	if !strings.Contains(uri, "@") {
+		return streams.NilDocument()
 	}
 
-	// Try to load the resource/account via WebFinger
-	resource, err := digit.Lookup(acc.url)
+	// Try to load the Actor via WebFinger
+	response, err := digit.Lookup(uri, client.RemoteOptions...)
 
-	// On errors, just continue processing the pipeline
+	// If we dont' have a valid response, then return nil (skip this step)
 	if err != nil {
-		return false
+		return streams.NilDocument()
 	}
 
-	acc.links = make([]digit.Link, 0, len(resource.Links))
-
-	// Add links to the accumulator
-	for _, link := range resource.Links {
-		acc.links = append(acc.links, digit.Link{
-			RelationType: link.RelationType,
-			MediaType:    link.MediaType,
-			Href:         getRelativeURL(acc.url, link.Href),
-		})
+	// Search for ActivityPub endpoints
+	for _, link := range response.Links {
+		if (link.RelationType == digit.RelationTypeSelf) && (link.MediaType == ContentTypeActivityPub) {
+			if result := client.loadActor_ActivityStreams(link.Href); result.NotNil() {
+				config.MaximumRedirects--
+				return result
+			}
+		}
 	}
 
-	return false
+	// Search for Profile pages (as a backup)
+	for _, link := range response.Links {
+		if link.RelationType == digit.RelationTypeProfile {
+			if result := client.loadActor_Feed(link.Href, config); result.NotNil() {
+				config.MaximumRedirects--
+				return result
+			}
+		}
+	}
+
+	// Fall through means we couldn't find any relevant links in the WebFinger response
+	return streams.NilDocument()
 }
