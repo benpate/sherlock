@@ -6,12 +6,11 @@ import (
 
 	"github.com/benpate/remote"
 	"github.com/benpate/remote/options"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/stretchr/testify/require"
 )
 
 func init() {
-	spew.Config.DisableMethods = true
+	// spew.Config.DisableMethods = true
 }
 
 func getTestServer() remote.Option {
