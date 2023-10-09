@@ -43,6 +43,9 @@ func (client Client) loadActor_Feed_RSS(txn *remote.Transaction) streams.Documen
 		},
 	}
 
+	// Apply links found in the response headers
+	client.applyLinks(txn, data)
+
 	// Return the result as a streams.Document
 	return streams.NewDocument(
 		data,

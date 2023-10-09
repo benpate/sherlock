@@ -40,7 +40,7 @@ func (client Client) loadActor_Feed_MicroFormats(txn *remote.Transaction) stream
 
 			if len(items) > 0 {
 
-				document := mapof.Any{
+				data := mapof.Any{
 					vocab.PropertyID:           parsedURL.String(),
 					vocab.PropertyName:         microformat_Property(feed, "name"),
 					vocab.PropertyImage:        microformat_Property(feed, "photo"),
@@ -48,8 +48,12 @@ func (client Client) loadActor_Feed_MicroFormats(txn *remote.Transaction) stream
 					vocab.PropertyOutbox:       microformat_Outbox(items),
 				}
 
+				// Apply links found in the response headers
+				client.applyLinks(txn, data)
+
+				// Return the (successfully?) parsed document to the caller.
 				return streams.NewDocument(
-					document,
+					data,
 					streams.WithClient(client),
 					streams.WithHTTPHeader(txn.ResponseHeader()),
 				)

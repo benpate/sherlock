@@ -38,7 +38,7 @@ func (client Client) loadActor_Feed_JSON(txn *remote.Transaction) streams.Docume
 	})
 
 	// Create an ActivityStream document
-	actor := mapof.Any{
+	data := mapof.Any{
 		vocab.AtContext:       vocab.ContextTypeActivityStreams,
 		vocab.PropertyID:      feed.HomePageURL,
 		vocab.PropertyType:    vocab.ActorTypeService,
@@ -65,15 +65,18 @@ func (client Client) loadActor_Feed_JSON(txn *remote.Transaction) streams.Docume
 	// Search for WebSub hubs.
 	for _, hub := range feed.Hubs {
 		if hub.Type == "WebSub" {
-			actor[vocab.PropertyEndpoints] = mapof.Any{
+			data[vocab.PropertyEndpoints] = mapof.Any{
 				"hub": hub.URL,
 			}
 			break
 		}
 	}
 
+	// Apply links found in the response headers
+	client.applyLinks(txn, data)
+
 	return streams.NewDocument(
-		actor,
+		data,
 		streams.WithClient(client),
 		streams.WithHTTPHeader(txn.ResponseHeader()),
 	)

@@ -27,6 +27,9 @@ func (client *Client) loadDocument_HTML(uri string, data mapof.Any) streams.Docu
 		return streams.NilDocument()
 	}
 
+	// Apply links found in the response headers
+	client.applyLinks(txn, data)
+
 	// Add JSON-LD data to the data
 	client.loadDocument_JSONLD(body, data)
 
