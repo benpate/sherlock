@@ -11,6 +11,7 @@ func (client *Client) loadActor_WebFinger(uri string, config *LoadConfig) stream
 
 	// If the ID doesn't look like an email/username then skip this step
 	if !strings.Contains(uri, "@") {
+		client.Debug("verbose", "loadActor_WebFinger: skipping because uri doesn't look like an email address")
 		return streams.NilDocument()
 	}
 
@@ -19,6 +20,7 @@ func (client *Client) loadActor_WebFinger(uri string, config *LoadConfig) stream
 
 	// If we dont' have a valid response, then return nil (skip this step)
 	if err != nil {
+		client.Debug("verbose", "loadActor_WebFinger: skipping because of error: "+err.Error())
 		return streams.NilDocument()
 	}
 

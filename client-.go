@@ -1,6 +1,8 @@
 package sherlock
 
 import (
+	"fmt"
+
 	"github.com/benpate/hannibal/streams"
 	"github.com/benpate/remote"
 )
@@ -10,6 +12,7 @@ import (
 type Client struct {
 	UserAgent     string          // User-Agent string to send with every request
 	RemoteOptions []remote.Option // Additional options to pass to the remote library
+	DebugLevel    string          // Debug levels: "verbose", "terse", "none"
 }
 
 // NewClient returns a fully initialized Client object
@@ -53,4 +56,22 @@ func (client *Client) WithOptions(options ...ClientOption) {
 	for _, option := range options {
 		option(client)
 	}
+}
+
+// Debug prints a debug message to the console, if the client is configured to do so.
+func (client *Client) Debug(level string, value string) {
+
+	if client.DebugLevel == "" {
+		return
+	}
+
+	if client.DebugLevel == "none" {
+		return
+	}
+
+	if client.DebugLevel == "terse" && level == "verbose" {
+		return
+	}
+
+	fmt.Println("Sherlock: " + value)
 }

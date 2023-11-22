@@ -14,7 +14,7 @@ func (client Client) loadDocument(uri string, config LoadConfig) (streams.Docume
 
 	// RULE: uri must not be empty
 	if uri == "" {
-		return streams.NilDocument(), derp.New(derp.CodeBadRequestError, "sherlock.Client.LoadDocument", "Empty URI")
+		return streams.NilDocument(), derp.NewBadRequestError("sherlock.Client.LoadDocument", "Empty URI")
 	}
 
 	// RULE: uri must begin with a valid protocol
@@ -31,5 +31,5 @@ func (client Client) loadDocument(uri string, config LoadConfig) (streams.Docume
 	}
 
 	// 3. Abject failure.
-	return streams.NilDocument(), derp.New(derp.CodeBadRequestError, location, "Unable to load document", uri)
+	return streams.NilDocument(), derp.NewBadRequestError(location, "Unable to load document", uri)
 }

@@ -19,3 +19,10 @@ func WithRemoteOptions(middleware ...remote.Option) ClientOption {
 		client.RemoteOptions = append(client.RemoteOptions, middleware...)
 	}
 }
+
+// WithDebugLevel sets the debug level for the client.  Valid values are "verbose", "terse", and "none"
+func WithDebug(level string) ClientOption {
+	return func(client *Client) {
+		client.DebugLevel = level
+	}
+}
