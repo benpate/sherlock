@@ -7,6 +7,7 @@ import (
 	"github.com/benpate/hannibal/vocab"
 	"github.com/benpate/rosetta/mapof"
 	"github.com/microcosm-cc/bluemonday"
+	"github.com/rs/zerolog"
 )
 
 func sanitizeHTML(value string) string {
@@ -64,4 +65,9 @@ func withContext(value mapof.Any) {
 	if _, ok := value[vocab.AtContext]; !ok {
 		value[vocab.AtContext] = vocab.ContextTypeActivityStreams
 	}
+}
+
+// canLog returns TRUE if the current logging level is supported
+func canLog(level zerolog.Level) bool {
+	return level >= zerolog.GlobalLevel()
 }
