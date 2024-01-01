@@ -2,6 +2,7 @@ package sherlock
 
 import (
 	"github.com/benpate/hannibal/streams"
+	"github.com/benpate/hannibal/vocab"
 	"github.com/benpate/remote"
 	"github.com/benpate/rosetta/mapof"
 )
@@ -26,6 +27,11 @@ func (client *Client) loadDocument_HTML(uri string, data mapof.Any) streams.Docu
 	if err != nil {
 		return streams.NilDocument()
 	}
+
+	// Default values for Web Pages
+	data[vocab.PropertyID] = uri
+	data[vocab.PropertyURL] = uri
+	data[vocab.PropertyType] = vocab.ObjectTypePage
 
 	// Apply links found in the response headers
 	client.applyLinks(txn, data)
