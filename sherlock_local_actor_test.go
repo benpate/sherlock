@@ -4,6 +4,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/benpate/hannibal/vocab"
 	"github.com/benpate/remote"
 	"github.com/benpate/remote/options"
 	"github.com/davecgh/go-spew/spew"
@@ -38,7 +39,13 @@ func TestLocalActor_Atom_1(t *testing.T) {
 	result, err := client.Load("https://test-server/actor-atom-1.xml", AsActor())
 	require.Nil(t, err)
 	require.NotNil(t, result.Value())
-	// spew.Dump(result.Value())
+
+	require.True(t, result.IsActor())
+	require.Equal(t, vocab.ActorTypeService, result.Type())
+	require.Equal(t, vocab.CoreTypeOrderedCollection, result.Outbox().Type())
+	require.Equal(t, 2, result.Outbox().TotalItems())
+	require.Equal(t, 2, result.Outbox().Items().Len())
+	spew.Dump(result.Value())
 }
 
 func TestLocalActor_JSON_1(t *testing.T) {
