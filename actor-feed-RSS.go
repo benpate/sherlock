@@ -6,10 +6,12 @@ import (
 	"github.com/benpate/hannibal/streams"
 	"github.com/benpate/hannibal/vocab"
 	"github.com/benpate/remote"
+	"github.com/benpate/rosetta/convert"
 	"github.com/benpate/rosetta/html"
 	"github.com/benpate/rosetta/list"
 	"github.com/benpate/rosetta/mapof"
 	"github.com/benpate/rosetta/slice"
+	"github.com/davecgh/go-spew/spew"
 	"github.com/mmcdole/gofeed"
 )
 
@@ -60,13 +62,15 @@ func feedActivity(feed *gofeed.Feed) func(*gofeed.Item) any {
 	return func(item *gofeed.Item) any {
 
 		result := mapof.Any{
+			vocab.PropertyType:      vocab.ObjectTypePage,
 			vocab.PropertyID:        item.Link,
 			vocab.PropertyName:      html.ToText(item.Title),
 			vocab.PropertyPublished: item.PublishedParsed.Unix(),
+			vocab.PropertyActor:     feed.FeedLink,
 		}
 
-		if imageURL := feedImage(feed, item); imageURL != "" {
-			result[vocab.PropertyImage] = imageURL
+		if image := feedImage(feed, item); image != nil {
+			result[vocab.PropertyImage] = image
 		}
 
 		if summary := feedSummary(item); summary != "" {
@@ -87,7 +91,12 @@ func feedActivity(feed *gofeed.Feed) func(*gofeed.Item) any {
 
 func feedAuthor(feed *gofeed.Feed, item *gofeed.Item) mapof.Any {
 
-	result := mapof.Any{}
+	// Set up default values to override (if we find something better)
+	result := mapof.Any{
+		vocab.PropertyID:      feed.FeedLink,
+		vocab.PropertyName:    feed.Title,
+		vocab.PropertySummary: feed.Description,
+	}
 
 	// Try to find the image from the feed.  It's weird, but easier this way.
 	if feed.Image != nil {
@@ -134,10 +143,6 @@ func feedAuthor(feed *gofeed.Feed, item *gofeed.Item) mapof.Any {
 		}
 	}
 
-	// Fallback to use the Feed information as the Author
-	result[vocab.PropertyName] = feed.Title
-	result[vocab.PropertySummary] = feed.Description
-
 	return result
 }
 
@@ -152,37 +157,47 @@ func feedContent(item *gofeed.Item) string {
 }
 
 // rssImage returns the URL of the first image in the item's enclosure list.
-func feedImage(rssFeed *gofeed.Feed, item *gofeed.Item) string {
+func feedImage(rssFeed *gofeed.Feed, item *gofeed.Item) map[string]any {
+
+	spew.Dump("feedImage", item)
 
 	if item == nil {
-		return ""
+		return nil
 	}
 
 	if item.Image != nil {
-		return item.Image.URL
+		return map[string]any{
+			vocab.PropertyType:    vocab.ObjectTypeImage,
+			vocab.PropertyHref:    item.Image.URL,
+			vocab.PropertySummary: item.Image.Title,
+		}
 	}
 
 	// Search for an image in the enclosures
 	for _, enclosure := range item.Enclosures {
 		if list.Slash(enclosure.Type).First() == "image" {
-			return enclosure.URL
+			return map[string]any{
+				vocab.PropertyType: vocab.ObjectTypeImage,
+				vocab.PropertyHref: enclosure.URL,
+			}
 		}
 	}
 
 	// Search for media extensions (YouTube uses this)
 	if media, ok := item.Extensions["media"]; ok {
-		if group, ok := media["group"]; ok {
+		for _, group := range media {
 			for _, extension := range group {
-				if thumbnails, ok := extension.Children["thumbnail"]; ok {
-					for _, item := range thumbnails {
-						if url := item.Attrs["url"]; url != "" {
-							return url
-						}
+				if medium := extension.Attrs["medium"]; medium == "image" {
+					return map[string]any{
+						vocab.PropertyType:   vocab.ObjectTypeImage,
+						vocab.PropertyHref:   extension.Attrs["url"],
+						vocab.PropertyWidth:  convert.Int(extension.Attrs["width"]),
+						vocab.PropertyHeight: convert.Int(extension.Attrs["height"]),
 					}
 				}
 			}
 		}
 	}
 
-	return ""
+	return nil
 }
