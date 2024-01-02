@@ -8,28 +8,35 @@ import (
 // LoadDocument tries to retrieve a URL from the internet, then return it into a streams.Document.
 // If the remote resource is not already an ActivityStreams document, it will attempt to convert from
 // RSS, Atom, JSONFeed, and HTML MicroFormats.
-func (client Client) loadDocument(uri string, config LoadConfig) (streams.Document, error) {
+func (client Client) loadDocument(url string, config LoadConfig) (streams.Document, error) {
 
 	const location = "sherlock.Client.loadDocument"
 
-	// RULE: uri must not be empty
-	if uri == "" {
+	// RULE: url must not be empty
+	if url == "" {
 		return streams.NilDocument(), derp.NewBadRequestError("sherlock.Client.LoadDocument", "Empty URI")
 	}
 
-	// RULE: uri must begin with a valid protocol
-	uri = defaultHTTPS(uri)
+	// RULE: url must begin with a valid protocol
+	url = defaultHTTPS(url)
 
 	// 1. If we can load the document as an ActivityStream, then there you go.
-	if document := client.loadDocument_ActivityStream(uri); document.NotNil() {
+	if document := client.loadDocument_ActivityStream(url); document.NotNil() {
 		return document, nil
 	}
 
 	// 2. If we can load the document as HTML, then that will do.
-	if document := client.loadDocument_HTML(uri, config.DefaultValue); document.NotNil() {
+	if document := client.loadDocument_HTML(url, config.DefaultValue); document.NotNil() {
 		return document, nil
 	}
 
-	// 3. Abject failure.
-	return streams.NilDocument(), derp.NewBadRequestError(location, "Unable to load document", uri)
+	// 3. If the default value is good enough, then use that.
+	// This may happen when RSS feeds have *some* information, but a website CAPTCHA
+	// block us from loading more details.
+	if len(config.DefaultValue) > 0 {
+		return streams.NewDocument(config.DefaultValue, streams.WithClient(client)), nil
+	}
+
+	// 4. Abject failure.
+	return streams.NilDocument(), derp.NewBadRequestError(location, "Unable to load document", url, config)
 }

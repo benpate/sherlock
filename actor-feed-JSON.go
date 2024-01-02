@@ -50,7 +50,9 @@ func (client Client) loadActor_Feed_JSON(txn *remote.Transaction) streams.Docume
 			vocab.PropertyTotalItems: len(feed.Items),
 			vocab.PropertyOrderedItems: slice.Map(feed.Items, func(item jsonfeed.Item) mapof.Any {
 				return mapof.Any{
+					vocab.PropertyType:         vocab.ObjectTypePage,
 					vocab.PropertyID:           item.URL,
+					vocab.PropertyActor:        feed.FeedURL,
 					vocab.PropertyName:         item.Title,
 					vocab.PropertySummary:      item.Summary,
 					vocab.PropertyImage:        item.Image,
@@ -116,7 +118,9 @@ func jsonFeedToAuthor(feed jsonfeed.Feed, item jsonfeed.Item) mapof.Any {
 		}
 	}
 
-	return mapof.Any{}
+	return mapof.Any{
+		vocab.PropertyID: feed.FeedURL,
+	}
 }
 
 func jsonFeedToContentHTML(item jsonfeed.Item) string {

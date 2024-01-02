@@ -38,17 +38,17 @@ func NewClient(options ...ClientOption) Client {
 // OpenGraph, MicroFormats, and JSON-LD into an ActivityStreams equivalent.
 // "Actor" treats the URL as an Actor, translating RSS, Atom, JSON, and
 // MicroFormats feeds into an ActivityStream equivalent.
-func (client Client) Load(uri string, options ...any) (streams.Document, error) {
+func (client Client) Load(url string, options ...any) (streams.Document, error) {
 
 	config := NewLoadConfig(options...)
 
 	// If "Actor" is requested, then use that discovery method
 	if config.DocumentType == LoadDocumentTypeActor {
-		return client.loadActor(uri, &config)
+		return client.loadActor(url, &config)
 	}
 
 	// Otherwise, use "Document" discovery method
-	return client.loadDocument(uri, config)
+	return client.loadDocument(url, config)
 }
 
 // WithOptions applies one or more ClientOption functions to the client
