@@ -11,7 +11,6 @@ import (
 	"github.com/benpate/rosetta/list"
 	"github.com/benpate/rosetta/mapof"
 	"github.com/benpate/rosetta/slice"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/mmcdole/gofeed"
 )
 
@@ -33,7 +32,7 @@ func (client Client) loadActor_Feed_RSS(txn *remote.Transaction) streams.Documen
 	// Create JSON-LD for the Actor
 	data := mapof.Any{
 		vocab.AtContext:       vocab.ContextTypeActivityStreams,
-		vocab.PropertyType:    vocab.ActorTypeService,
+		vocab.PropertyType:    vocab.ActorTypeApplication,
 		vocab.PropertyID:      txn.RequestURL(),
 		vocab.PropertyName:    feed.Title,
 		vocab.PropertySummary: feed.Description,
@@ -158,8 +157,6 @@ func feedContent(item *gofeed.Item) string {
 
 // rssImage returns the URL of the first image in the item's enclosure list.
 func feedImage(rssFeed *gofeed.Feed, item *gofeed.Item) map[string]any {
-
-	spew.Dump("feedImage", item)
 
 	if item == nil {
 		return nil

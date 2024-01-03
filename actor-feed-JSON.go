@@ -41,7 +41,7 @@ func (client Client) loadActor_Feed_JSON(txn *remote.Transaction) streams.Docume
 	data := mapof.Any{
 		vocab.AtContext:       vocab.ContextTypeActivityStreams,
 		vocab.PropertyID:      feed.HomePageURL,
-		vocab.PropertyType:    vocab.ActorTypeService,
+		vocab.PropertyType:    vocab.ActorTypeApplication,
 		vocab.PropertyName:    feed.Title,
 		vocab.PropertySummary: feed.Description,
 		vocab.PropertyURL:     feed.HomePageURL,

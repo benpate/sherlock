@@ -42,6 +42,7 @@ func (client Client) loadActor_Feed_MicroFormats(txn *remote.Transaction) stream
 
 				data := mapof.Any{
 					vocab.PropertyID:           parsedURL.String(),
+					vocab.PropertyType:         vocab.ActorTypeApplication,
 					vocab.PropertyName:         microformat_Property(feed, "name"),
 					vocab.PropertyImage:        microformat_Property(feed, "photo"),
 					vocab.PropertyAttributedTo: microformat_Property(feed, "author"),
