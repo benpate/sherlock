@@ -46,19 +46,7 @@ func defaultHTTPS(uri string) string {
 	return "https://" + uri
 }
 
-/*
-// setMetadata sets common metadata from the HTTP response header
-func (client *Client) setMetadata(document streams.Document, header http.Header) {
-	document.WithOptions(
-		streams.WithClient(client),
-		streams.WithMeta("cache-control", header.Get("cache-control")),
-		streams.WithMeta("etag", header.Get("etag")),
-		streams.WithMeta("expires", header.Get("expires")),
-	)
-}
-*/
-
-// withContext adds the standard ActivityStreams @context to the JSON-LD document.
+// withContext adds the standard ActivityStream @context to the JSON-LD document.
 // If we're doing this, it's because we're assembling a "fake" JSON-LD document out of
 // other metadata (like OpenGraph, MicroFormats, oEmbed, etc).
 func withContext(value mapof.Any) {
