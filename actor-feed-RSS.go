@@ -1,6 +1,7 @@
 package sherlock
 
 import (
+	"net/url"
 	"sort"
 
 	"github.com/benpate/hannibal/streams"
@@ -58,11 +59,16 @@ func (client Client) loadActor_Feed_RSS(txn *remote.Transaction) streams.Documen
 // feedActivity populates an Activity object from a gofeed.Feed and gofeed.Item
 func feedActivity(feed *gofeed.Feed) func(*gofeed.Item) any {
 
+	baseURL, _ := url.Parse(feed.Link)
+
 	return func(item *gofeed.Item) any {
+
+		// Resolve relative URLs
+		linkURL, _ := baseURL.Parse(item.Link)
 
 		result := mapof.Any{
 			vocab.PropertyType:      vocab.ObjectTypePage,
-			vocab.PropertyID:        item.Link,
+			vocab.PropertyID:        linkURL.String(),
 			vocab.PropertyName:      html.ToText(item.Title),
 			vocab.PropertyPublished: item.PublishedParsed.Unix(),
 			vocab.PropertyActor:     feed.FeedLink,

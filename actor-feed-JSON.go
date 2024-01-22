@@ -2,6 +2,7 @@ package sherlock
 
 import (
 	"encoding/json"
+	"net/url"
 	"sort"
 
 	"github.com/benpate/hannibal/streams"
@@ -37,6 +38,8 @@ func (client Client) loadActor_Feed_JSON(txn *remote.Transaction) streams.Docume
 		return feed.Items[i].DatePublished.Unix() < feed.Items[j].DatePublished.Unix()
 	})
 
+	baseURL, _ := url.Parse(feed.FeedURL)
+
 	// Create an ActivityStream document
 	data := mapof.Any{
 		vocab.AtContext:       vocab.ContextTypeActivityStreams,
@@ -49,9 +52,12 @@ func (client Client) loadActor_Feed_JSON(txn *remote.Transaction) streams.Docume
 			vocab.PropertyType:       vocab.CoreTypeOrderedCollection,
 			vocab.PropertyTotalItems: len(feed.Items),
 			vocab.PropertyOrderedItems: slice.Map(feed.Items, func(item jsonfeed.Item) mapof.Any {
+
+				itemURL, _ := baseURL.Parse(item.URL)
+
 				return mapof.Any{
 					vocab.PropertyType:         vocab.ObjectTypePage,
-					vocab.PropertyID:           item.URL,
+					vocab.PropertyID:           itemURL,
 					vocab.PropertyActor:        feed.FeedURL,
 					vocab.PropertyName:         item.Title,
 					vocab.PropertySummary:      item.Summary,
