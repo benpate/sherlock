@@ -8,6 +8,7 @@ import (
 	"github.com/benpate/hannibal/vocab"
 	"github.com/benpate/remote"
 	"github.com/benpate/rosetta/convert"
+	"github.com/benpate/rosetta/first"
 	"github.com/benpate/rosetta/html"
 	"github.com/benpate/rosetta/list"
 	"github.com/benpate/rosetta/mapof"
@@ -30,18 +31,20 @@ func (client Client) loadActor_Feed_RSS(txn *remote.Transaction) streams.Documen
 		return feed.Items[i].PublishedParsed.Before(*feed.Items[j].PublishedParsed)
 	})
 
+	actorID := first.String(feed.FeedLink, feed.Link, txn.RequestURL())
+
 	// Create JSON-LD for the Actor
 	data := mapof.Any{
 		vocab.AtContext:       vocab.ContextTypeActivityStreams,
 		vocab.PropertyType:    vocab.ActorTypeApplication,
-		vocab.PropertyID:      txn.RequestURL(),
+		vocab.PropertyID:      actorID,
 		vocab.PropertyName:    feed.Title,
 		vocab.PropertySummary: feed.Description,
-		vocab.PropertyURL:     txn.RequestURL(),
+		vocab.PropertyURL:     actorID,
 		vocab.PropertyOutbox: mapof.Any{
 			vocab.PropertyType:         vocab.CoreTypeOrderedCollection,
 			vocab.PropertyTotalItems:   len(feed.Items),
-			vocab.PropertyOrderedItems: slice.Map(feed.Items, feedActivity(feed)),
+			vocab.PropertyOrderedItems: slice.Map(feed.Items, feedActivity(actorID, feed)),
 		},
 	}
 
@@ -57,9 +60,9 @@ func (client Client) loadActor_Feed_RSS(txn *remote.Transaction) streams.Documen
 }
 
 // feedActivity populates an Activity object from a gofeed.Feed and gofeed.Item
-func feedActivity(feed *gofeed.Feed) func(*gofeed.Item) any {
+func feedActivity(actorID string, feed *gofeed.Feed) func(*gofeed.Item) any {
 
-	baseURL, _ := url.Parse(feed.Link)
+	baseURL, _ := url.Parse(actorID)
 
 	return func(item *gofeed.Item) any {
 
@@ -86,7 +89,7 @@ func feedActivity(feed *gofeed.Feed) func(*gofeed.Item) any {
 			result[vocab.PropertyContent] = contentHTML
 		}
 
-		if attributedTo := feedAuthor(feed, item); attributedTo != nil {
+		if attributedTo := feedAuthor(actorID, feed, item); attributedTo != nil {
 			result[vocab.PropertyAttributedTo] = attributedTo
 		}
 
@@ -94,11 +97,11 @@ func feedActivity(feed *gofeed.Feed) func(*gofeed.Item) any {
 	}
 }
 
-func feedAuthor(feed *gofeed.Feed, item *gofeed.Item) mapof.Any {
+func feedAuthor(actorID string, feed *gofeed.Feed, item *gofeed.Item) mapof.Any {
 
 	// Set up default values to override (if we find something better)
 	result := mapof.Any{
-		vocab.PropertyID:      feed.FeedLink,
+		vocab.PropertyID:      actorID,
 		vocab.PropertyName:    feed.Title,
 		vocab.PropertySummary: feed.Description,
 	}

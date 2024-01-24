@@ -3,11 +3,11 @@ package sherlock
 import (
 	"encoding/json"
 	"net/url"
-	"sort"
 
 	"github.com/benpate/hannibal/streams"
 	"github.com/benpate/hannibal/vocab"
 	"github.com/benpate/remote"
+	"github.com/benpate/rosetta/first"
 	"github.com/benpate/rosetta/html"
 	"github.com/benpate/rosetta/mapof"
 	"github.com/benpate/rosetta/slice"
@@ -33,17 +33,13 @@ func (client Client) loadActor_Feed_JSON(txn *remote.Transaction) streams.Docume
 		return streams.NilDocument()
 	}
 
-	// Before inserting, sort the items chronologically so that new feeds appear correctly in the UX
-	sort.SliceStable(feed.Items, func(i, j int) bool {
-		return feed.Items[i].DatePublished.Unix() < feed.Items[j].DatePublished.Unix()
-	})
-
-	baseURL, _ := url.Parse(feed.FeedURL)
+	actorID := first.String(feed.FeedURL, txn.RequestURL())
+	baseURL, _ := url.Parse(actorID)
 
 	// Create an ActivityStream document
 	data := mapof.Any{
 		vocab.AtContext:       vocab.ContextTypeActivityStreams,
-		vocab.PropertyID:      feed.HomePageURL,
+		vocab.PropertyID:      actorID,
 		vocab.PropertyType:    vocab.ActorTypeApplication,
 		vocab.PropertyName:    feed.Title,
 		vocab.PropertySummary: feed.Description,

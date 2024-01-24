@@ -5,10 +5,10 @@ import (
 	"github.com/benpate/remote"
 )
 
-func (client *Client) loadActor_Feed(uri string, config *LoadConfig) streams.Document {
+func (client *Client) loadActor_Feed(url string, config *LoadConfig) streams.Document {
 
 	// Retrieve the URL
-	txn := remote.Get(uri).
+	txn := remote.Get(url).
 		UserAgent(client.UserAgent).
 		WithOptions(client.RemoteOptions...)
 
