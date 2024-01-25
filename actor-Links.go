@@ -81,7 +81,7 @@ func (client *Client) loadActor_FollowLinks(txn *remote.Transaction, links digit
 	// If we have one or more links, then search them in order...
 	if len(links) > 0 {
 
-		for _, mediaType := range []string{ContentTypeActivityPub, ContentTypeJSONFeed, ContentTypeAtom, ContentTypeRSS} {
+		for _, mediaType := range []string{ContentTypeActivityPub, ContentTypeJSONFeed, ContentTypeJSON, ContentTypeAtom, ContentTypeRSS} {
 
 			link := findSelfOrAlternateLink(links, mediaType)
 

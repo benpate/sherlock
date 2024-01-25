@@ -17,12 +17,8 @@ func (client *Client) loadActor_Feed(url string, config *LoadConfig) streams.Doc
 	}
 
 	// Find and follow links in the response.
-	// We're keeping this variable around because
-	// it may also include links to hubs, icons, etc.
-	result := client.loadActor_Links(txn, config)
-
-	if result.NotNil() {
-		return result
+	if document := client.loadActor_Links(txn, config); document.NotNil() {
+		return document
 	}
 
 	// 1. Try to generate an Actor from a JSON Feed

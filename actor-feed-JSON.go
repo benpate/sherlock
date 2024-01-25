@@ -42,6 +42,7 @@ func (client Client) loadActor_Feed_JSON(txn *remote.Transaction) streams.Docume
 		vocab.PropertyID:      actorID,
 		vocab.PropertyType:    vocab.ActorTypeApplication,
 		vocab.PropertyName:    feed.Title,
+		vocab.PropertyIcon:    feed.Icon,
 		vocab.PropertySummary: feed.Description,
 		vocab.PropertyURL:     feed.HomePageURL,
 		vocab.PropertyOutbox: mapof.Any{
