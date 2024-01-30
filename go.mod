@@ -5,10 +5,10 @@ go 1.21
 require (
 	github.com/PuerkitoBio/goquery v1.8.1
 	github.com/benpate/derp v0.30.0
-	github.com/benpate/digit v0.11.3
-	github.com/benpate/hannibal v0.9.0
+	github.com/benpate/digit v0.11.4
+	github.com/benpate/hannibal v0.9.1
 	github.com/benpate/remote v0.13.1
-	github.com/benpate/rosetta v0.19.2
+	github.com/benpate/rosetta v0.19.4
 	github.com/davecgh/go-spew v1.1.1
 	github.com/dyatlov/go-opengraph/opengraph v0.0.0-20220524092352-606d7b1e5f8a
 	github.com/kr/jsonfeed v0.1.1
