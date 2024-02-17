@@ -19,10 +19,12 @@ func IsValidAddress(address string) bool {
 		address = strings.TrimPrefix(address, "@")
 
 		if _, domain, found := strings.Cut(address, "@"); found {
-			address = "https://" + domain
+			if _, err := url.Parse("https://" + domain); err == nil {
+				return true
+			}
 		}
 
-		// Fall through to check that the domain is valid
+		return false
 	}
 
 	// Validate that the address is a valid URL
@@ -31,6 +33,12 @@ func IsValidAddress(address string) bool {
 		if _, err := url.Parse(address); err == nil {
 			return true
 		}
+	}
+
+	// If the address *would be* a valid domain IF it had a protocol...
+	// then still maybe yes.
+	if _, err := url.Parse("https://" + address); err == nil {
+		return true
 	}
 
 	// If we get here, then the address is not valid
