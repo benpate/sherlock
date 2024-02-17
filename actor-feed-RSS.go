@@ -35,12 +35,13 @@ func (client Client) loadActor_Feed_RSS(txn *remote.Transaction) streams.Documen
 
 	// Create JSON-LD for the Actor
 	data := mapof.Any{
-		vocab.AtContext:       vocab.ContextTypeActivityStreams,
-		vocab.PropertyType:    vocab.ActorTypeApplication,
-		vocab.PropertyID:      actorID,
-		vocab.PropertyName:    feed.Title,
-		vocab.PropertySummary: feed.Description,
-		vocab.PropertyURL:     actorID,
+		vocab.AtContext:                 vocab.ContextTypeActivityStreams,
+		vocab.PropertyType:              vocab.ActorTypeApplication,
+		vocab.PropertyID:                actorID,
+		vocab.PropertyName:              feed.Title,
+		vocab.PropertySummary:           feed.Description,
+		vocab.PropertyURL:               txn.RequestURL(),
+		vocab.PropertyPreferredUsername: txn.RequestURL(),
 		vocab.PropertyOutbox: mapof.Any{
 			vocab.PropertyType:         vocab.CoreTypeOrderedCollection,
 			vocab.PropertyTotalItems:   len(feed.Items),

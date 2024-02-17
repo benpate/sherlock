@@ -34,17 +34,19 @@ func (client Client) loadActor_Feed_JSON(txn *remote.Transaction) streams.Docume
 	}
 
 	actorID := first.String(feed.FeedURL, txn.RequestURL())
+	username := first.String(feed.HomePageURL, txn.RequestURL())
 	baseURL, _ := url.Parse(actorID)
 
 	// Create an ActivityStream document
 	data := mapof.Any{
-		vocab.AtContext:       vocab.ContextTypeActivityStreams,
-		vocab.PropertyID:      actorID,
-		vocab.PropertyType:    vocab.ActorTypeApplication,
-		vocab.PropertyName:    feed.Title,
-		vocab.PropertyIcon:    feed.Icon,
-		vocab.PropertySummary: feed.Description,
-		vocab.PropertyURL:     feed.HomePageURL,
+		vocab.AtContext:                 vocab.ContextTypeActivityStreams,
+		vocab.PropertyID:                actorID,
+		vocab.PropertyType:              vocab.ActorTypeApplication,
+		vocab.PropertyName:              feed.Title,
+		vocab.PropertyIcon:              feed.Icon,
+		vocab.PropertySummary:           feed.Description,
+		vocab.PropertyURL:               username,
+		vocab.PropertyPreferredUsername: username,
 		vocab.PropertyOutbox: mapof.Any{
 			vocab.PropertyType:       vocab.CoreTypeOrderedCollection,
 			vocab.PropertyTotalItems: len(feed.Items),
