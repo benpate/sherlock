@@ -15,6 +15,11 @@ func (client Client) loadActor(url string, config *LoadConfig) (streams.Document
 
 	log.Debug().Str("loc", location).Msg("searching for: " + url)
 
+	// RULE: Prevent too many redirects
+	if config.MaximumRedirects < 0 {
+		return streams.NilDocument(), derp.NewInternalError(location, "Maximum redirects exceeded", url)
+	}
+
 	// 1. Try WebFinger
 	if actor := client.loadActor_WebFinger(url, config); actor.NotNil() {
 		log.Debug().Str("loc", location).Msg("Found via WebFinger")

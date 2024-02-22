@@ -14,7 +14,12 @@ func (client Client) loadDocument(url string, config LoadConfig) (streams.Docume
 
 	// RULE: url must not be empty
 	if url == "" {
-		return streams.NilDocument(), derp.NewBadRequestError("sherlock.Client.LoadDocument", "Empty URI")
+		return streams.NilDocument(), derp.NewBadRequestError(location, "Empty URI")
+	}
+
+	// RULE: Prevent too many redirects
+	if config.MaximumRedirects < 0 {
+		return streams.NilDocument(), derp.NewInternalError(location, "Maximum redirects exceeded", url)
 	}
 
 	// RULE: url must begin with a valid protocol
