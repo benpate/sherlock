@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/benpate/digit"
+	"github.com/benpate/hannibal"
 	"github.com/benpate/hannibal/streams"
 )
 
@@ -26,7 +27,7 @@ func (client *Client) loadActor_WebFinger(uri string, config *LoadConfig) stream
 
 	// Search for ActivityPub endpoints
 	for _, link := range response.Links {
-		if (link.RelationType == digit.RelationTypeSelf) && (link.MediaType == ContentTypeActivityPub) {
+		if (link.RelationType == digit.RelationTypeSelf) && (hannibal.IsActivityPubContentType(link.MediaType)) {
 			if result := client.loadActor_ActivityStreams(link.Href); result.NotNil() {
 				config.MaximumRedirects--
 				return result
