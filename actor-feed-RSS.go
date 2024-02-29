@@ -3,6 +3,7 @@ package sherlock
 import (
 	"net/url"
 	"sort"
+	"time"
 
 	"github.com/benpate/hannibal/streams"
 	"github.com/benpate/hannibal/vocab"
@@ -28,7 +29,13 @@ func (client Client) loadActor_Feed_RSS(txn *remote.Transaction) streams.Documen
 
 	// Sort the feed items (oldest first)
 	sort.Slice(feed.Items, func(i, j int) bool {
-		return feed.Items[i].PublishedParsed.Before(*feed.Items[j].PublishedParsed)
+		if firstPublishDate := feed.Items[i].PublishedParsed; firstPublishDate != nil {
+			if secondPublishDate := feed.Items[j].PublishedParsed; secondPublishDate != nil {
+				return firstPublishDate.Before(*secondPublishDate)
+			}
+			return false
+		}
+		return false
 	})
 
 	actorID := first.String(feed.FeedLink, feed.Link, txn.RequestURL())
@@ -71,14 +78,19 @@ func feedActivity(actorID string, feed *gofeed.Feed) func(*gofeed.Item) any {
 		linkURL, _ := baseURL.Parse(item.Link)
 
 		result := mapof.Any{
-			vocab.PropertyType:      vocab.ObjectTypePage,
-			vocab.PropertyID:        linkURL.String(),
-			vocab.PropertyName:      html.ToText(item.Title),
-			vocab.PropertyPublished: item.PublishedParsed.Unix(),
-			vocab.PropertyActor:     feed.FeedLink,
+			vocab.PropertyType:  vocab.ObjectTypePage,
+			vocab.PropertyID:    linkURL.String(),
+			vocab.PropertyName:  html.ToText(item.Title),
+			vocab.PropertyActor: feed.FeedLink,
 		}
 
-		if image := feedImage(feed, item); image != nil {
+		if item.PublishedParsed != nil {
+			result[vocab.PropertyPublished] = item.PublishedParsed.Unix()
+		} else {
+			result[vocab.PropertyPublished] = time.Now().Unix()
+		}
+
+		if image := feedImage(item); image != nil {
 			result[vocab.PropertyImage] = image
 		}
 
@@ -166,7 +178,7 @@ func feedContent(item *gofeed.Item) string {
 }
 
 // rssImage returns the URL of the first image in the item's enclosure list.
-func feedImage(rssFeed *gofeed.Feed, item *gofeed.Item) map[string]any {
+func feedImage(item *gofeed.Item) map[string]any {
 
 	if item == nil {
 		return nil
