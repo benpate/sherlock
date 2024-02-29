@@ -3,9 +3,7 @@ package sherlock
 import (
 	"github.com/benpate/hannibal/streams"
 	"github.com/benpate/remote"
-	"github.com/benpate/remote/options"
 	"github.com/benpate/rosetta/mapof"
-	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
 
@@ -24,10 +22,6 @@ func (client Client) loadActor_ActivityStreams(uri string) streams.Document {
 		WithOptions(client.RemoteOptions...).
 		Result(&data)
 
-	if canLog(zerolog.TraceLevel) {
-		txn.WithOptions(options.Debug())
-	}
-
 	// Try to load the data from the remote server
 	if err := txn.Send(); err != nil {
 		log.Debug().Str("loc", location).Msg("Error loading URI: " + uri)
@@ -36,7 +30,7 @@ func (client Client) loadActor_ActivityStreams(uri string) streams.Document {
 
 	// If the response is not an ActivityPub document, then exit
 	if !isActivityStream(txn.ResponseContentType()) {
-		if canLog(zerolog.DebugLevel) {
+		if canDebug() {
 			log.Debug().Str("loc", location).Msg("Response is not an ActivityStream: " + txn.ResponseContentType())
 		}
 		return streams.NilDocument()

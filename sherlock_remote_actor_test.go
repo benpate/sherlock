@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/benpate/hannibal/streams"
+	"github.com/benpate/hannibal/vocab"
 	"github.com/stretchr/testify/require"
 )
 
@@ -50,10 +51,9 @@ func testRemoteActor(t *testing.T, url string) streams.Document {
 	result, err := client.Load(url, AsActor())
 	require.NoError(t, err)
 
-	require.NotEqual(t, "", result.Outbox().ID())
-	outbox, err := result.Outbox().Load()
-	require.NoError(t, err)
-	require.Equal(t, "OrderedCollection", outbox.Type())
+	require.True(t, result.Outbox().NotNil())
+	outbox := result.Outbox().LoadLink()
+	require.Equal(t, vocab.CoreTypeOrderedCollection, outbox.Type())
 	// require.Greater(t, outbox.TotalItems(), 0)
 
 	return result

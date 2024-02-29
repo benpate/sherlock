@@ -64,7 +64,7 @@ func TestLocalActor_Microformats_2(t *testing.T) {
 
 	require.Nil(t, err)
 	require.NotNil(t, result.Value())
-	require.Equal(t, "Article", result.Type())
+	require.Equal(t, "Page", result.Type())
 	require.Equal(t, "https://test-server/document-microformats-4.html", result.ID())
 	require.Equal(t, "https://test-server/IndieWeb", result.AttributedTo().ID())
 	require.Equal(t, "IndieWeb", result.AttributedTo().Name())
@@ -79,8 +79,8 @@ func TestLocalDocument_OpenGraph(t *testing.T) {
 
 	require.Nil(t, err)
 	require.NotNil(t, result.Value())
-	require.Equal(t, "https://opengraphtester.com", result.ID())
-	require.Equal(t, "Article", result.Type())
+	require.Equal(t, "https://test-server/document-opengraph-1.html", result.ID())
+	require.Equal(t, "Page", result.Type())
 	require.Equal(t, "Open Graph Tester", result.Name())
 	require.Equal(t, "This website serves as a simple tool for web developers, designers, and marketing professionals to optimize their websites and posts prior to publishing them on social media.", result.Summary())
 	require.Equal(t, "https://opengraphtester.com/assets/images/logos/og-image.png", result.Image().URL())

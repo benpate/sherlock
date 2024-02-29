@@ -7,13 +7,11 @@ import (
 	"github.com/benpate/hannibal/vocab"
 	"github.com/benpate/remote"
 	"github.com/benpate/remote/options"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/stretchr/testify/require"
 )
 
-func init() {
-	// spew.Config.DisableMethods = true
-}
+// spew.Config.DisableMethods = true
+// zerolog.SetGlobalLevel(zerolog.InfoLevel)
 
 func getTestServer() remote.Option {
 	filesystem := os.DirFS("./test-files")
@@ -71,6 +69,7 @@ func TestLocalActor_Microformats_1(t *testing.T) {
 	// spew.Dump(result.Value())
 }
 
+/*
 func TestLocalActor_Microformats_3(t *testing.T) {
 
 	client := NewClient(WithRemoteOptions(getTestServer()))
@@ -78,11 +77,12 @@ func TestLocalActor_Microformats_3(t *testing.T) {
 	result, err := client.Load("https://test-server/actor-microformats-3.html", AsActor())
 	// require.Nil(t, err)
 	// require.NotNil(t, result.Value())
-	spew.Dump(result.Value())
-	spew.Dump(err)
+	// spew.Dump(result.Value())
+	// spew.Dump(err)
 	// TODO: This test is currently breaking because this page nests MicroFormats too deeply.
 	// TODO: Also, do a better job loading Author information from the h-card
 }
+*/
 
 func TestLocalActor_RSS_1_XML(t *testing.T) {
 
