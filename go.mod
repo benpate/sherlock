@@ -3,12 +3,12 @@ module github.com/benpate/sherlock
 go 1.21
 
 require (
-	github.com/PuerkitoBio/goquery v1.8.1
-	github.com/benpate/derp v0.30.0
-	github.com/benpate/digit v0.11.4
-	github.com/benpate/hannibal v0.9.2
-	github.com/benpate/remote v0.14.0
-	github.com/benpate/rosetta v0.19.4
+	github.com/PuerkitoBio/goquery v1.9.1
+	github.com/benpate/derp v0.31.0
+	github.com/benpate/digit v0.12.0
+	github.com/benpate/hannibal v0.10.0
+	github.com/benpate/remote v0.15.0
+	github.com/benpate/rosetta v0.20.0
 	github.com/davecgh/go-spew v1.1.1
 	github.com/dyatlov/go-opengraph/opengraph v0.0.0-20220524092352-606d7b1e5f8a
 	github.com/kr/jsonfeed v0.1.1
@@ -24,7 +24,7 @@ require (
 require (
 	github.com/andybalholm/cascadia v1.3.2 // indirect
 	github.com/aymerick/douceur v0.2.0 // indirect
-	github.com/benpate/domain v0.2.0 // indirect
+	github.com/benpate/domain v0.2.1 // indirect
 	github.com/benpate/exp v0.8.3 // indirect
 	github.com/gorilla/css v1.0.1 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
