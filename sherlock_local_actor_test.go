@@ -41,7 +41,7 @@ func TestLocalActor_Atom_1(t *testing.T) {
 	require.NotNil(t, result.Value())
 
 	require.True(t, result.IsActor())
-	require.Equal(t, vocab.ActorTypeService, result.Type())
+	require.Equal(t, vocab.ActorTypeApplication, result.Type())
 	require.Equal(t, vocab.CoreTypeOrderedCollection, result.Outbox().Type())
 	require.Equal(t, 2, result.Outbox().TotalItems())
 	require.Equal(t, 2, result.Outbox().Items().Len())
@@ -55,8 +55,8 @@ func TestLocalActor_JSON_1(t *testing.T) {
 	result, err := client.Load("https://test-server/actor-json-1.json", AsActor())
 	require.Nil(t, err)
 	require.NotNil(t, result.Value())
-	require.Equal(t, "https://www.jsonfeed.org/", result.ID())
-	require.Equal(t, "Service", result.Type())
+	require.Equal(t, "https://www.jsonfeed.org/feed.json", result.ID())
+	require.Equal(t, "Application", result.Type())
 	require.Equal(t, 2, result.Outbox().TotalItems())
 	// spew.Dump(result.Value())
 }
