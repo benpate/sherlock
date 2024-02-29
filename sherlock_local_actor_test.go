@@ -45,7 +45,7 @@ func TestLocalActor_Atom_1(t *testing.T) {
 	require.Equal(t, vocab.CoreTypeOrderedCollection, result.Outbox().Type())
 	require.Equal(t, 2, result.Outbox().TotalItems())
 	require.Equal(t, 2, result.Outbox().Items().Len())
-	spew.Dump(result.Value())
+	// spew.Dump(result.Value())
 }
 
 func TestLocalActor_JSON_1(t *testing.T) {

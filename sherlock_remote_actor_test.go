@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/benpate/hannibal/streams"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/stretchr/testify/require"
 )
 
@@ -43,7 +42,7 @@ func TestRemoteActor_Mitra_HTTP(t *testing.T) {
 
 func TestRemoteActor_Mitra_WebFinger(t *testing.T) {
 	result := testRemoteActor(t, "@benpate@wizard.casa")
-	spew.Dump(result)
+	require.Equal(t, "benpate", result.PreferredUsername())
 }
 
 func testRemoteActor(t *testing.T, url string) streams.Document {

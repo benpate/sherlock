@@ -15,7 +15,6 @@ func TestRemoteDocument_IndieWeb(t *testing.T) {
 
 	require.Nil(t, err)
 	require.NotNil(t, meta.Value())
-	// t.Log(meta.Value())
 }
 
 func TestRemoteDocument_NickSimpson(t *testing.T) {
@@ -25,7 +24,6 @@ func TestRemoteDocument_NickSimpson(t *testing.T) {
 
 	require.Nil(t, err)
 	require.NotNil(t, meta.Value())
-	// t.Log(meta.Value())
 }
 
 func TestRemoteDocument_MastodonProfile(t *testing.T) {
@@ -35,7 +33,6 @@ func TestRemoteDocument_MastodonProfile(t *testing.T) {
 
 	require.Nil(t, err)
 	require.NotNil(t, meta.Value())
-	// t.Log(meta.Value())
 }
 
 func TestRemoteDocument_MastodonProfile_Redirect(t *testing.T) {
@@ -45,7 +42,6 @@ func TestRemoteDocument_MastodonProfile_Redirect(t *testing.T) {
 
 	require.Nil(t, err)
 	require.NotNil(t, meta.Value())
-	// t.Log(meta.Value())
 }
 
 func TestRemoteDocument_MastodonToot(t *testing.T) {
@@ -55,5 +51,4 @@ func TestRemoteDocument_MastodonToot(t *testing.T) {
 
 	require.Nil(t, err)
 	require.NotNil(t, meta.Value())
-	// t.Log(meta.Value())
 }
