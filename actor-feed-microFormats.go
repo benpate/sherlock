@@ -52,6 +52,9 @@ func (client Client) loadActor_Feed_MicroFormats(txn *remote.Transaction) stream
 				// Apply links found in the response headers
 				client.applyLinks(txn, data)
 
+				// Patch icon into the feed (if necessary)
+				client.loadActor_Feed_FindHomePageIcon(data)
+
 				// Return the (successfully?) parsed document to the caller.
 				return streams.NewDocument(
 					data,

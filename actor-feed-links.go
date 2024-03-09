@@ -54,7 +54,7 @@ func (client *Client) loadActor_DiscoverLinks(txn *remote.Transaction) digit.Lin
 	if htmlDocument, err := goquery.NewDocumentFromReader(txn.ResponseBodyReader()); err == nil {
 
 		// Get "relevant" links from the document
-		selection := htmlDocument.Find("[rel=alternate],[rel=self],[rel=feed],[rel=hub],[rel=icon]")
+		selection := htmlDocument.Find("[rel=alternate],[rel=self],[rel=feed],[rel=hub],[rel=icon],[rel=apple-touch-icon],[rel=apple-touch-icon-precomposed],[rel=mask-icon]")
 
 		// Add links to the accumulator
 		for _, link := range selection.Nodes {
@@ -62,6 +62,9 @@ func (client *Client) loadActor_DiscoverLinks(txn *remote.Transaction) digit.Lin
 				RelationType: nodeAttribute(link, "rel"),
 				MediaType:    nodeAttribute(link, "type"),
 				Href:         getRelativeURL(requestURL, nodeAttribute(link, "href")),
+				Properties: map[string]string{
+					"sizes": nodeAttribute(link, "sizes"),
+				},
 			})
 		}
 	}

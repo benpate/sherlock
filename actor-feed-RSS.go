@@ -18,7 +18,7 @@ import (
 )
 
 // loadActor_Feed_RSS tries generate an Actor from an RSS or Atom feed
-func (client Client) loadActor_Feed_RSS(txn *remote.Transaction) streams.Document {
+func (client Client) loadActor_Feed_RSS(txn *remote.Transaction, config *LoadConfig) streams.Document {
 
 	// Try to find the RSS feed associated with this link
 	feed, err := gofeed.NewParser().Parse(txn.ResponseBodyReader())
@@ -41,27 +41,28 @@ func (client Client) loadActor_Feed_RSS(txn *remote.Transaction) streams.Documen
 	actorID := first.String(feed.FeedLink, feed.Link, txn.RequestURL())
 
 	// Create JSON-LD for the Actor
-	data := mapof.Any{
-		vocab.AtContext:                 vocab.ContextTypeActivityStreams,
-		vocab.PropertyType:              vocab.ActorTypeApplication,
-		vocab.PropertyID:                actorID,
-		vocab.PropertyName:              feed.Title,
-		vocab.PropertySummary:           feed.Description,
-		vocab.PropertyURL:               txn.RequestURL(),
-		vocab.PropertyPreferredUsername: txn.RequestURL(),
-		vocab.PropertyOutbox: mapof.Any{
-			vocab.PropertyType:         vocab.CoreTypeOrderedCollection,
-			vocab.PropertyTotalItems:   len(feed.Items),
-			vocab.PropertyOrderedItems: slice.Map(feed.Items, feedActivity(actorID, feed)),
-		},
+	result := config.DefaultValue
+	result[vocab.AtContext] = vocab.ContextTypeActivityStreams
+	result[vocab.PropertyType] = vocab.ActorTypeApplication
+	result[vocab.PropertyID] = actorID
+	result[vocab.PropertyName] = feed.Title
+	result[vocab.PropertySummary] = feed.Description
+	result[vocab.PropertyURL] = txn.RequestURL()
+	result[vocab.PropertyOutbox] = mapof.Any{
+		vocab.PropertyType:         vocab.CoreTypeOrderedCollection,
+		vocab.PropertyTotalItems:   len(feed.Items),
+		vocab.PropertyOrderedItems: slice.Map(feed.Items, feedActivity(actorID, feed)),
 	}
 
 	// Apply links found in the response headers
-	client.applyLinks(txn, data)
+	client.applyLinks(txn, result)
+
+	// Patch icon into the feed (if necessary)
+	client.loadActor_Feed_FindHomePageIcon(result)
 
 	// Return the result as a streams.Document
 	return streams.NewDocument(
-		data,
+		result,
 		streams.WithClient(client),
 		streams.WithHTTPHeader(txn.ResponseHeader()),
 	)

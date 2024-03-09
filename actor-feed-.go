@@ -22,12 +22,12 @@ func (client *Client) loadActor_Feed(url string, config *LoadConfig) streams.Doc
 	}
 
 	// 1. Try to generate an Actor from a JSON Feed
-	if document := client.loadActor_Feed_JSON(txn); document.NotNil() {
+	if document := client.loadActor_Feed_JSON(txn, config); document.NotNil() {
 		return document
 	}
 
 	// 2. Try to generate an Actor from a RSS/Atom Feed
-	if document := client.loadActor_Feed_RSS(txn); document.NotNil() {
+	if document := client.loadActor_Feed_RSS(txn, config); document.NotNil() {
 		return document
 	}
 

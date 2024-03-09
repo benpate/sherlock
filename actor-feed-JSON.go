@@ -14,7 +14,7 @@ import (
 	"github.com/kr/jsonfeed"
 )
 
-func (client Client) loadActor_Feed_JSON(txn *remote.Transaction) streams.Document {
+func (client Client) loadActor_Feed_JSON(txn *remote.Transaction, config *LoadConfig) streams.Document {
 
 	// JSONFeed content only
 	if !isJSONFeedContentType(txn.ResponseContentType()) {
@@ -38,41 +38,39 @@ func (client Client) loadActor_Feed_JSON(txn *remote.Transaction) streams.Docume
 	baseURL, _ := url.Parse(actorID)
 
 	// Create an ActivityStream document
-	data := mapof.Any{
-		vocab.AtContext:                 vocab.ContextTypeActivityStreams,
-		vocab.PropertyID:                actorID,
-		vocab.PropertyType:              vocab.ActorTypeApplication,
-		vocab.PropertyName:              feed.Title,
-		vocab.PropertyIcon:              feed.Icon,
-		vocab.PropertySummary:           feed.Description,
-		vocab.PropertyURL:               username,
-		vocab.PropertyPreferredUsername: username,
-		vocab.PropertyOutbox: mapof.Any{
-			vocab.PropertyType:       vocab.CoreTypeOrderedCollection,
-			vocab.PropertyTotalItems: len(feed.Items),
-			vocab.PropertyOrderedItems: slice.Map(feed.Items, func(item jsonfeed.Item) mapof.Any {
+	result := config.DefaultValue
+	result[vocab.AtContext] = vocab.ContextTypeActivityStreams
+	result[vocab.PropertyID] = actorID
+	result[vocab.PropertyType] = vocab.ActorTypeApplication
+	result[vocab.PropertyName] = feed.Title
+	result[vocab.PropertyIcon] = feed.Icon
+	result[vocab.PropertySummary] = feed.Description
+	result[vocab.PropertyURL] = username
+	result[vocab.PropertyOutbox] = mapof.Any{
+		vocab.PropertyType:       vocab.CoreTypeOrderedCollection,
+		vocab.PropertyTotalItems: len(feed.Items),
+		vocab.PropertyOrderedItems: slice.Map(feed.Items, func(item jsonfeed.Item) mapof.Any {
 
-				itemURL, _ := baseURL.Parse(item.URL)
+			itemURL, _ := baseURL.Parse(item.URL)
 
-				return mapof.Any{
-					vocab.PropertyType:         vocab.ObjectTypePage,
-					vocab.PropertyID:           itemURL,
-					vocab.PropertyActor:        feed.FeedURL,
-					vocab.PropertyName:         item.Title,
-					vocab.PropertySummary:      item.Summary,
-					vocab.PropertyImage:        item.Image,
-					vocab.PropertyContent:      jsonFeedToContentHTML(item),
-					vocab.PropertyPublished:    item.DatePublished.Unix(),
-					vocab.PropertyAttributedTo: jsonFeedToAuthor(feed, item),
-				}
-			}),
-		},
+			return mapof.Any{
+				vocab.PropertyType:         vocab.ObjectTypePage,
+				vocab.PropertyID:           itemURL,
+				vocab.PropertyActor:        feed.FeedURL,
+				vocab.PropertyName:         item.Title,
+				vocab.PropertySummary:      item.Summary,
+				vocab.PropertyImage:        item.Image,
+				vocab.PropertyContent:      jsonFeedToContentHTML(item),
+				vocab.PropertyPublished:    item.DatePublished.Unix(),
+				vocab.PropertyAttributedTo: jsonFeedToAuthor(feed, item),
+			}
+		}),
 	}
 
 	// Search for WebSub hubs.
 	for _, hub := range feed.Hubs {
 		if hub.Type == "WebSub" {
-			data[vocab.PropertyEndpoints] = mapof.Any{
+			result[vocab.PropertyEndpoints] = mapof.Any{
 				"hub": hub.URL,
 			}
 			break
@@ -80,10 +78,16 @@ func (client Client) loadActor_Feed_JSON(txn *remote.Transaction) streams.Docume
 	}
 
 	// Apply links found in the response headers
-	client.applyLinks(txn, data)
+	client.applyLinks(txn, result)
+
+	// Patch icon into the feed (if necessary)
+	client.loadActor_Feed_FindHomePageIcon(result)
+
+	// Find/Manufacture the icon for the feed
+	// client.loadActor_Feed_Icon(txn, result)
 
 	return streams.NewDocument(
-		data,
+		result,
 		streams.WithClient(client),
 		streams.WithHTTPHeader(txn.ResponseHeader()),
 	)
