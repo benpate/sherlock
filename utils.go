@@ -131,6 +131,11 @@ func iconSizesAsInt(value string) int {
 		}
 	}
 
+	// If we found no results, then return 0
+	if len(results) == 0 {
+		return 0
+	}
+
 	// Return the largest number found
 	return slices.Max(results)
 }
