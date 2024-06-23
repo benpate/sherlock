@@ -10,7 +10,7 @@ func (client *Client) loadActor_Feed(url string, config *LoadConfig) streams.Doc
 	// Retrieve the URL
 	txn := remote.Get(url).
 		UserAgent(client.UserAgent).
-		WithOptions(client.RemoteOptions...)
+		With(client.RemoteOptions...)
 
 	if err := txn.Send(); err != nil {
 		return streams.NilDocument()

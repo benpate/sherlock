@@ -20,7 +20,7 @@ func getTestServer() remote.Option {
 
 func TestTestServer(t *testing.T) {
 
-	txn := remote.Get("https://test-server/actor-microformats-3.html").Use(getTestServer())
+	txn := remote.Get("https://test-server/actor-microformats-3.html").With(getTestServer())
 	err := txn.Send()
 	require.Nil(t, err)
 

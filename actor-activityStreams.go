@@ -19,7 +19,7 @@ func (client Client) loadActor_ActivityStreams(uri string) streams.Document {
 	txn := remote.Get(uri).
 		UserAgent(client.UserAgent).
 		Accept(ContentTypeActivityPub).
-		WithOptions(client.RemoteOptions...).
+		With(client.RemoteOptions...).
 		Result(&data)
 
 	// Try to load the data from the remote server

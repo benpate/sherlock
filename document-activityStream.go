@@ -17,7 +17,7 @@ func (client *Client) loadDocument_ActivityStream(uri string) streams.Document {
 	txn := remote.Get(uri).
 		UserAgent(client.UserAgent).
 		Accept(vocab.ContentTypeActivityPub).
-		WithOptions(client.RemoteOptions...).
+		With(client.RemoteOptions...).
 		Result(&data)
 
 	if err := txn.Send(); err != nil {

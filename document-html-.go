@@ -15,7 +15,7 @@ func (client *Client) loadDocument_HTML(uri string, data mapof.Any) streams.Docu
 	// Retrieve the HTML document
 	txn := remote.Get(uri).
 		UserAgent(client.UserAgent).
-		WithOptions(client.RemoteOptions...)
+		With(client.RemoteOptions...)
 
 	if err := txn.Send(); err != nil {
 		return streams.NilDocument()
