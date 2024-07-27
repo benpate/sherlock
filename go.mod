@@ -6,7 +6,7 @@ require (
 	github.com/PuerkitoBio/goquery v1.9.2
 	github.com/benpate/derp v0.31.0
 	github.com/benpate/digit v0.12.1
-	github.com/benpate/hannibal v0.11.0
+	github.com/benpate/hannibal v0.11.1
 	github.com/benpate/remote v0.16.0
 	github.com/benpate/rosetta v0.21.2
 	github.com/dyatlov/go-opengraph/opengraph v0.0.0-20220524092352-606d7b1e5f8a
@@ -25,7 +25,7 @@ require (
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/benpate/domain v0.2.2 // indirect
 	github.com/benpate/exp v0.8.3 // indirect
-	github.com/benpate/re v0.3.0 // indirect
+	github.com/benpate/re v0.3.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/gorilla/css v1.0.1 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
