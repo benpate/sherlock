@@ -6,7 +6,7 @@ require (
 	github.com/PuerkitoBio/goquery v1.9.2
 	github.com/benpate/derp v0.31.0
 	github.com/benpate/digit v0.12.1
-	github.com/benpate/hannibal v0.11.1
+	github.com/benpate/hannibal v0.11.2
 	github.com/benpate/remote v0.16.0
 	github.com/benpate/rosetta v0.21.2
 	github.com/dyatlov/go-opengraph/opengraph v0.0.0-20220524092352-606d7b1e5f8a
