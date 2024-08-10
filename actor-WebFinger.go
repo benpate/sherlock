@@ -11,9 +11,11 @@ import (
 
 func (client *Client) loadActor_WebFinger(uri string, config *LoadConfig) streams.Document {
 
+	const location = "sherlock.Client.loadActor_WebFinger"
+
 	// If the ID doesn't look like an email/username then skip this step
 	if !strings.Contains(uri, "@") {
-		log.Trace().Msg("loadActor_WebFinger: skipping because uri doesn't look like an email address")
+		log.Trace().Str("location", location).Msg("Skipping because uri doesn't look like an email address")
 		return streams.NilDocument()
 	}
 
@@ -25,6 +27,8 @@ func (client *Client) loadActor_WebFinger(uri string, config *LoadConfig) stream
 		log.Error().Err(err).Msg("loadActor_WebFinger: skipping because of error")
 		return streams.NilDocument()
 	}
+
+	log.Trace().Str("location", location).Interface("response", response).Msg("Found WebFinger response")
 
 	// Search for ActivityPub endpoints
 	for _, link := range response.Links {

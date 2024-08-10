@@ -3,6 +3,7 @@ package sherlock
 import (
 	"github.com/benpate/hannibal/streams"
 	"github.com/benpate/remote"
+	"github.com/benpate/remote/options"
 	"github.com/benpate/rosetta/mapof"
 	"github.com/rs/zerolog/log"
 )
@@ -22,19 +23,25 @@ func (client Client) loadActor_ActivityStreams(uri string) streams.Document {
 		With(client.RemoteOptions...).
 		Result(&data)
 
+	if canTrace() {
+		txn.With(options.Debug())
+	}
+
 	// Try to load the data from the remote server
 	if err := txn.Send(); err != nil {
-		log.Debug().Str("loc", location).Msg("Error loading URI: " + uri)
+		log.Trace().Str("location", location).Msg("Error loading URI: " + uri)
 		return streams.NilDocument()
 	}
 
 	// If the response is not an ActivityPub document, then exit
 	if !isActivityStream(txn.ResponseContentType()) {
-		if canDebug() {
-			log.Debug().Str("loc", location).Msg("Response is not an ActivityStream: " + txn.ResponseContentType())
+		if canTrace() {
+			log.Trace().Str("location", location).Msg("Response is not an ActivityStream: " + txn.ResponseContentType())
 		}
 		return streams.NilDocument()
 	}
+
+	log.Trace().Str("location", location).Str("objectId", uri).Msg("Found ActivityStreams document")
 
 	// Otherwise, return the Actor with expected metadata
 	result := streams.NewDocument(
