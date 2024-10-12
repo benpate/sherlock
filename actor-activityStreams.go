@@ -41,7 +41,9 @@ func (client Client) loadActor_ActivityStreams(uri string) streams.Document {
 		return streams.NilDocument()
 	}
 
-	log.Trace().Str("location", location).Str("objectId", uri).Msg("Found ActivityStreams document")
+	if canTrace() {
+		log.Trace().Str("location", location).Str("objectId", uri).Msg("Found ActivityStreams document")
+	}
 
 	// Otherwise, return the Actor with expected metadata
 	result := streams.NewDocument(
