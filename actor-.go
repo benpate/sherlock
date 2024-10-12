@@ -1,6 +1,8 @@
 package sherlock
 
 import (
+	"strings"
+
 	"github.com/benpate/derp"
 	"github.com/benpate/hannibal/streams"
 	"github.com/rs/zerolog/log"
@@ -24,6 +26,11 @@ func (client Client) loadActor(url string, config *LoadConfig) (streams.Document
 	if actor := client.loadActor_WebFinger(url, config); actor.NotNil() {
 		log.Debug().Str("loc", location).Msg("Found via WebFinger")
 		return actor, nil
+	}
+
+	// If the url is a username, then stop searching here.
+	if strings.HasPrefix(url, "@") {
+		return streams.NilDocument(), derp.NewNotFoundError(location, "Unable to load actor by username", url)
 	}
 
 	// RULE: url must begin with a valid protocol
