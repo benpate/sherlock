@@ -8,7 +8,7 @@ require (
 	github.com/benpate/digit v0.12.3
 	github.com/benpate/hannibal v0.11.5
 	github.com/benpate/remote v0.16.2
-	github.com/benpate/rosetta v0.21.3
+	github.com/benpate/rosetta v0.21.4
 	github.com/dyatlov/go-opengraph/opengraph v0.0.0-20220524092352-606d7b1e5f8a
 	github.com/kr/jsonfeed v0.1.1
 	github.com/microcosm-cc/bluemonday v1.0.27
