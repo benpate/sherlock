@@ -1,8 +1,6 @@
 package sherlock
 
 import (
-	"strings"
-
 	"github.com/benpate/derp"
 	"github.com/benpate/hannibal/streams"
 	"github.com/rs/zerolog/log"
@@ -11,43 +9,51 @@ import (
 // Actor returns an ActivityPub Actor representation of the provided URL.
 // If and ActivityPub Actor cannot be found, it attempts to create a fake one
 // using RSS/Atom feeds, and MicroFormats instead.
-func (client Client) loadActor(url string, config *LoadConfig) (streams.Document, error) {
+func (client Client) loadActor(identifier string, config *LoadConfig) (streams.Document, error) {
 
 	const location = "sherlock.Client.Actor"
 
-	log.Debug().Str("loc", location).Msg("searching for: " + url)
-
 	// RULE: Prevent too many redirects
 	if config.MaximumRedirects < 0 {
-		return streams.NilDocument(), derp.NewInternalError(location, "Maximum redirects exceeded", url)
+		return streams.NilDocument(), derp.NewInternalError(location, "Maximum redirects exceeded", identifier)
 	}
 
-	// 1. Try WebFinger
-	if actor := client.loadActor_WebFinger(url, config); actor.NotNil() {
-		log.Debug().Str("loc", location).Msg("Found via WebFinger")
-		return actor, nil
+	// Validate the identifier
+	idType := identifierType(identifier)
+
+	if idType == IdentifierTypeNone {
+		return streams.NilDocument(), derp.NewBadRequestError(location, "Invalid identifier", identifier)
 	}
 
-	// If the url is a username, then stop searching here.
-	if strings.HasPrefix(url, "@") {
-		return streams.NilDocument(), derp.NewNotFoundError(location, "Unable to load actor by username", url)
+	log.Trace().Str("loc", location).Str("type", idType).Msg("searching for: " + identifier)
+
+	// 1. If this looks like a username, then try WebFinger
+	if idType == IdentifierTypeUsername {
+
+		if actor := client.loadActor_WebFinger(identifier, config); actor.NotNil() {
+			log.Trace().Str("loc", location).Msg("Found via WebFinger")
+			return actor, nil
+		}
+
+		// If we can't look up the user via WebFinger, then stop here
+		return streams.NilDocument(), derp.NewNotFoundError(location, "Unable to load actor by username", identifier)
 	}
 
-	// RULE: url must begin with a valid protocol
-	url = defaultHTTPS(url)
+	// RULE: identifier must begin with a valid protocol
+	identifier = defaultHTTPS(identifier)
 
 	// 2. Try ActivityStreams
-	if actor := client.loadActor_ActivityStreams(url); actor.NotNil() {
-		log.Debug().Str("loc", location).Msg("Found via ActivityStream")
+	if actor := client.loadActor_ActivityStreams(identifier); actor.NotNil() {
+		log.Trace().Str("loc", location).Msg("Found via ActivityStream")
 		return actor, nil
 	}
 
 	// 3. Try RSS/Atom/JSONFeed/MicroFormats
-	if actor := client.loadActor_Feed(url, config); actor.NotNil() {
-		log.Debug().Str("loc", location).Msg("Found via Feed")
+	if actor := client.loadActor_Feed(identifier, config); actor.NotNil() {
+		log.Trace().Str("loc", location).Msg("Found via Feed")
 		return actor, nil
 	}
 
 	// 4. Abject failure. Your mother would be ashamed.
-	return streams.NilDocument(), derp.NewNotFoundError(location, "Unable to load actor", url)
+	return streams.NilDocument(), derp.NewNotFoundError(location, "Unable to load actor", identifier)
 }

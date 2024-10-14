@@ -79,3 +79,13 @@ const LinkRelationIcon = "icon"
 const LinkRelationHub = "hub"
 
 const LinkRelationSelf = "self"
+
+/******************************************
+ * Identifier Types
+ ******************************************/
+
+const IdentifierTypeUsername = "USERNAME"
+
+const IdentifierTypeURL = "URL"
+
+const IdentifierTypeNone = "NONE"

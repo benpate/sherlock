@@ -44,3 +44,9 @@ func TestHostOnly(t *testing.T) {
 
 	require.Equal(t, "", hostOnly("example.com"))
 }
+
+func TestIdentifierType(t *testing.T) {
+
+	require.Equal(t, "USERNAME", identifierType("@benpate@climatejustice.social"))
+	require.Equal(t, "URL", identifierType("https://climatejustice.social/@benpate"))
+}
