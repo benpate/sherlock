@@ -9,8 +9,8 @@ require (
 	github.com/benpate/derp v0.31.0
 	github.com/benpate/digit v0.13.2
 	github.com/benpate/hannibal v0.11.20
-	github.com/benpate/remote v0.16.6
-	github.com/benpate/rosetta v0.22.2
+	github.com/benpate/remote v0.16.8
+	github.com/benpate/rosetta v0.23.0
 	github.com/dyatlov/go-opengraph/opengraph v0.0.0-20220524092352-606d7b1e5f8a
 	github.com/kr/jsonfeed v0.1.1
 	github.com/microcosm-cc/bluemonday v1.0.27
@@ -28,7 +28,7 @@ require (
 	github.com/benpate/domain v0.2.3 // indirect
 	github.com/benpate/exp v0.8.3 // indirect
 	github.com/benpate/re v0.3.1 // indirect
-	github.com/benpate/turbine v0.1.1 // indirect
+	github.com/benpate/turbine v0.1.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/gorilla/css v1.0.1 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
