@@ -5,6 +5,7 @@ import (
 
 	"github.com/benpate/remote"
 	"github.com/davecgh/go-spew/spew"
+	"github.com/stretchr/testify/require"
 )
 
 func TestOpenGraph(t *testing.T) {
@@ -19,7 +20,8 @@ func TestOpenGraph(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	OpenGraph(url, body, data)
+	err := OpenGraph(url, body, data)
+	require.NoError(t, err)
 
 	spew.Dump(url, data)
 }
