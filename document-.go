@@ -14,12 +14,12 @@ func (client Client) loadDocument(url string, config LoadConfig) (streams.Docume
 
 	// RULE: url must not be empty
 	if url == "" {
-		return streams.NilDocument(), derp.NewBadRequestError(location, "Empty URI")
+		return streams.NilDocument(), derp.BadRequestError(location, "Empty URI")
 	}
 
 	// RULE: Prevent too many redirects
 	if config.MaximumRedirects < 0 {
-		return streams.NilDocument(), derp.NewInternalError(location, "Maximum redirects exceeded", url)
+		return streams.NilDocument(), derp.InternalError(location, "Maximum redirects exceeded", url)
 	}
 
 	// RULE: url must begin with a valid protocol
@@ -43,5 +43,5 @@ func (client Client) loadDocument(url string, config LoadConfig) (streams.Docume
 	}
 
 	// 4. Abject failure.
-	return streams.NilDocument(), derp.NewBadRequestError(location, "Unable to load document", url, config)
+	return streams.NilDocument(), derp.BadRequestError(location, "Unable to load document", url, config)
 }

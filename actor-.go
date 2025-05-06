@@ -15,14 +15,14 @@ func (client Client) loadActor(identifier string, config *LoadConfig) (streams.D
 
 	// RULE: Prevent too many redirects
 	if config.MaximumRedirects < 0 {
-		return streams.NilDocument(), derp.NewInternalError(location, "Maximum redirects exceeded", identifier)
+		return streams.NilDocument(), derp.InternalError(location, "Maximum redirects exceeded", identifier)
 	}
 
 	// Validate the identifier
 	idType := identifierType(identifier)
 
 	if idType == IdentifierTypeNone {
-		return streams.NilDocument(), derp.NewBadRequestError(location, "Invalid identifier", identifier)
+		return streams.NilDocument(), derp.BadRequestError(location, "Invalid identifier", identifier)
 	}
 
 	log.Trace().Str("loc", location).Str("type", idType).Msg("searching for: " + identifier)
@@ -36,7 +36,7 @@ func (client Client) loadActor(identifier string, config *LoadConfig) (streams.D
 		}
 
 		// If we can't look up the user via WebFinger, then stop here
-		return streams.NilDocument(), derp.NewNotFoundError(location, "Unable to load actor by username", identifier)
+		return streams.NilDocument(), derp.NotFoundError(location, "Unable to load actor by username", identifier)
 	}
 
 	// RULE: identifier must begin with a valid protocol
@@ -55,5 +55,5 @@ func (client Client) loadActor(identifier string, config *LoadConfig) (streams.D
 	}
 
 	// 4. Abject failure. Your mother would be ashamed.
-	return streams.NilDocument(), derp.NewNotFoundError(location, "Unable to load actor", identifier)
+	return streams.NilDocument(), derp.NotFoundError(location, "Unable to load actor", identifier)
 }
