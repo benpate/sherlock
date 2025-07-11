@@ -13,6 +13,8 @@ func (client Client) loadActor(identifier string, config *LoadConfig) (streams.D
 
 	const location = "sherlock.Client.Actor"
 
+	log.Trace().Str("loc", location).Str("identifier", identifier).Msg("Loading Actor")
+
 	// RULE: Prevent too many redirects
 	if config.MaximumRedirects < 0 {
 		return streams.NilDocument(), derp.InternalError(location, "Maximum redirects exceeded", identifier)

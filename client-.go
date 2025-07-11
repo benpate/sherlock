@@ -3,6 +3,7 @@ package sherlock
 import (
 	"github.com/benpate/hannibal/streams"
 	"github.com/benpate/remote"
+	"github.com/rs/zerolog/log"
 )
 
 // Client implements the hannibal/streams.Client interface, and is used to load JSON-LD documents from remote servers.
@@ -17,7 +18,7 @@ func NewClient(options ...ClientOption) Client {
 
 	// Create a default Client
 	result := Client{
-		UserAgent:     "Sherlock: github.com/benpate/sherlock",
+		UserAgent:     "Sherlock: https://github.com/benpate/sherlock",
 		RemoteOptions: make([]remote.Option, 0),
 	}
 
@@ -36,6 +37,8 @@ func NewClient(options ...ClientOption) Client {
 // "Actor" treats the URL as an Actor, translating RSS, Atom, JSON, and
 // MicroFormats feeds into an ActivityStream equivalent.
 func (client Client) Load(url string, options ...any) (streams.Document, error) {
+
+	log.Trace().Str("loc", "sherlock.Client.Load").Msg("Loading " + url)
 
 	config := NewLoadConfig(options...)
 
