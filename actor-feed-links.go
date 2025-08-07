@@ -16,13 +16,13 @@ import (
 // If it finds a link to an ActivityStream, RSS Feed, or similar, then it returns
 // the corresponding Actor document.
 // Otherwise, it returns an empty streams.Document that includes metadata for
-func (client *Client) loadActor_Links(txn *remote.Transaction, config *LoadConfig) streams.Document {
+func (client *Client) loadActor_Links(config Config, txn *remote.Transaction) streams.Document {
 
 	// Extranct all Links from the HTTP Header and HTML Document
 	links := client.loadActor_DiscoverLinks(txn)
 
 	// If links point directly to something we can use (ActivityPub, RSS, etc) then use it
-	if document := client.loadActor_FollowLinks(txn, links, config); document.NotNil() {
+	if document := client.loadActor_FollowLinks(config, txn, links); document.NotNil() {
 		return document
 	}
 
@@ -73,7 +73,7 @@ func (client *Client) loadActor_DiscoverLinks(txn *remote.Transaction) digit.Lin
 }
 
 // actor_ScanHTMLForWebMentions tries to load/use any linked feeds
-func (client *Client) loadActor_FollowLinks(txn *remote.Transaction, links digit.LinkSet, config *LoadConfig) streams.Document {
+func (client *Client) loadActor_FollowLinks(config Config, txn *remote.Transaction, links digit.LinkSet) streams.Document {
 
 	// If the client is not allowed to follow redirects (or has used all of them already),
 	// then there is nothing to do here. Return an empty document instead.
@@ -98,7 +98,7 @@ func (client *Client) loadActor_FollowLinks(txn *remote.Transaction, links digit
 				return streams.NilDocument()
 			}
 
-			if document, err := client.loadActor(link.Href, config); err == nil {
+			if document, err := client.loadActor(config, link.Href); err == nil {
 				if document.NotNil() {
 					config.MaximumRedirects--
 					return document

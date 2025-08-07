@@ -10,14 +10,14 @@ import (
 // loadDocument_ActivityStream tries to load a remote document as an ActivityStream
 // If successful, it will return a streams.Document with the appropriate metadata.
 // Otherwise, it returns a nil document.
-func (client *Client) loadDocument_ActivityStream(uri string) streams.Document {
+func (client *Client) loadDocument_ActivityStream(config Config, uri string) streams.Document {
 
 	data := mapof.NewAny()
 
 	txn := remote.Get(uri).
-		UserAgent(client.UserAgent).
+		UserAgent(config.UserAgent).
 		Accept(vocab.ContentTypeActivityPub).
-		With(client.RemoteOptions...).
+		With(config.RemoteOptions...).
 		Result(&data)
 
 	if err := txn.Send(); err != nil {

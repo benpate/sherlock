@@ -14,7 +14,7 @@ import (
 	"github.com/kr/jsonfeed"
 )
 
-func (client Client) loadActor_Feed_JSON(txn *remote.Transaction, config *LoadConfig) streams.Document {
+func (client Client) loadActor_Feed_JSON(config Config, txn *remote.Transaction) streams.Document {
 
 	// JSONFeed content only
 	if !isJSONFeedContentType(txn.ResponseContentType()) {

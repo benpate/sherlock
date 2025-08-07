@@ -11,16 +11,16 @@ import (
 // loadActor_ActivityStreams attempts to load an ActivityStream directly from
 // a uri.  If the retrieved document is not an ActivityStream, then
 // this method returns a NilDocument.
-func (client Client) loadActor_ActivityStreams(uri string) streams.Document {
+func (client Client) loadActor_ActivityStreams(config Config, uri string) streams.Document {
 
 	const location = "sherlock.Client.loadActor_ActivityStreams"
 
 	// Set up the transaction
 	data := mapof.NewAny()
 	txn := remote.Get(uri).
-		UserAgent(client.UserAgent).
 		Accept(ContentTypeActivityPub).
-		With(client.RemoteOptions...).
+		UserAgent(config.UserAgent).
+		With(config.RemoteOptions...).
 		Result(&data)
 
 	if canTrace() {

@@ -9,7 +9,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-func (client *Client) loadActor_WebFinger(uri string, config *LoadConfig) streams.Document {
+func (client *Client) loadActor_WebFinger(config Config, uri string) streams.Document {
 
 	const location = "sherlock.Client.loadActor_WebFinger"
 
@@ -20,7 +20,7 @@ func (client *Client) loadActor_WebFinger(uri string, config *LoadConfig) stream
 	}
 
 	// Try to load the Actor via WebFinger
-	response, err := digit.Lookup(uri, client.RemoteOptions...)
+	response, err := digit.Lookup(uri, config.RemoteOptions...)
 
 	// If we dont' have a valid response, then return nil (skip this step)
 	if err != nil {
@@ -33,7 +33,7 @@ func (client *Client) loadActor_WebFinger(uri string, config *LoadConfig) stream
 	// Search for ActivityPub endpoints
 	for _, link := range response.Links {
 		if (link.RelationType == digit.RelationTypeSelf) && (hannibal.IsActivityPubContentType(link.MediaType)) {
-			if result := client.loadActor_ActivityStreams(link.Href); result.NotNil() {
+			if result := client.loadActor_ActivityStreams(config, link.Href); result.NotNil() {
 				config.MaximumRedirects--
 				return result
 			}
@@ -43,7 +43,7 @@ func (client *Client) loadActor_WebFinger(uri string, config *LoadConfig) stream
 	// Search for Profile pages (as a backup)
 	for _, link := range response.Links {
 		if link.RelationType == digit.RelationTypeProfile {
-			if result := client.loadActor_Feed(link.Href, config); result.NotNil() {
+			if result := client.loadActor_Feed(config, link.Href); result.NotNil() {
 				config.MaximumRedirects--
 				return result
 			}

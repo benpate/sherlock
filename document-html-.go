@@ -4,18 +4,17 @@ import (
 	"github.com/benpate/hannibal/streams"
 	"github.com/benpate/hannibal/vocab"
 	"github.com/benpate/remote"
-	"github.com/benpate/rosetta/mapof"
 )
 
 // loadDocument_HTML tries to mimic an ActivityPub document by parsing meta-data on
 // a remote HTML page. The `data` argument is a map that may already contain some
 // data, and will be updated with any new data that is discovered.
-func (client *Client) loadDocument_HTML(uri string, data mapof.Any) streams.Document {
+func (client *Client) loadDocument_HTML(config Config, uri string) streams.Document {
 
 	// Retrieve the HTML document
 	txn := remote.Get(uri).
-		UserAgent(client.UserAgent).
-		With(client.RemoteOptions...)
+		UserAgent(config.UserAgent).
+		With(config.RemoteOptions...)
 
 	if err := txn.Send(); err != nil {
 		return streams.NilDocument()
@@ -29,6 +28,7 @@ func (client *Client) loadDocument_HTML(uri string, data mapof.Any) streams.Docu
 	}
 
 	// Default values for Web Pages
+	data := config.DefaultValue
 	data[vocab.PropertyID] = uri
 	data[vocab.PropertyURL] = uri
 	data[vocab.PropertyType] = vocab.ObjectTypePage

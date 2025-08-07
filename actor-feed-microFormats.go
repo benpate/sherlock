@@ -13,7 +13,7 @@ import (
 )
 
 // actor_MicroFormats searches and HTML document for for an h-feed Microformat
-func (client Client) loadActor_Feed_MicroFormats(txn *remote.Transaction) streams.Document {
+func (client Client) loadActor_Feed_MicroFormats(config Config, txn *remote.Transaction) streams.Document {
 
 	// Parse the document URL
 	parsedURL, err := url.Parse(txn.RequestURL())

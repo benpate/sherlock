@@ -1,32 +1,32 @@
 package sherlock
 
 import (
+	"github.com/benpate/derp"
 	"github.com/benpate/hannibal/streams"
-	"github.com/benpate/remote"
 	"github.com/rs/zerolog/log"
 )
 
 // Client implements the hannibal/streams.Client interface, and is used to load JSON-LD documents from remote servers.
 // The sherlock client maps additional meta-data into a standard ActivityStreams document.
 type Client struct {
-	UserAgent     string          // User-Agent string to send with every request
-	RemoteOptions []remote.Option // Additional options to pass to the remote library
+	userAgent   string
+	keyPairFunc KeyPairFunc
 }
 
 // NewClient returns a fully initialized Client object
 func NewClient(options ...ClientOption) Client {
-
-	// Create a default Client
 	result := Client{
-		UserAgent:     "Sherlock: https://github.com/benpate/sherlock",
-		RemoteOptions: make([]remote.Option, 0),
+		userAgent: "Sherlock (https://github.com/benpate/sherlock)",
 	}
 
-	// Apply options
-	result.WithOptions(options...)
-
-	// Success
+	result.With(options...)
 	return result
+}
+
+func (client *Client) With(options ...ClientOption) {
+	for _, option := range options {
+		option(client)
+	}
 }
 
 // Load retrieves a document from a remote server and returns it as a streams.Document
@@ -38,22 +38,27 @@ func NewClient(options ...ClientOption) Client {
 // MicroFormats feeds into an ActivityStream equivalent.
 func (client Client) Load(url string, options ...any) (streams.Document, error) {
 
-	log.Trace().Str("loc", "sherlock.Client.Load").Msg("Loading " + url)
+	const location = "sherlock.Client.Load"
 
-	config := NewLoadConfig(options...)
+	log.Trace().Str("loc", location).Msg("Loading " + url)
+
+	config := client.newConfig(options...)
+
+	// RULE: url must not be empty
+	if url == "" {
+		return streams.NilDocument(), derp.BadRequestError(location, "URL cannot be empty")
+	}
+
+	// RULE: Prevent too many redirects
+	if config.MaximumRedirects < 0 {
+		return streams.NilDocument(), derp.InternalError(location, "Maximum redirects exceeded", url)
+	}
 
 	// If "Actor" is requested, then use that discovery method
-	if config.DocumentType == LoadDocumentTypeActor {
-		return client.loadActor(url, &config)
+	if config.DocumentType == documentTypeActor {
+		return client.loadActor(config, url)
 	}
 
 	// Otherwise, use "Document" discovery method
-	return client.loadDocument(url, config)
-}
-
-// WithOptions applies one or more ClientOption functions to the client
-func (client *Client) WithOptions(options ...ClientOption) {
-	for _, option := range options {
-		option(client)
-	}
+	return client.loadDocument(config, url)
 }

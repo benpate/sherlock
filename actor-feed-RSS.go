@@ -18,7 +18,7 @@ import (
 )
 
 // loadActor_Feed_RSS tries generate an Actor from an RSS or Atom feed
-func (client Client) loadActor_Feed_RSS(txn *remote.Transaction, config *LoadConfig) streams.Document {
+func (client Client) loadActor_Feed_RSS(config Config, txn *remote.Transaction) streams.Document {
 
 	// Try to find the RSS feed associated with this link
 	feed, err := gofeed.NewParser().Parse(txn.ResponseBodyReader())

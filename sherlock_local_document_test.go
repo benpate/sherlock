@@ -8,59 +8,54 @@ import (
 
 func TestLocalDocument_AP_Mastodon_JSON(t *testing.T) {
 
-	client := NewClient(WithRemoteOptions(getTestServer()))
+	client := NewClient()
 
-	result, err := client.Load("https://test-server/document-ap-mastodon.json")
+	result, err := client.Load("https://test-server/document-ap-mastodon.json", withTestServer())
 	require.Nil(t, err)
 	require.NotNil(t, result.Value())
-	// spew.Dump(result.Value())
 }
 
 func TestLocalDocument_AP_Mastodon_HTML(t *testing.T) {
 
-	client := NewClient(WithRemoteOptions(getTestServer()))
+	client := NewClient()
 
-	result, err := client.Load("https://test-server/document-ap-mastodon.html")
+	result, err := client.Load("https://test-server/document-ap-mastodon.html", withTestServer())
 	require.Nil(t, err)
 	require.NotNil(t, result.Value())
-	// spew.Dump(result.Value())
 }
 
 func TestLocalDocument_Microformats_1(t *testing.T) {
 
-	client := NewClient(WithRemoteOptions(getTestServer()))
+	client := NewClient()
 
-	result, err := client.Load("https://test-server/document-microformats-1.html")
+	result, err := client.Load("https://test-server/document-microformats-1.html", withTestServer())
 	require.Nil(t, err)
 	require.NotNil(t, result.Value())
-	// spew.Dump(result.Value())
 }
 
 func TestLocalDocument_Microformats_2(t *testing.T) {
 
-	client := NewClient(WithRemoteOptions(getTestServer()))
+	client := NewClient()
 
-	result, err := client.Load("https://test-server/document-microformats-2.html")
+	result, err := client.Load("https://test-server/document-microformats-2.html", withTestServer())
 	require.Nil(t, err)
 	require.NotNil(t, result.Value())
-	// spew.Dump(result.Value())
 }
 
 func TestLocalDocument_Microformats_3(t *testing.T) {
 
-	client := NewClient(WithRemoteOptions(getTestServer()))
+	client := NewClient()
 
-	result, err := client.Load("https://test-server/document-microformats-3.html")
+	result, err := client.Load("https://test-server/document-microformats-3.html", withTestServer())
 	require.Nil(t, err)
 	require.NotNil(t, result.Value())
-	// spew.Dump(result.Value())
 }
 
 func TestLocalActor_Microformats_2(t *testing.T) {
 
-	client := NewClient(WithRemoteOptions(getTestServer()))
+	client := NewClient()
 
-	result, err := client.Load("https://test-server/document-microformats-4.html")
+	result, err := client.Load("https://test-server/document-microformats-4.html", withTestServer())
 
 	require.Nil(t, err)
 	require.NotNil(t, result.Value())
@@ -68,14 +63,13 @@ func TestLocalActor_Microformats_2(t *testing.T) {
 	require.Equal(t, "https://test-server/document-microformats-4.html", result.ID())
 	require.Equal(t, "https://test-server/IndieWeb", result.AttributedTo().ID())
 	require.Equal(t, "IndieWeb", result.AttributedTo().Name())
-	// spew.Dump(result.Value())
 }
 
 func TestLocalDocument_OpenGraph(t *testing.T) {
 
-	client := NewClient(WithRemoteOptions(getTestServer()))
+	client := NewClient()
 
-	result, err := client.Load("https://test-server/document-opengraph-1.html")
+	result, err := client.Load("https://test-server/document-opengraph-1.html", withTestServer())
 
 	require.Nil(t, err)
 	require.NotNil(t, result.Value())

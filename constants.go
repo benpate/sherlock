@@ -89,3 +89,15 @@ const IdentifierTypeUsername = "USERNAME"
 const IdentifierTypeURL = "URL"
 
 const IdentifierTypeNone = "NONE"
+
+/******************************************
+* Document Types
+ ******************************************/
+
+const documentTypeUnknown = 0
+
+const documentTypeActor = 1
+
+const documentTypeCollection = 2
+
+const documentTypeDocument = 3

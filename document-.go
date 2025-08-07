@@ -8,30 +8,20 @@ import (
 // LoadDocument tries to retrieve a URL from the internet, then return it into a streams.Document.
 // If the remote resource is not already an ActivityStreams document, it will attempt to convert from
 // RSS, Atom, JSONFeed, and HTML MicroFormats.
-func (client Client) loadDocument(url string, config LoadConfig) (streams.Document, error) {
+func (client Client) loadDocument(config Config, url string) (streams.Document, error) {
 
 	const location = "sherlock.Client.loadDocument"
-
-	// RULE: url must not be empty
-	if url == "" {
-		return streams.NilDocument(), derp.BadRequestError(location, "Empty URI")
-	}
-
-	// RULE: Prevent too many redirects
-	if config.MaximumRedirects < 0 {
-		return streams.NilDocument(), derp.InternalError(location, "Maximum redirects exceeded", url)
-	}
 
 	// RULE: url must begin with a valid protocol
 	url = defaultHTTPS(url)
 
 	// 1. If we can load the document as an ActivityStream, then there you go.
-	if document := client.loadDocument_ActivityStream(url); document.NotNil() {
+	if document := client.loadDocument_ActivityStream(config, url); document.NotNil() {
 		return document, nil
 	}
 
 	// 2. If we can load the document as HTML, then that will do.
-	if document := client.loadDocument_HTML(url, config.DefaultValue); document.NotNil() {
+	if document := client.loadDocument_HTML(config, url); document.NotNil() {
 		return document, nil
 	}
 
