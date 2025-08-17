@@ -29,6 +29,10 @@ func (client *Client) With(options ...ClientOption) {
 	}
 }
 
+func (client Client) SetRootClient(rootClient streams.Client) {
+	// NO-OP: There is no inner client to receive the root pointer
+}
+
 // Load retrieves a document from a remote server and returns it as a streams.Document
 // It uses either the "Actor" or "Document" methods of generating it ActivityStreams
 // result.
