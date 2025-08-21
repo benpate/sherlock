@@ -16,7 +16,9 @@ func (client Client) loadDocument(config Config, url string) (streams.Document, 
 	url = defaultHTTPS(url)
 
 	// 1. If we can load the document as an ActivityStream, then there you go.
-	if document := client.loadDocument_ActivityStream(config, url); document.NotNil() {
+	if document, err := client.loadDocument_ActivityStream(config, url); err != nil {
+		return document, derp.Wrap(err, location, "Unable to load ActivityStream", url)
+	} else if document.NotNil() {
 		return document, nil
 	}
 
