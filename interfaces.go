@@ -2,4 +2,4 @@ package sherlock
 
 import "crypto"
 
-type KeyPairFunc func() (string, crypto.PrivateKey)
+type KeyPairFunc func() (publicKeyID string, privateKey crypto.PrivateKey)

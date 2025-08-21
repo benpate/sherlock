@@ -55,20 +55,6 @@ func TestLocalActor_Microformats_1(t *testing.T) {
 	require.NotNil(t, result.Value())
 }
 
-/*
-func TestLocalActor_Microformats_3(t *testing.T) {
-
-	client := NewClient()
-
-	result, err := client.Load("https://test-server/actor-microformats-3.html", AsActor(), withTestServer())
-	// require.Nil(t, err)
-	// require.NotNil(t, result.Value())
-	// spew.Dump(err)
-	// TODO: This test is currently breaking because this page nests MicroFormats too deeply.
-	// TODO: Also, do a better job loading Author information from the h-card
-}
-*/
-
 func TestLocalActor_RSS_1_XML(t *testing.T) {
 
 	client := NewClient()
