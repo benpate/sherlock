@@ -5,13 +5,13 @@ import (
 	"net/mail"
 	"net/url"
 	"slices"
-	"strconv"
 	"strings"
 
 	"github.com/benpate/derp"
 	"github.com/benpate/digit"
 	"github.com/benpate/hannibal/vocab"
 	"github.com/benpate/rosetta/compare"
+	"github.com/benpate/rosetta/convert"
 	"github.com/benpate/rosetta/mapof"
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/rs/zerolog"
@@ -124,7 +124,7 @@ func iconSizesAsInt(value string) int {
 		part, _, _ = strings.Cut(part, "x")
 
 		// If we have a number, then add that to the potential result
-		if result, err := strconv.ParseInt(part, 10, 64); err == nil {
+		if result, ok := convert.IntOk(part, 0); ok {
 			results = append(results, int(result))
 		}
 	}
