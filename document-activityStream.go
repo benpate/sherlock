@@ -5,7 +5,6 @@ import (
 	"github.com/benpate/hannibal/streams"
 	"github.com/benpate/hannibal/vocab"
 	"github.com/benpate/remote"
-	"github.com/benpate/remote/options"
 	"github.com/benpate/rosetta/mapof"
 )
 
@@ -18,7 +17,10 @@ func (client *Client) loadDocument_ActivityStream(config Config, uri string) (st
 
 	data := mapof.NewAny()
 
-	config.RemoteOptions = append(config.RemoteOptions, options.Debug())
+	// config.RemoteOptions = append(
+	//	config.RemoteOptions,
+	//  options.Debug(),
+	// )
 
 	txn := remote.Get(uri).
 		UserAgent(config.UserAgent).

@@ -3,7 +3,6 @@ package sherlock
 import (
 	"github.com/benpate/derp"
 	"github.com/benpate/hannibal/streams"
-	"github.com/rs/zerolog/log"
 )
 
 // Client implements the hannibal/streams.Client interface, and is used to load JSON-LD documents from remote servers.
@@ -44,8 +43,6 @@ func (client Client) Load(url string, options ...any) (streams.Document, error) 
 
 	const location = "sherlock.Client.Load"
 
-	log.Trace().Str("loc", location).Msg("Loading " + url)
-
 	config := client.newConfig(options...)
 
 	// RULE: url must not be empty
@@ -65,4 +62,12 @@ func (client Client) Load(url string, options ...any) (streams.Document, error) 
 
 	// Otherwise, use "Document" discovery method
 	return client.loadDocument(config, url)
+}
+
+func (client Client) Save(document streams.Document) error {
+	return nil
+}
+
+func (client Client) Delete(documentID string) error {
+	return nil
 }
