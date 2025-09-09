@@ -1,6 +1,6 @@
 module github.com/benpate/sherlock
 
-go 1.23.1
+go 1.24.0
 
 toolchain go1.24.1
 
@@ -19,7 +19,7 @@ require (
 	github.com/rs/zerolog v1.34.0
 	github.com/stretchr/testify v1.11.1
 	github.com/tomnomnom/linkheader v0.0.0-20250811210735-e5fe3b51442e
-	golang.org/x/net v0.43.0
+	golang.org/x/net v0.44.0
 	willnorris.com/go/microformats v1.2.0
 )
 
@@ -38,7 +38,7 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	golang.org/x/sys v0.35.0 // indirect
-	golang.org/x/text v0.28.0 // indirect
+	golang.org/x/sys v0.36.0 // indirect
+	golang.org/x/text v0.29.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
