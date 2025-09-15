@@ -10,7 +10,7 @@ require (
 	github.com/benpate/digit v0.13.6
 	github.com/benpate/hannibal v0.14.0
 	github.com/benpate/remote v0.17.5
-	github.com/benpate/rosetta v0.25.15
+	github.com/benpate/rosetta v0.25.16
 	github.com/davecgh/go-spew v1.1.1
 	github.com/dyatlov/go-opengraph/opengraph v0.0.0-20220524092352-606d7b1e5f8a
 	github.com/kr/jsonfeed v0.1.1
