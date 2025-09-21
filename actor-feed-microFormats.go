@@ -25,6 +25,10 @@ func (client Client) loadActor_Feed_MicroFormats(_ Config, txn *remote.Transacti
 	// Parse the HTML document
 	data := microformats.Parse(txn.ResponseBodyReader(), parsedURL)
 
+	if data == nil {
+		return streams.NilDocument()
+	}
+
 	// Search Microformats for an h-feed
 	for _, feed := range data.Items {
 

@@ -23,6 +23,10 @@ func (client *Client) loadDocument_MicroFormats(uri string, body []byte, data ma
 
 	mf := microformats.Parse(bytes.NewReader(body), parsedURL)
 
+	if mf == nil {
+		return
+	}
+
 	for _, item := range mf.Items {
 		for _, property := range item.Type {
 			switch property {

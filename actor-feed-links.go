@@ -144,7 +144,11 @@ func getRelativeURL(baseURL string, relativeURL string) string {
 	}
 
 	// Parse the base URL so that we can do URL-math on it
-	baseURLParsed, _ := url.Parse(baseURL)
+	baseURLParsed, err := url.Parse(baseURL)
+
+	if err != nil {
+		return relativeURL
+	}
 
 	// If the relative URL is a path-relative URL, then just replace the path
 	if strings.HasPrefix(relativeURL, "/") {
