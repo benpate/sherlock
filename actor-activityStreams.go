@@ -3,7 +3,6 @@ package sherlock
 import (
 	"github.com/benpate/hannibal/streams"
 	"github.com/benpate/remote"
-	"github.com/benpate/remote/options"
 	"github.com/benpate/rosetta/mapof"
 	"github.com/rs/zerolog/log"
 )
@@ -23,9 +22,9 @@ func (client Client) loadActor_ActivityStreams(config Config, uri string) stream
 		With(config.RemoteOptions...).
 		Result(&data)
 
-	if canTrace() {
-		txn.With(options.Debug())
-	}
+	// if canTrace() {
+	//	txn.With(options.Debug())
+	// }
 
 	// Try to load the data from the remote server
 	if err := txn.Send(); err != nil {

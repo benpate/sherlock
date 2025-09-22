@@ -6,6 +6,7 @@ import (
 
 	"github.com/benpate/hannibal/vocab"
 	"github.com/benpate/remote/options"
+	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/require"
 )
 
@@ -15,7 +16,11 @@ import (
 func withTestServer() Option {
 	return func(config *Config) {
 		filesystem := os.DirFS("./test-files")
-		config.RemoteOptions = append(config.RemoteOptions, options.TestServer("test-server", filesystem))
+		config.RemoteOptions = append(
+			config.RemoteOptions,
+			options.TestServer("test-server", filesystem),
+		)
+		zerolog.SetGlobalLevel(zerolog.ErrorLevel)
 	}
 }
 
