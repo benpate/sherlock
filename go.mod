@@ -6,7 +6,7 @@ toolchain go1.24.1
 
 require (
 	github.com/PuerkitoBio/goquery v1.10.3
-	github.com/benpate/derp v0.33.0
+	github.com/benpate/derp v0.34.0
 	github.com/benpate/digit v0.13.7
 	github.com/benpate/hannibal v0.14.1
 	github.com/benpate/remote v0.17.6
