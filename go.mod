@@ -19,7 +19,7 @@ require (
 	github.com/rs/zerolog v1.34.0
 	github.com/stretchr/testify v1.11.1
 	github.com/tomnomnom/linkheader v0.0.0-20250811210735-e5fe3b51442e
-	golang.org/x/net v0.44.0
+	golang.org/x/net v0.45.0
 	willnorris.com/go/microformats v1.2.0
 )
 
