@@ -1,3 +1,5 @@
+//gobuild:localonly
+
 package sherlock
 
 import (
