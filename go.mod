@@ -7,10 +7,10 @@ toolchain go1.24.1
 require (
 	github.com/PuerkitoBio/goquery v1.10.3
 	github.com/benpate/derp v0.34.0
-	github.com/benpate/digit v0.13.8
-	github.com/benpate/hannibal v0.14.2
-	github.com/benpate/remote v0.17.7
-	github.com/benpate/rosetta v0.25.20
+	github.com/benpate/digit v0.13.9
+	github.com/benpate/hannibal v0.14.3
+	github.com/benpate/remote v0.17.8
+	github.com/benpate/rosetta v0.25.21
 	github.com/davecgh/go-spew v1.1.1
 	github.com/dyatlov/go-opengraph/opengraph v0.0.0-20220524092352-606d7b1e5f8a
 	github.com/kr/jsonfeed v0.1.1
@@ -27,7 +27,7 @@ require (
 	github.com/andybalholm/cascadia v1.3.3 // indirect
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/benpate/domain v0.2.9 // indirect
-	github.com/benpate/exp v0.8.6 // indirect
+	github.com/benpate/exp v0.8.7 // indirect
 	github.com/benpate/re v0.3.5 // indirect
 	github.com/benpate/turbine v0.4.1 // indirect
 	github.com/gorilla/css v1.0.1 // indirect
