@@ -28,7 +28,7 @@ func (client Client) loadActor_ActivityStreams(config Config, uri string) stream
 
 	// Try to load the data from the remote server
 	if err := txn.Send(); err != nil {
-		log.Trace().Str("location", location).Msg("Error loading URI: " + uri)
+		log.Trace().Str("location", location).Msg("Unable to load URI: " + uri)
 		return streams.NilDocument()
 	}
 
