@@ -26,7 +26,7 @@ func (client Client) newConfig(options ...any) Config {
 
 	// If we CAN use Authorized Fetch, then enable it here.
 	if client.keyPairFunc != nil {
-		publicKey, privateKey := client.keyPairFunc()
+		publicKey, privateKey := client.keyPairFunc() // nolint:scopeguard readability
 		if (publicKey != "") && (privateKey != nil) {
 			config.RemoteOptions = append(config.RemoteOptions, AuthorizedFetch(publicKey, privateKey))
 		}
