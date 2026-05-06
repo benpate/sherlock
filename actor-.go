@@ -13,15 +13,14 @@ func (client Client) loadActor(config Config, identifier string) (streams.Docume
 
 	const location = "sherlock.Client.Actor"
 
-	log.Trace().Str("loc", location).Str("identifier", identifier).Msg("Loading Actor")
-
 	// Validate the identifier
 	idType := identifierType(identifier)
 
 	if idType == IdentifierTypeNone {
-		return streams.NilDocument(), derp.BadRequestError(location, "Invalid identifier", identifier)
+		return streams.NilDocument(), derp.BadRequest(location, "Invalid identifier", identifier)
 	}
 
+	log.Trace().Str("loc", location).Str("identifier", identifier).Msg("Loading Actor")
 	log.Trace().Str("loc", location).Str("type", idType).Msg("searching for: " + identifier)
 
 	// 1. If this looks like a username, then try WebFinger
@@ -33,7 +32,7 @@ func (client Client) loadActor(config Config, identifier string) (streams.Docume
 		}
 
 		// If we can't look up the user via WebFinger, then stop here
-		return streams.NilDocument(), derp.NotFoundError(location, "Unable to load actor by username", identifier)
+		return streams.NilDocument(), derp.NotFound(location, "Unable to load actor by username", identifier)
 	}
 
 	// RULE: identifier must begin with a valid protocol
@@ -52,5 +51,5 @@ func (client Client) loadActor(config Config, identifier string) (streams.Docume
 	}
 
 	// 4. Abject failure. Your mother would be ashamed.
-	return streams.NilDocument(), derp.NotFoundError(location, "Unable to load actor", identifier)
+	return streams.NilDocument(), derp.NotFound(location, "Unable to load actor", identifier)
 }

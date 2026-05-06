@@ -35,5 +35,5 @@ func (client Client) loadDocument(config Config, url string) (streams.Document, 
 	}
 
 	// 4. Abject failure.
-	return streams.NilDocument(), derp.BadRequestError(location, "Unable to load document", url, config)
+	return streams.NilDocument(), derp.BadRequest(location, "Unable to load document", url, config)
 }

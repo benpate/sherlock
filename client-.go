@@ -47,12 +47,12 @@ func (client Client) Load(url string, options ...any) (streams.Document, error) 
 
 	// RULE: url must not be empty
 	if url == "" {
-		return streams.NilDocument(), derp.BadRequestError(location, "URL cannot be empty")
+		return streams.NilDocument(), derp.BadRequest(location, "URL cannot be empty")
 	}
 
 	// RULE: Prevent too many redirects
 	if config.MaximumRedirects < 0 {
-		return streams.NilDocument(), derp.InternalError(location, "Maximum redirects exceeded", url)
+		return streams.NilDocument(), derp.Internal(location, "Maximum redirects exceeded", url)
 	}
 
 	// If "Actor" is requested, then use that discovery method

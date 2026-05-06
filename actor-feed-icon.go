@@ -29,7 +29,7 @@ func (client *Client) loadActor_Feed_FindHomePageIcon(document map[string]any) {
 	txn := remote.Get(documentID)
 
 	if err := txn.Send(); err != nil {
-		log.Error().Err(err).Str("documentID", documentID).Msg("Error sending request")
+		log.Error().Err(err).Str("documentID", documentID).Msg("Unable to send request")
 		return
 	}
 
