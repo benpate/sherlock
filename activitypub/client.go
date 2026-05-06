@@ -1,12 +1,12 @@
 package activitypub
 
 import (
-	"github.com/benpate/dns"
 	"github.com/benpate/hannibal"
 	"github.com/benpate/hannibal/streams"
 	"github.com/benpate/hannibal/vocab"
 	"github.com/benpate/remote"
 	"github.com/benpate/sherlock"
+	"github.com/benpate/uri"
 )
 
 // Client represents a "middleware" that tries to load an
@@ -36,11 +36,11 @@ func New(innerClient streams.Client, options ...ClientOption) streams.Client {
 	return &result
 }
 
-func (client *Client) Load(uri string, options ...any) (streams.Document, error) {
+func (client *Client) Load(id string, options ...any) (streams.Document, error) {
 
 	// RULE: This must be a valid URL
-	if dns.NotValidURL(uri) {
-		return client.innerClient.Load(uri, options...)
+	if uri.NotValidURL(id) {
+		return client.innerClient.Load(id, options...)
 	}
 
 	// Build a remote transaction (to try) to load the ActivityStream document
@@ -54,7 +54,7 @@ func (client *Client) Load(uri string, options ...any) (streams.Document, error)
 		remoteOptions = append(remoteOptions, authorizedFetch)
 	}
 
-	txn := remote.Get(uri).
+	txn := remote.Get(id).
 		Accept(vocab.ContentTypeActivityPub).
 		UserAgent(client.userAgent).
 		With(remoteOptions...).
@@ -73,11 +73,11 @@ func (client *Client) Load(uri string, options ...any) (streams.Document, error)
 		}
 	}
 
-	return client.innerClient.Load(uri, options...)
+	return client.innerClient.Load(id, options...)
 }
 
-func (client *Client) Delete(uri string) error {
-	return client.innerClient.Delete(uri)
+func (client *Client) Delete(id string) error {
+	return client.innerClient.Delete(id)
 }
 
 func (client *Client) Save(document streams.Document) error {

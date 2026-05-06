@@ -3,25 +3,25 @@ package bridgyfed
 import (
 	"strings"
 
-	"github.com/benpate/dns"
+	"github.com/benpate/uri"
 )
 
 // LooksLikeBluesky returns TRUE if the provided URI looks like a Bluesky handle (e.g. "@alice.bsky.social")
-func LooksLikeBluesky(uri string) bool {
-	uri = strings.TrimPrefix(uri, "@")
-	uri = strings.ToLower(uri)
+func LooksLikeBluesky(id string) bool {
+	id = strings.TrimPrefix(id, "@")
+	id = strings.ToLower(id)
 
-	if !dns.IsValidHostname(uri) {
+	if uri.NotValidHostname(id) {
 		return false
 	}
 
 	// Special case to fix autocomplete (e.g. still typing "yomama.bsky.so"....)
-	if strings.HasSuffix(uri, "bsky.so") {
+	if strings.HasSuffix(id, "bsky.so") {
 		return false
 	}
 
 	// Confirm that there are at least 2 segments (e.g. "me.social")
-	if segments := strings.Split(uri, "."); len(segments) < 2 {
+	if segments := strings.Split(id, "."); len(segments) < 2 {
 		return false
 	}
 

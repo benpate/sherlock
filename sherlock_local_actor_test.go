@@ -20,7 +20,7 @@ func withTestServer() Option {
 		filesystem := os.DirFS("./test-files")
 		config.RemoteOptions = append(
 			config.RemoteOptions,
-			options.TestServer("test-server", filesystem),
+			options.TestServer("test-server.local", filesystem),
 		)
 		zerolog.SetGlobalLevel(zerolog.ErrorLevel)
 	}
@@ -30,7 +30,7 @@ func TestLocalActor_Atom_1(t *testing.T) {
 
 	client := NewClient()
 
-	result, err := client.Load("https://test-server/actor-atom-1.xml", AsActor(), withTestServer())
+	result, err := client.Load("https://test-server.local/actor-atom-1.xml", AsActor(), withTestServer())
 	require.Nil(t, err)
 	require.NotNil(t, result.Value())
 
@@ -45,7 +45,7 @@ func TestLocalActor_JSON_1(t *testing.T) {
 
 	client := NewClient()
 
-	result, err := client.Load("https://test-server/actor-json-1.json", AsActor(), withTestServer())
+	result, err := client.Load("https://test-server.local/actor-json-1.json", AsActor(), withTestServer())
 	require.Nil(t, err)
 	require.NotNil(t, result.Value())
 	require.Equal(t, "https://www.jsonfeed.org/feed.json", result.ID())
@@ -57,7 +57,7 @@ func TestLocalActor_Microformats_1(t *testing.T) {
 
 	client := NewClient()
 
-	result, err := client.Load("https://test-server/actor-microformats-1.html", AsActor(), withTestServer())
+	result, err := client.Load("https://test-server.local/actor-microformats-1.html", AsActor(), withTestServer())
 	require.Nil(t, err)
 	require.NotNil(t, result.Value())
 }
@@ -66,7 +66,7 @@ func TestLocalActor_RSS_1_XML(t *testing.T) {
 
 	client := NewClient()
 
-	result, err := client.Load("https://test-server/actor-rss-1.xml", AsActor(), withTestServer())
+	result, err := client.Load("https://test-server.local/actor-rss-1.xml", AsActor(), withTestServer())
 	require.Nil(t, err)
 	require.NotNil(t, result.Value())
 }
@@ -75,7 +75,7 @@ func TestLocalActor_RSS_1_HTML(t *testing.T) {
 
 	client := NewClient()
 
-	result, err := client.Load("https://test-server/actor-rss-1.html", AsActor(), withTestServer())
+	result, err := client.Load("https://test-server.local/actor-rss-1.html", AsActor(), withTestServer())
 	require.Nil(t, err)
 	require.NotNil(t, result.Value())
 }
@@ -84,7 +84,7 @@ func TestLocalActor_RSS_2_XML(t *testing.T) {
 
 	client := NewClient()
 
-	result, err := client.Load("https://test-server/actor-rss-2.xml", AsActor(), withTestServer())
+	result, err := client.Load("https://test-server.local/actor-rss-2.xml", AsActor(), withTestServer())
 	require.Nil(t, err)
 	require.NotNil(t, result.Value())
 }

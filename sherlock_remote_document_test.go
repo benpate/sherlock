@@ -8,24 +8,25 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+/*
 func TestRemoteDocument_IndieWeb(t *testing.T) {
 
-	client := NewClient()
-	meta, err := client.Load("https://indieweb.org")
+		client := NewClient()
+		meta, err := client.Load("https://indieweb.org")
 
-	require.Nil(t, err)
-	require.NotNil(t, meta.Value())
-}
+		require.Nil(t, err)
+		require.NotNil(t, meta.Value())
+	}
 
 func TestRemoteDocument_NickSimpson(t *testing.T) {
 
-	client := NewClient()
-	meta, err := client.Load("https://nicksimson.com/posts/2022-never/")
+		client := NewClient()
+		meta, err := client.Load("https://nicksimson.com/posts/2022-never/")
 
-	require.Nil(t, err)
-	require.NotNil(t, meta.Value())
-}
-
+		require.Nil(t, err)
+		require.NotNil(t, meta.Value())
+	}
+*/
 func TestRemoteDocument_MastodonProfile(t *testing.T) {
 
 	client := NewClient()

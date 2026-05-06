@@ -8,11 +8,11 @@ import (
 
 	"github.com/benpate/derp"
 	"github.com/benpate/digit"
-	"github.com/benpate/dns"
 	"github.com/benpate/hannibal/vocab"
 	"github.com/benpate/rosetta/compare"
 	"github.com/benpate/rosetta/convert"
 	"github.com/benpate/rosetta/mapof"
+	"github.com/benpate/uri"
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/rs/zerolog"
 )
@@ -194,7 +194,7 @@ func hostOnly(value string) string {
 func identifierType(identifier string) string {
 
 	// Try to detect URLs first because we can use the standard library
-	if dns.IsValidURL(identifier) {
+	if uri.IsValidURL(identifier) {
 		return IdentifierTypeURL
 	}
 

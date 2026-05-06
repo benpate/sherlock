@@ -4,7 +4,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/benpate/dns"
+	"github.com/benpate/uri"
 )
 
 var usernameRegex *regexp.Regexp = regexp.MustCompile(`^[a-zA-Z0-9_]{3,}$`)
@@ -28,7 +28,7 @@ func IsValidAddress(address string) bool {
 				return false
 			}
 
-			if !dns.IsValidHostname(domain) {
+			if uri.NotValidHostname(domain) {
 				return false
 			}
 
@@ -39,12 +39,12 @@ func IsValidAddress(address string) bool {
 	}
 
 	// Validate that the address is a valid URL
-	if dns.IsValidURL(address) {
+	if uri.IsValidURL(address) {
 		return true
 	}
 
 	// If the address *would be* a valid domain IF it had a protocol... then maybe yes.
-	if dns.IsValidURL("https://" + address) {
+	if uri.IsValidURL("https://" + address) {
 		return true
 	}
 
