@@ -2,13 +2,13 @@ package sherlock
 
 import (
 	"mime"
-	"net/mail"
 	"net/url"
 	"slices"
 	"strings"
 
 	"github.com/benpate/derp"
 	"github.com/benpate/digit"
+	"github.com/benpate/dns"
 	"github.com/benpate/hannibal/vocab"
 	"github.com/benpate/rosetta/compare"
 	"github.com/benpate/rosetta/convert"
@@ -194,18 +194,13 @@ func hostOnly(value string) string {
 func identifierType(identifier string) string {
 
 	// Try to detect URLs first because we can use the standard library
-	if strings.HasPrefix(identifier, "http://") || strings.HasPrefix(identifier, "https://") {
-		if _, err := url.Parse(identifier); err == nil {
-			return IdentifierTypeURL
-		}
+	if dns.IsValidURL(identifier) {
+		return IdentifierTypeURL
 	}
 
 	// Try to detect username/email by disregarding the leading "@"
-	identifier = strings.TrimPrefix(identifier, "@")
-	if strings.Contains(identifier, "@") {
-		if _, err := mail.ParseAddress(identifier); err == nil {
-			return IdentifierTypeUsername
-		}
+	if IsValidAddress(identifier) {
+		return IdentifierTypeUsername
 	}
 
 	// Cannot determine identifier type

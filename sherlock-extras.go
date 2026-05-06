@@ -1,9 +1,13 @@
 package sherlock
 
 import (
-	"net/url"
+	"regexp"
 	"strings"
+
+	"github.com/benpate/dns"
 )
+
+var usernameRegex *regexp.Regexp = regexp.MustCompile(`^[a-zA-Z0-9_]{3,}$`)
 
 // IsValidAddress returns TRUE for all values that Sherlock THINKS it SHOULD
 // be able to prorcess.  This includes: @username@host.tld and https://host.tld/username
@@ -18,29 +22,36 @@ func IsValidAddress(address string) bool {
 
 		address = strings.TrimPrefix(address, "@")
 
-		if _, domain, found := strings.Cut(address, "@"); found {
-			if _, err := url.Parse("https://" + domain); err == nil {
-				return true
+		if username, domain, found := strings.Cut(address, "@"); found {
+
+			if !IsValidUsername(username) {
+				return false
 			}
+
+			if !dns.IsValidHostname(domain) {
+				return false
+			}
+
+			return true
 		}
 
 		return false
 	}
 
 	// Validate that the address is a valid URL
-	if strings.HasPrefix(address, "https://") || strings.HasPrefix(address, "http://") {
-
-		if _, err := url.Parse(address); err == nil {
-			return true
-		}
+	if dns.IsValidURL(address) {
+		return true
 	}
 
-	// If the address *would be* a valid domain IF it had a protocol...
-	// then still maybe yes.
-	if _, err := url.Parse("https://" + address); err == nil {
+	// If the address *would be* a valid domain IF it had a protocol... then maybe yes.
+	if dns.IsValidURL("https://" + address) {
 		return true
 	}
 
 	// If we get here, then the address is not valid
 	return false
+}
+
+func IsValidUsername(username string) bool {
+	return usernameRegex.MatchString(username)
 }
