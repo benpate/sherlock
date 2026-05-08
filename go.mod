@@ -10,7 +10,6 @@ require (
 	github.com/benpate/remote v0.18.1
 	github.com/benpate/rosetta v0.25.26
 	github.com/benpate/uri v0.0.6
-	github.com/davecgh/go-spew v1.1.1
 	github.com/dyatlov/go-opengraph/opengraph v0.0.0-20220524092352-606d7b1e5f8a
 	github.com/kr/jsonfeed v0.1.1
 	github.com/microcosm-cc/bluemonday v1.0.27
@@ -28,6 +27,7 @@ require (
 	github.com/benpate/domain v0.2.9 // indirect
 	github.com/benpate/exp v0.9.0 // indirect
 	github.com/benpate/re v0.3.5 // indirect
+	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/gorilla/css v1.0.1 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
