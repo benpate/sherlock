@@ -79,7 +79,16 @@ func (client Client) isWebfinger(uri string) (bool, string, error) {
 
 	const location = "sherlock.webfinger.isWebfinger"
 
-	// Quick check: does the URI look like an email/username?
+	// Do not use WebFinger for URLs
+	if strings.HasPrefix(uri, "https://") {
+		return false, uri, nil
+	}
+
+	if strings.HasPrefix(uri, "http://") {
+		return false, uri, nil
+	}
+
+	// WebFinger account values MUST have an "@" symbol
 	if !strings.Contains(uri, "@") {
 		return false, uri, nil
 	}
