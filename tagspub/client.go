@@ -1,8 +1,6 @@
 package tagspub
 
 import (
-	"strings"
-
 	"github.com/benpate/hannibal/streams"
 )
 
@@ -75,25 +73,11 @@ func (client Client) SetRootClient(rootClient streams.Client) {
 	client.innerClient.SetRootClient(rootClient)
 }
 
-func (client Client) isHashtag(uri string) (bool, string) {
+func (client Client) isHashtag(id string) (bool, string) {
 
-	bytes := []byte(uri)
-
-	// RULE: bounds check
-	if len(bytes) == 0 {
-		return false, uri
+	if match, newID := IsHashtag(id); match {
+		return true, newID + "@" + client.hostname
 	}
 
-	// Quick check: Must start with # symbol
-	if bytes[0] != '#' {
-		return false, uri
-	}
-
-	// Thorough Regexp pattern match.
-	if !looksLikeHashtag.Match(bytes) {
-		return false, uri
-	}
-
-	// Format the username
-	return true, strings.TrimPrefix(uri, "#") + "@" + client.hostname
+	return false, id
 }

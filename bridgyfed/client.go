@@ -33,10 +33,10 @@ func New(innerClient streams.Client, options ...ClientOption) streams.Client {
 	return result
 }
 
-func (client Client) Load(uri string, loadOptions ...any) (streams.Document, error) {
+func (client Client) Load(id string, loadOptions ...any) (streams.Document, error) {
 
 	// If we think we can load this URL, then try to..
-	if looksLikeBluesky, bridgyHandle := client.looksLikeBluesky(uri); looksLikeBluesky {
+	if looksLikeBluesky, bridgyHandle := client.looksLikeBluesky(id); looksLikeBluesky {
 
 		// Inject the only Accept header that Bridgy Fed likes.
 		loadOptions = append(loadOptions, options.Accept(vocab.ContentTypeActivityPub))
@@ -51,13 +51,13 @@ func (client Client) Load(uri string, loadOptions ...any) (streams.Document, err
 	}
 
 	// Forward the request to the innerClient
-	return client.innerClient.Load(uri, loadOptions...)
+	return client.innerClient.Load(id, loadOptions...)
 }
 
-func (client Client) Delete(uri string) error {
+func (client Client) Delete(id string) error {
 
 	// If we think we can load this URL, then try to..
-	if looksLikeBluesky, bridgyHandle := client.looksLikeBluesky(uri); looksLikeBluesky {
+	if looksLikeBluesky, bridgyHandle := client.looksLikeBluesky(id); looksLikeBluesky {
 
 		// Try to look up the username via the inner client.
 		if err := client.innerClient.Delete(bridgyHandle); err == nil {
@@ -69,7 +69,7 @@ func (client Client) Delete(uri string) error {
 	}
 
 	// Forward the request to the innerClient
-	return client.innerClient.Delete(uri)
+	return client.innerClient.Delete(id)
 }
 
 func (client Client) Save(document streams.Document) error {

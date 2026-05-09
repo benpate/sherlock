@@ -29,14 +29,14 @@ func New(innerClient streams.Client, options ...remote.Option) streams.Client {
 
 // Load attempts to retrieve the URI from the Interweb, translating
 // WebFinger @handles into proper URLs if possible.
-func (client Client) Load(uri string, options ...any) (streams.Document, error) {
+func (client Client) Load(id string, options ...any) (streams.Document, error) {
 
 	const location = "sherlock.webfinger.Load"
 
-	isWebfinger, newURI, err := client.isWebfinger(uri)
+	isWebfinger, newURI, err := client.isWebfinger(id)
 
 	if err != nil {
-		return streams.NilDocument(), derp.Wrap(err, location, "Unable to load Webfinger info", uri)
+		return streams.NilDocument(), derp.Wrap(err, location, "Unable to load Webfinger info", id)
 	}
 
 	if isWebfinger {
@@ -44,7 +44,7 @@ func (client Client) Load(uri string, options ...any) (streams.Document, error) 
 	}
 
 	// Otherwise, allow the inner client to look instead
-	return client.innerClient.Load(uri, options...)
+	return client.innerClient.Load(id, options...)
 }
 
 // Load attempts to retrieve the URI from the Interweb, translating
