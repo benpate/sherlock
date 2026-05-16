@@ -1,6 +1,7 @@
 package activitypub
 
 import (
+	"github.com/benpate/derp"
 	"github.com/benpate/hannibal"
 	"github.com/benpate/hannibal/streams"
 	"github.com/benpate/hannibal/vocab"
@@ -22,11 +23,10 @@ type Client struct {
 }
 
 // New returns a fully initialized Client
-func New(innerClient streams.Client, options ...ClientOption) streams.Client {
+func New(options ...ClientOption) streams.Client {
 
 	result := Client{
-		innerClient: innerClient,
-		userAgent:   "Sherlock (https://github.com/benpate/sherlock)",
+		userAgent: "Sherlock (https://github.com/benpate/sherlock)",
 	}
 
 	for _, option := range options {
@@ -61,7 +61,10 @@ func (client *Client) Load(id string, options ...any) (streams.Document, error) 
 		Result(&result)
 
 	// Send the transaction to the Interwebs.
-	if err := txn.Send(); err == nil {
+	err := txn.Send()
+
+	// If the transaction was successful, then try to parse the result as an ActivityPub document.
+	if err == nil {
 
 		// Confirm that we've received an ActivityPub document
 		if contentType := txn.ResponseHeader().Get("Content-Type"); hannibal.IsActivityPubContentType(contentType) {
@@ -73,7 +76,20 @@ func (client *Client) Load(id string, options ...any) (streams.Document, error) 
 		}
 	}
 
-	return client.innerClient.Load(id, options...)
+	// FALLTHROUGH means FAILURE...
+
+	// If we have an inner client, then try to forward the request to it instead.
+	if client.innerClient != nil {
+		return client.innerClient.Load(id, options...)
+	}
+
+	// Otherwise, return a failure to the parent.
+	empty := streams.NilDocument().AddOptions(
+		streams.WithClient(client.rootClient),
+		streams.WithHTTPHeader(txn.ResponseHeader()),
+	)
+
+	return empty, derp.Wrap(err, "activitypub.Client.Load", "Unable to load document.")
 }
 
 func (client *Client) Delete(id string) error {
