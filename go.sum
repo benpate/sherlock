@@ -12,8 +12,8 @@ github.com/benpate/domain v0.2.12 h1:VpvhaCdBftHu8NFGzAERMkerma5CllpAGzKJhguzGTE
 github.com/benpate/domain v0.2.12/go.mod h1:L4izRt2ma1OJXXtN90NqC4IvBJScyG7WzVCm/QzSYcc=
 github.com/benpate/exp v0.9.0 h1:rlYLchy1u4ChQ9oYFi4zOQAKb+yRsrvMivcrcF18irI=
 github.com/benpate/exp v0.9.0/go.mod h1:OPDLAVhPZvz/G43bX3JFAEP02OTIRvZNwNRduV44RoU=
-github.com/benpate/hannibal v0.17.2 h1:yAOXOs9c1zW7aK1WEZOaumQk8oLj63oiMLmfz2vmTtM=
-github.com/benpate/hannibal v0.17.2/go.mod h1:SPCnMeYN2UCYM7SRfJK6kB1QgquxH8GcWgMNuWxWNOg=
+github.com/benpate/hannibal v0.17.3 h1:S8J4FMR3rPw/Jz8g4lYyTsj5TY/NrSMQHD7BTH6WTec=
+github.com/benpate/hannibal v0.17.3/go.mod h1:SPCnMeYN2UCYM7SRfJK6kB1QgquxH8GcWgMNuWxWNOg=
 github.com/benpate/re v0.3.5 h1:7v4jQfrzCqnhy1+6rG+AaJUyxh4R7atLJEZN3vhQtNA=
 github.com/benpate/re v0.3.5/go.mod h1:8qidRUQ9+HgSU0ETyzWSXqajR8D/ZZvMXMAs9rxlJWc=
 github.com/benpate/remote v0.18.1 h1:gvWr0wt84yPA38fyOJ5SqMv87ScvNm21JuZuB0W8W0w=
