@@ -38,9 +38,14 @@ func New(options ...ClientOption) streams.Client {
 
 func (client *Client) Load(id string, options ...any) (streams.Document, error) {
 
+	const location = "activitypub.Client.Load"
+
 	// RULE: This must be a valid URL
 	if uri.NotValidURL(id) {
-		return client.innerClient.Load(id, options...)
+		if client.innerClient != nil {
+			return client.innerClient.Load(id, options...)
+		}
+		return streams.NilDocument(), derp.NotFound(location, "activitypub.Client.Load", "Invalid URL.", id)
 	}
 
 	// Build a remote transaction (to try) to load the ActivityStream document
@@ -89,18 +94,26 @@ func (client *Client) Load(id string, options ...any) (streams.Document, error) 
 		streams.WithHTTPHeader(txn.ResponseHeader()),
 	)
 
-	return empty, derp.Wrap(err, "activitypub.Client.Load", "Unable to load document.")
+	return empty, derp.Wrap(err, location, "Unable to load document.", id)
 }
 
 func (client *Client) Delete(id string) error {
+	if client.innerClient == nil {
+		return nil
+	}
 	return client.innerClient.Delete(id)
 }
 
 func (client *Client) Save(document streams.Document) error {
+	if client.innerClient == nil {
+		return nil
+	}
 	return client.innerClient.Save(document)
 }
 
 func (client *Client) SetRootClient(rootClient streams.Client) {
-	client.innerClient.SetRootClient(rootClient)
-	client.rootClient = rootClient
+	if client.innerClient != nil {
+		client.innerClient.SetRootClient(rootClient)
+		client.rootClient = rootClient
+	}
 }
