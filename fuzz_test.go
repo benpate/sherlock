@@ -17,7 +17,7 @@ func FuzzIconSizesAsInt(f *testing.F) {
 	f.Add("xX x")
 	f.Add("999999999999999999999999x1")
 
-	f.Fuzz(func(t *testing.T, input string) {
+	f.Fuzz(func(_ *testing.T, input string) {
 		// Just assert it never panics. NOTE: the function does NOT clamp negative
 		// dimensions (e.g. iconSizesAsInt("-1") == -1), since convert.IntOk happily
 		// parses negative numbers. That's harmless for the sort comparator that uses
@@ -32,7 +32,7 @@ func FuzzDefaultHTTPS(f *testing.F) {
 	f.Add("http://example.com")
 	f.Add("https://example.com")
 
-	f.Fuzz(func(t *testing.T, input string) {
+	f.Fuzz(func(_ *testing.T, input string) {
 		_ = defaultHTTPS(input)
 	})
 }
@@ -43,7 +43,7 @@ func FuzzIsActivityStream(f *testing.F) {
 	f.Add("text/html")
 	f.Add("")
 
-	f.Fuzz(func(t *testing.T, input string) {
+	f.Fuzz(func(_ *testing.T, input string) {
 		_ = isActivityStream(input)
 	})
 }
@@ -54,7 +54,7 @@ func FuzzGetRelativeURL(f *testing.F) {
 	f.Add("", "")
 	f.Add("://bad", "/root")
 
-	f.Fuzz(func(t *testing.T, base string, relative string) {
+	f.Fuzz(func(_ *testing.T, base string, relative string) {
 		_ = getRelativeURL(base, relative)
 	})
 }
@@ -68,9 +68,7 @@ func FuzzIsValidAddress(f *testing.F) {
 
 	f.Fuzz(func(t *testing.T, input string) {
 		// Two calls should agree (no hidden state / non-determinism).
-		first := IsValidAddress(input)
-		second := IsValidAddress(input)
-		if first != second {
+		if first, second := IsValidAddress(input), IsValidAddress(input); first != second {
 			t.Errorf("IsValidAddress(%q) is not deterministic", input)
 		}
 	})
@@ -83,8 +81,7 @@ func FuzzIdentifierType(f *testing.F) {
 	f.Add("")
 
 	f.Fuzz(func(t *testing.T, input string) {
-		result := identifierType(input)
-		switch result {
+		switch result := identifierType(input); result {
 		case IdentifierTypeURL, IdentifierTypeUsername, IdentifierTypeNone:
 			// ok -- one of the three known values
 		default:
@@ -101,7 +98,7 @@ func FuzzLoadDocumentOpenGraph(f *testing.F) {
 	f.Add(``)
 	f.Add(`not html at all <<<>>>`)
 
-	f.Fuzz(func(t *testing.T, body string) {
+	f.Fuzz(func(_ *testing.T, body string) {
 		// Should never panic, regardless of how malformed the HTML is.
 		client.loadDocument_OpenGraph("https://example.com", []byte(body), mapof.NewAny())
 	})
@@ -115,7 +112,7 @@ func FuzzLoadDocumentMicroFormats(f *testing.F) {
 	f.Add(``)
 	f.Add(`<div class="h-feed"><div class="h-entry"></div></div>`)
 
-	f.Fuzz(func(t *testing.T, body string) {
+	f.Fuzz(func(_ *testing.T, body string) {
 		client.loadDocument_MicroFormats("https://example.com", []byte(body), mapof.NewAny())
 	})
 }
@@ -127,7 +124,7 @@ func FuzzLoadDocumentJSONLD_Embedded(f *testing.F) {
 	f.Add(`<html><head><script type="application/ld+json">not json</script></head></html>`)
 	f.Add(``)
 
-	f.Fuzz(func(t *testing.T, body string) {
+	f.Fuzz(func(_ *testing.T, body string) {
 		client.loadDocument_JSONLD([]byte(body), mapof.NewAny())
 	})
 }

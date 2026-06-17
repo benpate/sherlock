@@ -98,6 +98,21 @@ func TestOffline_Actor_RSS(t *testing.T) {
 // impossible to exercise quickly offline. The parsing logic itself is covered by the
 // microformat_* unit tests, and the end-to-end path by the localonly suite.
 
+func TestOffline_Document_NilDefaultValue(t *testing.T) {
+
+	client := NewClient()
+
+	// Regression: WithDefaultValue(nil) used to leave a nil map that the HTML/feed
+	// loaders would panic on when writing default properties. It must now load cleanly.
+	doc, err := client.Load(
+		"https://test-server.local/offline-actor.json",
+		withOfflineServer(),
+		WithDefaultValue(nil),
+	)
+	require.Nil(t, err)
+	require.False(t, doc.IsNil())
+}
+
 func TestOffline_Actor_InvalidIdentifier(t *testing.T) {
 
 	client := NewClient()

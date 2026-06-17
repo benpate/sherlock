@@ -10,7 +10,13 @@ import (
 // applyLinks searches for common link headers in the response, and applies them to the data map
 func (client *Client) applyLinks(txn *remote.Transaction, data mapof.Any) {
 
-	links := linkheader.ParseMultiple(txn.Response().Header["Link"])
+	// Guard against an un-sent transaction (Response() is nil before Send succeeds).
+	response := txn.Response()
+	if response == nil {
+		return
+	}
+
+	links := linkheader.ParseMultiple(response.Header["Link"])
 
 	for _, link := range links {
 		switch link.Rel {

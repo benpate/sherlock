@@ -42,6 +42,18 @@ func TestNewConfig_WithDefaultValue(t *testing.T) {
 	require.Equal(t, "value", config.DefaultValue["key"])
 }
 
+func TestNewConfig_WithDefaultValue_Nil(t *testing.T) {
+	client := NewClient()
+
+	// WithDefaultValue(nil) must NOT leave a nil map: the loaders write into it,
+	// and a nil-map write would panic.
+	config := client.newConfig(WithDefaultValue(nil))
+	require.NotNil(t, config.DefaultValue)
+	require.NotPanics(t, func() {
+		config.DefaultValue["id"] = "https://example.com"
+	})
+}
+
 func TestNewConfig_WithRemoteOptions(t *testing.T) {
 	client := NewClient()
 

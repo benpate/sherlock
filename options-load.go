@@ -72,6 +72,10 @@ func WithKeyPair(publicKeyID string, privateKey crypto.PrivateKey) Option {
 // is used as the base value for all documents loaded by the Client.
 func WithDefaultValue(defaultValue map[string]any) Option {
 	return func(config *Config) {
+		// Never store a nil map: the document/feed loaders write into DefaultValue.
+		if defaultValue == nil {
+			defaultValue = make(map[string]any)
+		}
 		config.DefaultValue = defaultValue
 	}
 }
