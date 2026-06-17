@@ -1,0 +1,12 @@
+HTTP/1.1 200 OK
+Content-Type: application/rss+xml
+Connection: close
+
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0"><channel>
+<title>Offline RSS</title>
+<link>https://test-server.local/</link>
+<description>An offline RSS feed</description>
+<item><title>Item One</title><link>https://test-server.local/item-1</link><description>First item</description><pubDate>Tue, 02 Jan 2024 15:04:05 GMT</pubDate></item>
+<item><title>Item Two</title><link>https://test-server.local/item-2</link><description>Second item</description><pubDate>Wed, 03 Jan 2024 15:04:05 GMT</pubDate></item>
+</channel></rss>
