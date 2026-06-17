@@ -14,6 +14,8 @@ import (
 	"github.com/kr/jsonfeed"
 )
 
+// loadActor_Feed_JSON parses a JSON Feed response into an Actor document with an
+// outbox of its items. Returns a nil document if the response is not a JSON Feed.
 func (client Client) loadActor_Feed_JSON(config Config, txn *remote.Transaction) streams.Document {
 
 	// JSONFeed content only
@@ -93,7 +95,8 @@ func (client Client) loadActor_Feed_JSON(config Config, txn *remote.Transaction)
 	)
 }
 
-// Returns TRUE if the contentType is application/activity+json or application/ld+json
+// isJSONFeedContentType returns TRUE if the contentType is application/feed+json
+// or application/json.
 func isJSONFeedContentType(contentType string) bool {
 
 	switch contentType {
@@ -109,6 +112,8 @@ func isJSONFeedContentType(contentType string) bool {
 	}
 }
 
+// jsonFeedToAuthor builds an author map, preferring the item's author, then the
+// feed's author, and finally falling back to the feed URL as the author ID.
 func jsonFeedToAuthor(feed jsonfeed.Feed, item jsonfeed.Item) mapof.Any {
 
 	if item.Author != nil {
@@ -132,6 +137,8 @@ func jsonFeedToAuthor(feed jsonfeed.Feed, item jsonfeed.Item) mapof.Any {
 	}
 }
 
+// jsonFeedToContentHTML returns the item's sanitized HTML content, converting from
+// plain text when only ContentText is present.
 func jsonFeedToContentHTML(item jsonfeed.Item) string {
 
 	var result string

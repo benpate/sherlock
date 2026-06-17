@@ -6,6 +6,8 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
+// loadDocument_JSONLD merges JSON-LD metadata into result, trying embedded
+// <script> blocks first and then linked alternate documents.
 func (client *Client) loadDocument_JSONLD(body []byte, result map[string]any) {
 
 	// Search the returned HTML for JSON-LD

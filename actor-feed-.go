@@ -5,6 +5,8 @@ import (
 	"github.com/benpate/remote"
 )
 
+// loadActor_Feed retrieves a URL and synthesizes an Actor from its links, JSON
+// Feed, RSS/Atom feed, or HTML MicroFormats. Returns a nil document on failure.
 func (client *Client) loadActor_Feed(config Config, url string) streams.Document {
 
 	// Retrieve the URL

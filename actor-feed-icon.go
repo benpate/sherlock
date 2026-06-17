@@ -12,7 +12,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-// loadActor_Feed_FindRootLevelIcon searches for an icon from the website homepage
+// loadActor_Feed_FindHomePageIcon searches for an icon on the website homepage
 // and adds it to the document if found.
 func (client *Client) loadActor_Feed_FindHomePageIcon(document map[string]any) {
 

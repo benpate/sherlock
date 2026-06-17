@@ -12,7 +12,8 @@ import (
 	"willnorris.com/go/microformats"
 )
 
-// actor_MicroFormats searches and HTML document for for an h-feed Microformat
+// loadActor_Feed_MicroFormats searches an HTML document for an h-feed MicroFormat
+// and builds an Actor from it. Returns a nil document if no h-feed is found.
 func (client Client) loadActor_Feed_MicroFormats(_ Config, txn *remote.Transaction) streams.Document {
 
 	// Parse the document URL

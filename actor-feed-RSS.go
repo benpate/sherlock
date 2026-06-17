@@ -17,7 +17,7 @@ import (
 	"github.com/mmcdole/gofeed"
 )
 
-// loadActor_Feed_RSS tries generate an Actor from an RSS or Atom feed
+// loadActor_Feed_RSS tries to generate an Actor from an RSS or Atom feed.
 func (client Client) loadActor_Feed_RSS(config Config, txn *remote.Transaction) streams.Document {
 
 	// Try to find the RSS feed associated with this link
@@ -111,6 +111,9 @@ func feedActivity(actorID string, feed *gofeed.Feed) func(*gofeed.Item) any {
 	}
 }
 
+// feedAuthor builds an author map, preferring (in order) the item author, the
+// item's first author, the feed author, and the feed's first author, then falling
+// back to the feed's title and description.
 func feedAuthor(actorID string, feed *gofeed.Feed, item *gofeed.Item) mapof.Any {
 
 	// Set up default values to override (if we find something better)
@@ -178,7 +181,8 @@ func feedContent(item *gofeed.Item) string {
 	return sanitizeHTML(item.Content)
 }
 
-// rssImage returns the URL of the first image in the item's enclosure list.
+// feedImage returns an image map for the item, drawn from its Image field, its
+// first image enclosure, or a media extension. Returns nil when none is found.
 func feedImage(item *gofeed.Item) map[string]any {
 
 	if item == nil {

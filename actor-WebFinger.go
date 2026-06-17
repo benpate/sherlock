@@ -9,6 +9,9 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+// loadActor_WebFinger resolves a @user@host.tld identifier via WebFinger, then
+// loads the linked ActivityPub actor or profile feed. Returns a nil document if
+// no usable link is found.
 func (client *Client) loadActor_WebFinger(config Config, uri string) streams.Document {
 
 	const location = "sherlock.Client.loadActor_WebFinger"
@@ -22,7 +25,7 @@ func (client *Client) loadActor_WebFinger(config Config, uri string) streams.Doc
 	// Try to load the Actor via WebFinger
 	response, err := digit.Lookup(uri, config.RemoteOptions...)
 
-	// If we dont' have a valid response, then return nil (skip this step)
+	// If we don't have a valid response, then return nil (skip this step)
 	if err != nil {
 		log.Error().Err(err).Msg("loadActor_WebFinger: skipping because of error")
 		return streams.NilDocument()

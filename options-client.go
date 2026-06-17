@@ -1,5 +1,6 @@
 package sherlock
 
+// ClientOption is a function that configures a Client during construction.
 type ClientOption func(*Client)
 
 // WithKeyPairFunc is an Option that sets the ActorGetter for a Client.

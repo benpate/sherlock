@@ -10,7 +10,7 @@ import (
 var usernameRegex *regexp.Regexp = regexp.MustCompile(`^[a-zA-Z0-9_]{3,}$`)
 
 // IsValidAddress returns TRUE for all values that Sherlock THINKS it SHOULD
-// be able to prorcess.  This includes: @username@host.tld and https://host.tld/username
+// be able to process.  This includes: @username@host.tld and https://host.tld/username
 // addresses.
 // IMPORTANT: Just because this function returns TRUE does NOT mean that the address
 // is valid.  It just means that it looks like a valid format, but it will still need
@@ -52,6 +52,8 @@ func IsValidAddress(address string) bool {
 	return false
 }
 
+// IsValidUsername returns TRUE if the value is at least three characters of
+// letters, digits, or underscores.
 func IsValidUsername(username string) bool {
 	return usernameRegex.MatchString(username)
 }

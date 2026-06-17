@@ -6,6 +6,7 @@ import (
 	"github.com/benpate/rosetta/mapof"
 )
 
+// ParseOEmbed is an unimplemented stub for reading oEmbed metadata into data.
 func ParseOEmbed(reader io.Reader, data mapof.Any) {
 
 	// oEmbed discovery links look like this:

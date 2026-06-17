@@ -18,7 +18,7 @@ import (
 // Otherwise, it returns an empty streams.Document that includes metadata for
 func (client *Client) loadActor_Links(config Config, txn *remote.Transaction) streams.Document {
 
-	// Extranct all Links from the HTTP Header and HTML Document
+	// Extract all Links from the HTTP Header and HTML Document
 	links := client.loadActor_DiscoverLinks(txn)
 
 	// If links point directly to something we can use (ActivityPub, RSS, etc) then use it
@@ -72,7 +72,9 @@ func (client *Client) loadActor_DiscoverLinks(txn *remote.Transaction) digit.Lin
 	return result
 }
 
-// actor_ScanHTMLForWebMentions tries to load/use any linked feeds
+// loadActor_FollowLinks loads the first link pointing to an ActivityPub, JSON
+// Feed, JSON, Atom, or RSS resource, in that priority order. Returns a nil
+// document if redirects are exhausted or no usable link is found.
 func (client *Client) loadActor_FollowLinks(config Config, txn *remote.Transaction, links digit.LinkSet) streams.Document {
 
 	// If the client is not allowed to follow redirects (or has used all of them already),
@@ -161,6 +163,8 @@ func getRelativeURL(baseURL string, relativeURL string) string {
 	return baseURLParsed.String()
 }
 
+// findSelfOrAlternateLink returns the first "self" or "alternate" link matching
+// the given media type, or an empty link if none matches.
 func findSelfOrAlternateLink(links []digit.Link, mediaType string) digit.Link {
 
 	for _, link := range links {

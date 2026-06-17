@@ -17,10 +17,12 @@ import (
 	"github.com/rs/zerolog"
 )
 
+// sanitizeHTML strips unsafe markup from a string, keeping user-generated content tags.
 func sanitizeHTML(value string) string {
 	return bluemonday.UGCPolicy().Sanitize(value)
 }
 
+// sanitizeText strips all markup from a string, leaving plain text.
 func sanitizeText(value string) string {
 	return bluemonday.StrictPolicy().Sanitize(value)
 }
@@ -104,7 +106,7 @@ func sortImageLinks(a, b digit.Link) int {
 	return compare.Int(iconMediaTypeAsInt(a.MediaType), iconMediaTypeAsInt(b.MediaType))
 }
 
-// iconSizeAsInt converts an image size string (in the form of "128x128") to the maximum
+// iconSizesAsInt converts an image size string (in the form of "128x128") to the maximum
 // integer value of the two dimensions.  This is useful for sorting images by size.
 func iconSizesAsInt(value string) int {
 
@@ -139,7 +141,7 @@ func iconSizesAsInt(value string) int {
 }
 
 // iconMediaTypeAsInt converts an image type string (in the form of "image/png") to a numeric value
-// that cam be used to sort images by type.
+// that can be used to sort images by type.
 func iconMediaTypeAsInt(value string) int {
 
 	switch value {

@@ -12,6 +12,8 @@ import (
 	"willnorris.com/go/microformats"
 )
 
+// loadDocument_MicroFormats merges h-entry MicroFormats metadata from the HTML
+// body into data, without overwriting values that are already set.
 func (client *Client) loadDocument_MicroFormats(uri string, body []byte, data mapof.Any) {
 
 	// Validate the URL

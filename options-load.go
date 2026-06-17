@@ -6,6 +6,7 @@ import (
 	"github.com/benpate/remote"
 )
 
+// Config holds the per-request settings used when loading a document.
 type Config struct {
 	UserAgent        string // User-Agent string to send with every request
 	DocumentType     int
@@ -14,6 +15,8 @@ type Config struct {
 	DefaultValue     map[string]any
 }
 
+// newConfig builds a Config from the Client defaults, applying any Options found
+// among the arguments and ignoring the rest.
 func (client Client) newConfig(options ...any) Config {
 
 	config := Config{
@@ -42,6 +45,7 @@ func (client Client) newConfig(options ...any) Config {
 	return config
 }
 
+// Option is a function that configures a Config for a single Load request.
 type Option func(*Config)
 
 // AsActor tells Sherlock to try parsing the URL as an Actor object.
@@ -100,6 +104,7 @@ func WithRemoteOptions(options ...remote.Option) Option {
  * Helper Functions
  ******************************************/
 
+// asDocumentType returns an Option that sets the Config's DocumentType.
 func asDocumentType(documentType int) Option {
 	return func(config *Config) {
 		config.DocumentType = documentType

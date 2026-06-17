@@ -22,12 +22,15 @@ func NewClient(options ...ClientOption) Client {
 	return result
 }
 
+// With applies one or more ClientOptions to the Client.
 func (client *Client) With(options ...ClientOption) {
 	for _, option := range options {
 		option(client)
 	}
 }
 
+// SetRootClient is a no-op that satisfies the streams.Client interface; there is
+// no inner client to receive the root pointer.
 func (client Client) SetRootClient(rootClient streams.Client) {
 	// NO-OP: There is no inner client to receive the root pointer
 }
@@ -64,10 +67,12 @@ func (client Client) Load(url string, options ...any) (streams.Document, error) 
 	return client.loadDocument(config, url)
 }
 
+// Save is a no-op that satisfies the streams.Client interface; Sherlock is read-only.
 func (client Client) Save(document streams.Document) error {
 	return nil
 }
 
+// Delete is a no-op that satisfies the streams.Client interface; Sherlock is read-only.
 func (client Client) Delete(documentID string) error {
 	return nil
 }
