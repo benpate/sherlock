@@ -35,7 +35,7 @@ func (client Client) Load(uri string, options ...any) (streams.Document, error) 
 	if match, newURI := client.isHashtag(uri); match {
 
 		// Try to look up the username via the inner client.
-		if result, err := client.innerClient.Load(newURI, options); err == nil {
+		if result, err := client.innerClient.Load(newURI, options...); err == nil {
 			return result, nil
 		}
 
