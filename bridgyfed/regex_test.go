@@ -14,8 +14,8 @@ func TestLooksLikeBlueSky(t *testing.T) {
 	require.True(t, LooksLikeBluesky("@only.one.at.sign.com"))
 	require.True(t, LooksLikeBluesky("@names.can-have.dashes.biz"))
 	require.True(t, LooksLikeBluesky("or.no.at.signs.net"))
+	require.True(t, LooksLikeBluesky("two-segments-is-okay-now.net"))
 
-	require.False(t, LooksLikeBluesky("not-enough-segments.net"))
 	require.False(t, LooksLikeBluesky("yomama.bsky.so"))
 	require.False(t, LooksLikeBluesky(".cant.start.with.dot.com"))
 	require.False(t, LooksLikeBluesky("@cant/have/slashes.eu"))
