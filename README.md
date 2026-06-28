@@ -2,9 +2,8 @@
 
 <img alt="Illustration of Sherlock Holmes and Watson in a train car, by Sidney Paget. From Arthur Conan Doyle's 1892 book 'The Adventure of Silver Blaze'" src="https://github.com/benpate/sherlock/raw/main/meta/The_Adventure_of_Silver_Blaze.jpg" style="width:100%; display:block; margin-bottom:20px;">
 
-[![GoDoc](https://img.shields.io/badge/go-documentation-blue.svg?style=flat-square)](http://pkg.go.dev/github.com/benpate/sherlock)
-[![Version](https://img.shields.io/github/v/release/benpate/sherlock?include_prereleases&style=flat-square&color=brightgreen)](https://github.com/benpate/sherlock/releases)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/benpate/sherlock/go.yml?style=flat-square)](https://github.com/benpate/sherlock/actions/workflows/go.yml)
+[![Go Reference](https://pkg.go.dev/badge/github.com/benpate/sherlock.svg)](https://pkg.go.dev/github.com/benpate/sherlock)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/benpate/sherlock/go.yml?branch=main)](https://github.com/benpate/sherlock/actions/workflows/go.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/benpate/sherlock?style=flat-square)](https://goreportcard.com/report/github.com/benpate/sherlock)
 [![Codecov](https://img.shields.io/codecov/c/github/benpate/sherlock.svg?style=flat-square)](https://codecov.io/gh/benpate/sherlock)
 
@@ -42,14 +41,30 @@ The goal is to have a standard interface into all web content, regardless of com
 ```go
 client := sherlock.NewClient()
 
-// If you only have a URL, then pass it in to .Load()
+// Load inspects a URL and returns whatever metadata it can find,
+// as an ActivityStreams document.
 result, err := client.Load("https://my-url-here")
 
-// If you have already downloaded a file, then pass it to .Parse()
-result, err := sherlock.ParseHTML("https://original-url", &bytes.Buffer)
-
+// Per-call options refine the request: what kind of object you expect,
+// a default value to merge into, a redirect cap, or extra remote options.
+result, err = client.Load("https://my-url-here",
+    sherlock.AsActor(),
+    sherlock.WithMaximumRedirects(4),
+)
 ```
 
 ### Using Sherlock with Hannibal
 
-Sherlock can also be used as an http client for [Hannibal](https://github.com/benpate/hannibal), the ActivityPub library for Go.  This allows many other online resources to *look like* they're ActivityPub-enabled.
+Sherlock implements the [Hannibal](https://github.com/benpate/hannibal) `streams.Client` interface, so it can be used as the HTTP client for that ActivityPub library. This makes many non-ActivityPub resources *look like* they're ActivityPub-enabled.
+
+## What matters here
+
+- **`Load` never hard-fails on a single source; it tries many and merges.** Each metadata format is attempted in turn and merged into one ActivityStreams document without overwriting values already found. A fetch or parse error from one source is swallowed so the others still run. Don't expect an error just because one format was absent or malformed.
+
+- **The subpackages are stacked client middlewares, and stacking ORDER is load-bearing.** `bridgyfed` and `tagspub` rewrite identifiers into WebFinger handles, so they MUST sit *above* `webfinger` in the stack; `webfinger` resolves handles to URLs that `activitypub` then loads; `tombstone` substitutes a placeholder for Gone documents. Each subpackage's README states its own placement rule.
+
+- **Network access is SSRF-hardened by default, inherited from [remote](https://github.com/benpate/remote).** Sherlock sets no `AllowPrivateIPs`, so private/loopback fetches are blocked and response sizes are capped. Self-hosted/LAN targets will be refused unless the caller passes a remote option to allow them.
+
+- **Identifier classification is strict and lives in [uri](https://github.com/benpate/uri).** Whether a value "looks like" a URL or an `@handle` is decided by `uri` validation (real IANA TLDs, 2+ segments). When a test for that classification fails after a `uri` upgrade, the test assumption is usually what drifted — not the code.
+
+- **Untrusted-input parsers are fuzzed; keep new ones that way.** The document and identifier parsers (OpenGraph, microformats, embedded JSON-LD, address/identifier classification) have `Fuzz*` coverage in `fuzz_test.go`. Regexes are static patterns (`regexp.MustCompile`) — no untrusted input is ever compiled into a regex. A new parser of remote bytes should arrive with its own fuzz target.
