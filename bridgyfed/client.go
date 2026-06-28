@@ -33,6 +33,8 @@ func New(innerClient streams.Client, options ...ClientOption) streams.Client {
 	return result
 }
 
+// Load resolves a Bluesky-looking id through Bridgy Fed, falling back to the
+// inner client (with the original id) when it is not a Bluesky handle or fails.
 func (client Client) Load(id string, loadOptions ...any) (streams.Document, error) {
 
 	// If we think we can load this URL, then try to..
@@ -54,6 +56,8 @@ func (client Client) Load(id string, loadOptions ...any) (streams.Document, erro
 	return client.innerClient.Load(id, loadOptions...)
 }
 
+// Delete resolves a Bluesky-looking id through Bridgy Fed, falling back to the
+// inner client (with the original id) when it is not a Bluesky handle or fails.
 func (client Client) Delete(id string) error {
 
 	// If we think we can load this URL, then try to..
@@ -72,14 +76,18 @@ func (client Client) Delete(id string) error {
 	return client.innerClient.Delete(id)
 }
 
+// Save forwards a document to the inner client's cache.
 func (client Client) Save(document streams.Document) error {
 	return client.innerClient.Save(document)
 }
 
+// SetRootClient propagates the top-level client to the inner client.
 func (client Client) SetRootClient(rootClient streams.Client) {
 	client.innerClient.SetRootClient(rootClient)
 }
 
+// looksLikeBluesky reports whether the URI is a Bluesky handle and, if so,
+// returns the Bridgy Fed WebFinger handle (e.g. "@alice.bsky.social@bsky.brid.gy").
 func (client Client) looksLikeBluesky(uri string) (bool, string) {
 
 	if !LooksLikeBluesky(uri) {

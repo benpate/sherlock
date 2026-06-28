@@ -2,6 +2,7 @@ package activitypub
 
 import "github.com/benpate/hannibal/streams"
 
+// ClientOption configures a Client at construction time.
 type ClientOption func(*Client)
 
 // WithInnerClient is an Option that sets the inner client for a Client.

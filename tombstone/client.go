@@ -1,3 +1,5 @@
+// Package tombstone is a Sherlock client middleware that turns a "Gone" (HTTP
+// 410) response into a synthetic ActivityStreams Tombstone document.
 package tombstone
 
 import (
@@ -7,6 +9,8 @@ import (
 	"github.com/benpate/hannibal/vocab"
 )
 
+// Client wraps an inner streams.Client, substituting a Tombstone document when
+// the inner client reports that a document is Gone.
 type Client struct {
 	innerClient streams.Client
 }
@@ -68,6 +72,7 @@ func (client *Client) Load(url string, options ...any) (streams.Document, error)
 	return result, err
 }
 
+// Save forwards a document to the inner client's cache.
 func (client *Client) Save(document streams.Document) error {
 	return client.innerClient.Save(document)
 }

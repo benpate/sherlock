@@ -1,5 +1,6 @@
 package bridgyfed
 
+// ClientOption configures a Client at construction time.
 type ClientOption func(*Client)
 
 // WithHostname uses a custom hostname (instead of the default bsky.brid.gy)

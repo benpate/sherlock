@@ -47,8 +47,8 @@ func (client Client) Load(id string, options ...any) (streams.Document, error) {
 	return client.innerClient.Load(id, options...)
 }
 
-// Load attempts to retrieve the URI from the Interweb, translating
-// WebFinger @handles into proper URLs if possible.
+// Delete removes the URI from the inner client's cache, translating WebFinger
+// @handles into proper URLs first when possible.
 func (client Client) Delete(uri string) error {
 
 	const location = "sherlock.webfinger.Delete"
@@ -67,14 +67,18 @@ func (client Client) Delete(uri string) error {
 	return client.innerClient.Delete(uri)
 }
 
+// Save forwards a document to the inner client's cache.
 func (client Client) Save(document streams.Document) error {
 	return client.innerClient.Save(document)
 }
 
+// SetRootClient propagates the top-level client to the inner client.
 func (client Client) SetRootClient(rootClient streams.Client) {
 	client.innerClient.SetRootClient(rootClient)
 }
 
+// isWebfinger reports whether the URI is a WebFinger handle and, if so, resolves
+// it to the canonical ActivityPub URL via a WebFinger lookup.
 func (client Client) isWebfinger(uri string) (bool, string, error) {
 
 	const location = "sherlock.webfinger.isWebfinger"

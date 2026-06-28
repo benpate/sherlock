@@ -1,3 +1,5 @@
+// Package activitypub provides a Sherlock client middleware that loads
+// ActivityPub/ActivityStream documents directly from their canonical URLs.
 package activitypub
 
 import (
@@ -36,6 +38,8 @@ func New(options ...ClientOption) streams.Client {
 	return &result
 }
 
+// Load retrieves the ActivityPub document at the given URL, falling back to the
+// inner client when the URL is invalid or does not return ActivityPub content.
 func (client *Client) Load(id string, options ...any) (streams.Document, error) {
 
 	const location = "activitypub.Client.Load"
@@ -97,6 +101,8 @@ func (client *Client) Load(id string, options ...any) (streams.Document, error) 
 	return empty, derp.Wrap(err, location, "Unable to load document.", id)
 }
 
+// Delete forwards a cache-delete to the inner client, or is a no-op when there
+// is no inner client.
 func (client *Client) Delete(id string) error {
 	if client.innerClient == nil {
 		return nil
@@ -104,6 +110,8 @@ func (client *Client) Delete(id string) error {
 	return client.innerClient.Delete(id)
 }
 
+// Save forwards a document to the inner client's cache, or is a no-op when there
+// is no inner client.
 func (client *Client) Save(document streams.Document) error {
 	if client.innerClient == nil {
 		return nil
@@ -111,6 +119,7 @@ func (client *Client) Save(document streams.Document) error {
 	return client.innerClient.Save(document)
 }
 
+// SetRootClient records the top-level client and propagates it to the inner client.
 func (client *Client) SetRootClient(rootClient streams.Client) {
 	if client.innerClient != nil {
 		client.innerClient.SetRootClient(rootClient)

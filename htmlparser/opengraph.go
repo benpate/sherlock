@@ -8,6 +8,8 @@ import (
 	"github.com/dyatlov/go-opengraph/opengraph"
 )
 
+// OpenGraph parses OpenGraph metadata from the HTML body and merges it into
+// data, without overwriting values that are already set.
 func OpenGraph(url string, body []byte, data mapof.Any) error {
 
 	ogInfo := opengraph.NewOpenGraph()
@@ -63,6 +65,7 @@ func OpenGraph(url string, body []byte, data mapof.Any) error {
 	return nil
 }
 
+// mapOpenGraphTags converts a list of tag strings into a slice of name-keyed maps.
 func mapOpenGraphTags(values []string) []mapof.Any {
 	result := make([]mapof.Any, len(values))
 	for index, value := range values {

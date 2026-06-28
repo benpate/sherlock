@@ -1,5 +1,6 @@
 package tagspub
 
+// ClientOption configures a Client at construction time.
 type ClientOption func(*Client)
 
 // WithHostname uses a custom server hostname (instead of the default tags.pub)

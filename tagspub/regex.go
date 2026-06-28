@@ -4,8 +4,11 @@ import (
 	"regexp"
 )
 
+// looksLikeHashtag matches a "#tag" of letters, digits, or underscores.
 var looksLikeHashtag *regexp.Regexp = regexp.MustCompile(`^(?:#)?(?:[a-zA-Z0-9_]+)$`)
 
+// IsHashtag reports whether the URI is a "#hashtag" and, if so, returns the tag
+// text with the leading "#" removed.
 func IsHashtag(uri string) (bool, string) {
 
 	bytes := []byte(uri)
