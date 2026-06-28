@@ -94,9 +94,7 @@ func (client Client) isWebfinger(uri string) (bool, string, error) {
 	}
 
 	// Thorough check: can digit determine an actual URL for the URI
-	webFingerURLs := digit.ParseAccount(uri)
-
-	if len(webFingerURLs) == 0 {
+	if webFingerURLs := digit.ParseAccount(uri); len(webFingerURLs) == 0 {
 		return false, uri, nil
 	}
 

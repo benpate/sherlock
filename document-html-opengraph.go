@@ -47,9 +47,10 @@ func (client *Client) loadDocument_OpenGraph(url string, body []byte, data mapof
 	}
 
 	if len(data) > 0 {
+		// Prefer the OpenGraph og:url; fall back to the fetch URL parameter.
 		if data.IsZeroValue(vocab.PropertyID) {
-			if url := ogInfo.URL; url != "" {
-				data[vocab.PropertyID] = url
+			if ogURL := ogInfo.URL; ogURL != "" {
+				data[vocab.PropertyID] = ogURL
 			}
 		}
 
