@@ -16,25 +16,33 @@ The goal is to have a standard interface into all web content, regardless of com
 
 ### Supported Formats
 
-✅ [ActivityPub](https://www.w3.org/TR/activitypub/)/[ActivityStreams](https://www.w3.org/TR/activitystreams-core/)
+Sherlock attempts every format it knows about and merges what it finds into a single ActivityStreams document.
 
-✅ [MicroFormats](https://microformats.org)
+✅ [ActivityPub](https://www.w3.org/TR/activitypub/) / [ActivityStreams](https://www.w3.org/TR/activitystreams-core/)
+
+✅ [WebFinger](https://webfinger.net) — resolves `@user@host.tld` handles to an actor
 
 ✅ [Open Graph](https://ogp.me)
 
-### In Progress
+✅ [MicroFormats2](https://microformats.org) — `h-entry` documents and `h-feed` actors
 
-🚧 [WebFinger](https://webfinger.net)
+✅ [JSON-LD](https://json-ld.org/) — both embedded `<script type="application/ld+json">` and linked `<link rel="alternate">`
 
-🚧 [JSON-LD (Linked)](https://json-ld.org/)
+✅ [RSS / Atom](https://www.rssboard.org/rss-specification) feeds
 
-🚧 [Twitter Metadata](https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/abouts-cards)
+✅ [JSON Feed](https://www.jsonfeed.org)
 
-🚧 [Microdata](https://html.spec.whatwg.org/multipage/microdata.html#microdata)
+✅ HTTP `Link` headers
 
-🚧 [RDFa](https://rdfa.info)
+### Middleware and Rewriters
 
-🚧 [oEmbed data provider](https://oembed.com)
+Sherlock is built from a stack of client middlewares. Most just resolve a format, but a few rewrite an identifier into something the rest of the stack can resolve, or substitute a placeholder for a missing document. Each is its own subpackage with its own README and placement rules.
+
+- [bridgyfed](bridgyfed/README.md) — rewrites a Bluesky-looking handle (`alice.bsky.social`) into a WebFinger handle on [Bridgy Fed](https://fed.brid.gy), so Bluesky accounts resolve as ActivityPub actors.
+
+- [tagspub](tagspub/README.md) — rewrites a `#hashtag` into a WebFinger handle on [tags.pub](https://tags.pub), so hashtags resolve to ActivityPub collections.
+
+- [tombstone](tombstone/README.md) — turns a "Gone" (HTTP 410) response into a synthetic ActivityStreams Tombstone, so deleted objects resolve to a stable placeholder instead of an error.
 
 
 ### Using Sherlock
