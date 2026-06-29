@@ -20,8 +20,6 @@ Sherlock attempts every format it knows about and merges what it finds into a si
 
 ✅ [ActivityPub](https://www.w3.org/TR/activitypub/) / [ActivityStreams](https://www.w3.org/TR/activitystreams-core/)
 
-✅ [WebFinger](https://webfinger.net) — resolves `@user@host.tld` handles to an actor
-
 ✅ [Open Graph](https://ogp.me)
 
 ✅ [MicroFormats2](https://microformats.org) — `h-entry` documents and `h-feed` actors
@@ -37,6 +35,8 @@ Sherlock attempts every format it knows about and merges what it finds into a si
 ### Middleware and Rewriters
 
 Sherlock is built from a stack of client middlewares. Most just resolve a format, but a few rewrite an identifier into something the rest of the stack can resolve, or substitute a placeholder for a missing document. Each is its own subpackage with its own README and placement rules.
+
+- [webfinger](webfinger/README.md) — recognizes `@user@host` handles and resolves them to a canonical ActivityPub URL for the rest of the stack to load. The rewriters below all hand off to it.
 
 - [bridgyfed](bridgyfed/README.md) — rewrites a Bluesky-looking handle (`alice.bsky.social`) into a WebFinger handle on [Bridgy Fed](https://fed.brid.gy), so Bluesky accounts resolve as ActivityPub actors.
 
