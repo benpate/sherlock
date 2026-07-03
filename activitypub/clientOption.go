@@ -31,3 +31,12 @@ func WithKeyPairFunc(fn KeyPairFunc) ClientOption {
 		client.keyPairFunc = fn
 	}
 }
+
+// WithAllowPrivateIPs is an Option that sets the allowPrivateIPs flag for a Client.
+// This allows the Client to load ActivityPub documents from private IP addresses.
+// This is useful for testing and development, but should be disabled in production.
+func WithAllowPrivateIPs(allow bool) ClientOption {
+	return func(client *Client) {
+		client.allowPrivateIPs = allow
+	}
+}

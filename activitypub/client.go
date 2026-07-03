@@ -18,10 +18,11 @@ import (
 // If the server does not respond with an ActvityPub content-type
 // then the request is forwarded to the inner client.
 type Client struct {
-	innerClient streams.Client
-	keyPairFunc KeyPairFunc
-	rootClient  streams.Client
-	userAgent   string
+	innerClient     streams.Client
+	keyPairFunc     KeyPairFunc
+	rootClient      streams.Client
+	userAgent       string
+	allowPrivateIPs bool
 }
 
 // New returns a fully initialized Client
@@ -66,6 +67,7 @@ func (client *Client) Load(id string, options ...any) (streams.Document, error) 
 	txn := remote.Get(id).
 		Accept(vocab.ContentTypeActivityPub).
 		UserAgent(client.userAgent).
+		AllowPrivateIPs(client.allowPrivateIPs).
 		With(remoteOptions...).
 		Result(&result)
 
