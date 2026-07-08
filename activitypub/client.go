@@ -123,8 +123,8 @@ func (client *Client) Save(document streams.Document) error {
 
 // SetRootClient records the top-level client and propagates it to the inner client.
 func (client *Client) SetRootClient(rootClient streams.Client) {
+	client.rootClient = rootClient
 	if client.innerClient != nil {
 		client.innerClient.SetRootClient(rootClient)
-		client.rootClient = rootClient
 	}
 }

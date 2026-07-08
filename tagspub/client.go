@@ -76,7 +76,9 @@ func (client Client) Save(document streams.Document) error {
 
 // SetRootClient propagates the top-level client to the inner client.
 func (client Client) SetRootClient(rootClient streams.Client) {
-	client.innerClient.SetRootClient(rootClient)
+	if client.innerClient != nil {
+		client.innerClient.SetRootClient(rootClient)
+	}
 }
 
 // isHashtag reports whether the id is a hashtag and, if so, returns the

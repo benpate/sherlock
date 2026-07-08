@@ -9,7 +9,7 @@ require (
 	github.com/benpate/hannibal v0.21.0
 	github.com/benpate/remote v0.21.2
 	github.com/benpate/rosetta v0.30.0
-	github.com/benpate/uri v0.1.2
+	github.com/benpate/uri v0.2.0
 	github.com/dyatlov/go-opengraph/opengraph v0.0.0-20220524092352-606d7b1e5f8a
 	github.com/kr/jsonfeed v0.1.1
 	github.com/microcosm-cc/bluemonday v1.0.27

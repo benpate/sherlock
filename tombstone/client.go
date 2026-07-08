@@ -37,7 +37,9 @@ func New(innerClient streams.Client) *Client {
 
 // SetRootClient applies a "top level" client (which is needed by some hannibal client implementations)
 func (client *Client) SetRootClient(rootClient streams.Client) {
-	client.innerClient.SetRootClient(rootClient)
+	if client.innerClient != nil {
+		client.innerClient.SetRootClient(rootClient)
+	}
 }
 
 // Load retrieves a URL from the cache/interweb, returning it as a streams.Document

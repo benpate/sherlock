@@ -112,14 +112,17 @@ func TestSave_ForwardsToInnerClient(t *testing.T) {
 	require.True(t, inner.savedCalled)
 }
 
-func TestSetRootClient_NilInnerClient_IsNoOp(t *testing.T) {
-	// With no inner client, SetRootClient must not panic and (per the current
-	// implementation) does not record the root client.
+func TestSetRootClient_NilInnerClient_RecordsRoot(t *testing.T) {
+	// With no inner client, SetRootClient must not panic and must still record
+	// the root client. A leaf activitypub client stamps every document it builds
+	// with WithClient(rootClient); if the root were dropped here, those documents
+	// would fall back to a bare default client that cannot honor options such as
+	// AllowPrivateIPs.
 	client := New().(*Client)
 	root := &fakeClient{}
 
 	require.NotPanics(t, func() { client.SetRootClient(root) })
-	require.Nil(t, client.rootClient, "rootClient is only set when an inner client exists")
+	require.Same(t, root, client.rootClient, "rootClient must be recorded even without an inner client")
 }
 
 func TestSetRootClient_ForwardsToInnerClient(t *testing.T) {
