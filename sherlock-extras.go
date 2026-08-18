@@ -7,15 +7,15 @@ import (
 	"github.com/benpate/uri"
 )
 
+// usernameRegex matches bare usernames: letters, digits, and underscores, three or more.
 var usernameRegex *regexp.Regexp = regexp.MustCompile(`^[a-zA-Z0-9_]{3,}$`)
 
-// IsValidAddress returns TRUE for all values that Sherlock THINKS it SHOULD
-// be able to process.  This includes: @username@host.tld and https://host.tld/username
-// addresses.
-// IMPORTANT: Just because this function returns TRUE does NOT mean that the address
-// is valid.  It just means that it looks like a valid format, but it will still need
-// to be checked.
+// IsValidAddress returns TRUE for values that Sherlock THINKS it should be able
+// to process: @username@host.tld and https://host.tld/username addresses.
 func IsValidAddress(address string) bool {
+
+	// RULE: TRUE means "looks like a processable format" — NOT that the
+	// address is valid. It still needs to be checked.
 
 	// If this LOOKS LIKE a username, then try to split into username and domain
 	if strings.HasPrefix(address, "@") {

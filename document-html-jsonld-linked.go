@@ -8,9 +8,6 @@ import (
 
 // loadDocument_JSONLD_Linked searches the GoQuery document for links to ActivityPub-like documents.
 func (client *Client) loadDocument_JSONLD_Linked(document *goquery.Document, result mapof.Any) bool {
-	// TODO: LOW: Add support for JSON-LD metadata embedded in a <script> tag
-	// This may be a way to extract the JSON-LD metadata
-	// https://pkg.go.dev/github.com/daetal-us/getld#section-readme
 
 	var success bool
 	selection := document.Find("link[rel=alternate]")

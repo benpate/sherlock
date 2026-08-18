@@ -62,6 +62,31 @@ result, err = client.Load("https://my-url-here",
 )
 ```
 
+### Using the Metadata API
+
+`Client.Metadata` is the webpage-metadata half of Sherlock as a first-class API: one fetch, every in-page format extracted from a single parsed tree, merged by a fixed precedence (ActivityStreams → Open Graph → Twitter Cards → oEmbed → HTML natives) into an oEmbed-adjacent `metadata.Preview` — title, description, canonical URL, thumbnail, embed, provider, authors, dates. No ActivityStreams types involved; callers who need AS2 use `Load`.
+
+```go
+client := sherlock.NewClient()
+
+preview, err := client.Metadata(ctx, "https://example.com/article")
+if err != nil {
+    return err
+}
+
+fmt.Println(preview.Title, preview.Description, preview.Thumbnail.URL)
+```
+
+The extraction engine lives in the [metadata](metadata/) sub-package, which never imports ActivityStreams types — the package boundary enforces the layering. It can also be used directly, without a `Client`:
+
+```go
+preview, err := metadata.Get(ctx, "https://example.com/article",
+    metadata.WithUserAgent("my-app/1.0"),
+)
+```
+
+The oEmbed endpoint (the only extra network hop) is called lazily — only when a registry match or player tags suggest an embed, or when fields oEmbed could fill are still empty. Provider embed HTML never enters the model raw: it is classified by [oembed](https://github.com/benpate/oembed)'s `Embed()` into a rebuilt iframe, sandboxed markup, or nothing. Sandboxed markup is off by default; opt in with `WithAllowSandboxEmbeds(true)` if your renderer places `Embed.HTML` inside a sandboxed iframe.
+
 ### Using Sherlock with Hannibal
 
 Sherlock implements the [Hannibal](https://github.com/benpate/hannibal) `streams.Client` interface, so it can be used as the HTTP client for that ActivityPub library. This makes many non-ActivityPub resources *look like* they're ActivityPub-enabled.

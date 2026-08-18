@@ -73,11 +73,8 @@ func canTrace() bool {
 	return canLog(zerolog.TraceLevel)
 }
 
-// canLog is a silly zerolog helper that returns TRUE
-// if the provided log level would be allowed
-// (based on the global log level).
-// This makes it easier to execute expensive code conditionally,
-// for instance: marshalling a JSON object for logging.
+// canLog returns TRUE if the provided log level would be allowed by the global
+// zerolog level — a cheap guard around expensive log-only work.
 func canLog(level zerolog.Level) bool {
 	return zerolog.GlobalLevel() <= level
 }

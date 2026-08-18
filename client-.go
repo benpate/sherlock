@@ -35,17 +35,16 @@ func (client Client) SetRootClient(rootClient streams.Client) {
 	// NO-OP: There is no inner client to receive the root pointer
 }
 
-// Load retrieves a document from a remote server and returns it as a streams.Document
-// It uses either the "Actor" or "Document" methods of generating it ActivityStreams
-// result.
-// "Document" treats the URL as a single ActivityStreams document, translating
-// OpenGraph, MicroFormats, and JSON-LD into an ActivityStreams equivalent.
-// "Actor" treats the URL as an Actor, translating RSS, Atom, JSON, and
-// MicroFormats feeds into an ActivityStream equivalent.
+// Load retrieves a document from a remote server and returns it as a
+// streams.Document, using either the "Actor" or "Document" discovery method.
 func (client Client) Load(url string, options ...any) (streams.Document, error) {
 
 	const location = "sherlock.Client.Load"
 
+	// "Document" treats the URL as a single ActivityStreams document,
+	// translating OpenGraph, MicroFormats, and JSON-LD into an ActivityStreams
+	// equivalent. "Actor" treats the URL as an Actor, translating RSS, Atom,
+	// JSON, and MicroFormats feeds instead.
 	config := client.newConfig(options...)
 
 	// RULE: url must not be empty
