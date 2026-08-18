@@ -45,6 +45,4 @@ The oEmbed endpoint is the only extra network hop, and it is gated: called only 
 
 ## Design notes
 
-The full design, decisions, and precedence rationale live in the Emissary spec `LINK-METADATA-CONSUMER.md`. Two rules worth knowing before editing: extractors are pure functions and never write into a `Preview` (merge is the one writer, and merge never overwrites), and this package never imports ActivityStreams types — the package boundary is the layering rule.
-
-A source's contribution is a `partial`, whose fields are nullable values (`null.String`, `null.Object[T]`) rather than pointers, so "absent" and "present but empty" stay distinguishable with nothing to dereference — a null field reads back as its own zero value. Two consequences when editing: ask `IsPresent()` in merge (`IsZero()` reads TRUE for a present-but-empty value and would silently demote a source that did speak), and remember that a group arrives in the `Preview` as a *copy*, so the icon backfill can never write back into the partial that won.
+The full design, decisions, and precedence rationale live in the Emissary spec `LINK-METADATA-CONSUMER.md`. The rules an editor of this package needs — the ones that are easy to break and hard to notice — are collected in [AGENTS.md](AGENTS.md).

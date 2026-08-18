@@ -63,3 +63,20 @@ func TestBoundDimension(t *testing.T) {
 	require.Equal(t, 0, boundDimension(maxDimension+1))
 	require.Equal(t, 0, boundDimension(1<<62))
 }
+
+func TestJSONInt_BoundsRemoteNumbers(t *testing.T) {
+
+	// encoding/json hands every number back as a float64, so an AS2 document
+	// can declare a dimension far outside the int64 range. Converting one of
+	// those to int64 is implementation-defined, so jsonInt bounds the float.
+	require.Equal(t, 640, jsonInt(float64(640)))
+	require.Equal(t, 0, jsonInt(1e300))
+	require.Equal(t, 0, jsonInt(-1e300))
+	require.Equal(t, 0, jsonInt(float64(maxDimension+1)))
+
+	// Quoted numbers take the string path, and anything else is absent.
+	require.Equal(t, 480, jsonInt("480"))
+	require.Equal(t, 0, jsonInt("wide"))
+	require.Equal(t, 0, jsonInt(nil))
+	require.Equal(t, 0, jsonInt(true))
+}

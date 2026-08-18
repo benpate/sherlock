@@ -161,6 +161,12 @@ func jsonInt(value any) int {
 	switch typed := value.(type) {
 
 	case float64:
+		// RULE: converting an out-of-range float to int64 is
+		// implementation-defined, so bound the float itself first rather than
+		// trusting whatever the conversion happens to produce.
+		if typed < 0 || typed > maxDimension {
+			return 0
+		}
 		return boundDimension(int64(typed))
 
 	case string:

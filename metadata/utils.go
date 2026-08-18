@@ -59,7 +59,7 @@ func iconSizesAsInt(value string) int {
 		part, _, _ = strings.Cut(part, "x")
 
 		if result, ok := convert.IntOk(part, 0); ok {
-			results = append(results, int(result))
+			results = append(results, result)
 		}
 	}
 

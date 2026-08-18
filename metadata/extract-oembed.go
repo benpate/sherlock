@@ -175,22 +175,27 @@ func classifyEmbed(response oembed.Response, allowSandbox bool) null.Object[Embe
 	// sandbox plan runs in an opaque-origin iframe (no cookies, storage, or
 	// parent DOM), which is MORE contained than the plain iframe plan that
 	// loads the provider's own origin unsandboxed.
+	//
+	// RULE: plan dimensions come straight from the provider's JSON, and the
+	// policy above sets no clamp, so they must pass through boundDimension
+	// like every other remote dimension. oembed collapses negatives on its
+	// own, but nothing upstream bounds the top end.
 	switch plan := response.Embed(oembed.EmbedPolicy{AllowSandbox: allowSandbox}).(type) {
 
 	case oembed.EmbedIframe:
 		return null.NewObject(Embed{
 			Mode:      EmbedIframe,
 			IframeURL: plan.Src,
-			Width:     plan.Width,
-			Height:    plan.Height,
+			Width:     boundDimension(int64(plan.Width)),
+			Height:    boundDimension(int64(plan.Height)),
 		})
 
 	case oembed.EmbedSandbox:
 		return null.NewObject(Embed{
 			Mode:   EmbedProviderHTML,
 			HTML:   plan.HTML,
-			Width:  plan.Width,
-			Height: plan.Height,
+			Width:  boundDimension(int64(plan.Width)),
+			Height: boundDimension(int64(plan.Height)),
 		})
 	}
 

@@ -3,6 +3,7 @@ package metadata
 import (
 	"testing"
 
+	"github.com/benpate/oembed"
 	"github.com/stretchr/testify/require"
 )
 
@@ -48,4 +49,38 @@ func TestOEmbedCouldHelp(t *testing.T) {
 
 	// A blank preview is improvable by definition.
 	require.True(t, oembedCouldHelp(Preview{}))
+}
+
+func TestClassifyEmbed_BoundsProviderDimensions(t *testing.T) {
+
+	// A provider's declared player size is remote input like any other, and
+	// the EmbedPolicy passed by classifyEmbed sets no clamp of its own.
+	oversized := oembed.Response{
+		Type:   "video",
+		HTML:   `<iframe src="https://example.com/player"></iframe>`,
+		Width:  999999999999,
+		Height: 888888888888,
+	}
+
+	iframe := classifyEmbed(oversized, false)
+
+	require.True(t, iframe.IsPresent())
+	require.Equal(t, EmbedIframe, iframe.Object().Mode)
+	require.Zero(t, iframe.Object().Width)
+	require.Zero(t, iframe.Object().Height)
+
+	// The sandbox plan reads the same dimensions and must bound them too.
+	sandbox := classifyEmbed(oembed.Response{
+		Type:   "rich",
+		HTML:   `<div><script>player()</script></div>`,
+		Width:  999999999999,
+		Height: 480,
+	}, true)
+
+	require.True(t, sandbox.IsPresent())
+	require.Equal(t, EmbedProviderHTML, sandbox.Object().Mode)
+	require.Zero(t, sandbox.Object().Width)
+
+	// A sane dimension still survives — this floor zeroes junk, not everything.
+	require.Equal(t, 480, sandbox.Object().Height)
 }
