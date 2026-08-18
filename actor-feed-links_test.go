@@ -48,6 +48,16 @@ func TestGetRelativeURL(t *testing.T) {
 		// Path-relative -- joins paths
 		{"https://example.com/blog/", "feed.xml", "https://example.com/blog/feed.xml"},
 
+		// Directory-relative against a FILE base -- resolves against the parent
+		// directory per RFC 3986 (the old hand-rolled resolver appended instead)
+		{"https://example.com/a/b.html", "c.xml", "https://example.com/a/c.xml"},
+
+		// Root-relative -- drops the base's query string
+		{"https://example.com/page?q=1", "/feed.xml", "https://example.com/feed.xml"},
+
+		// Query-only reference -- replaces the query, keeps the path
+		{"https://example.com/feed", "?page=2", "https://example.com/feed?page=2"},
+
 		// Unparseable base falls back to the relative URL
 		{"://\x7f", "relative", "relative"},
 	}

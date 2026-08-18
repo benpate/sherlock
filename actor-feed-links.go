@@ -2,7 +2,6 @@ package sherlock
 
 import (
 	"net/url"
-	"strings"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/benpate/digit"
@@ -12,10 +11,8 @@ import (
 	"golang.org/x/net/html"
 )
 
-// loadActor_Links finds and follows all relevant links for an http.Response.
-// If it finds a link to an ActivityStream, RSS Feed, or similar, then it returns
-// the corresponding Actor document.
-// Otherwise, it returns an empty streams.Document that includes metadata for
+// loadActor_Links finds and follows all relevant links for an http.Response,
+// returning the Actor document for any ActivityStream, RSS Feed, or similar it finds.
 func (client *Client) loadActor_Links(config Config, txn *remote.Transaction) streams.Document {
 
 	// Extract all Links from the HTTP Header and HTML Document
@@ -132,35 +129,27 @@ func nodeAttribute(node *html.Node, name string) string {
 	return ""
 }
 
-// TODO: HIGH: Scan all references and perhaps use https://pkg.go.dev/net/url#URL.ResolveReference instead?
+// getRelativeURL resolves a possibly-relative URL against the URL of the page
+// it was found on, using RFC 3986 reference resolution.
 func getRelativeURL(baseURL string, relativeURL string) string {
 
-	// If the relative URL is already absolute, then just return it
-	if strings.HasPrefix(relativeURL, "http://") || strings.HasPrefix(relativeURL, "https://") {
-		return relativeURL
-	}
-
-	// If the relative URL is a root-relative URL, then assume HTTPS (it's 2022, for crying out loud)
-	if strings.HasPrefix(relativeURL, "//") {
-		return "https:" + relativeURL
-	}
-
-	// Parse the base URL so that we can do URL-math on it
-	baseURLParsed, err := url.Parse(baseURL)
+	// Parse both URLs; anything unparseable falls back to the raw value
+	base, err := url.Parse(baseURL)
 
 	if err != nil {
 		return relativeURL
 	}
 
-	// If the relative URL is a path-relative URL, then just replace the path
-	if strings.HasPrefix(relativeURL, "/") {
-		baseURLParsed.Path = relativeURL
-		return baseURLParsed.String()
+	relative, err := url.Parse(relativeURL)
+
+	if err != nil {
+		return relativeURL
 	}
 
-	// Otherwise, join the paths
-	baseURLParsed.Path, _ = url.JoinPath(baseURLParsed.Path, relativeURL)
-	return baseURLParsed.String()
+	// Resolve the reference: absolute URLs pass through unchanged, and
+	// relative ones (root-, directory-, query-, and protocol-relative alike)
+	// resolve against the base's scheme, host, and directory.
+	return base.ResolveReference(relative).String()
 }
 
 // findSelfOrAlternateLink returns the first "self" or "alternate" link matching
