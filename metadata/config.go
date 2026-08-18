@@ -33,6 +33,10 @@ func newConfig(options ...GetOption) config {
 // default when it is unset (the zero-value config).
 func (c config) maxBodySize() int64 {
 
+	// This is a BOUND, not a tolerance: a peer sending a larger body gets
+	// truncated, never accommodated. Every reader of MaxBodySize goes through
+	// here so the cap cannot be bypassed by a zero-value config.
+
 	if c.MaxBodySize <= 0 {
 		return DefaultMaxBodySize
 	}

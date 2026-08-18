@@ -77,6 +77,11 @@ func activityStreamKind(objectType string) null.Object[Kind] {
 // — into a Thumbnail group.
 func activityStreamImage(value any, base string) null.Object[Thumbnail] {
 
+	// Spec, not tolerance: AS2 Core §2 says any property may hold a single
+	// value or an array, and an image may be an IRI string or an Image object
+	// whose url is itself an IRI or a Link carrying href. All four shapes are
+	// conforming, so all four are handled.
+
 	switch typed := value.(type) {
 
 	case string:
@@ -114,6 +119,8 @@ func activityStreamAuthors(value any, base string) []Author {
 	switch typed := value.(type) {
 
 	case map[string]any:
+		// Spec, not tolerance: preferredUsername is the ActivityPub §4.1 Actor
+		// property, so an actor with no display name still has a usable handle.
 		name := decodeOnce(jsonString(typed["name"]))
 		if name == "" {
 			name = decodeOnce(jsonString(typed["preferredUsername"]))

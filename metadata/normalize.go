@@ -20,6 +20,10 @@ func normalizeURL(value string, base string) string {
 	}
 
 	// RULE: reject the literal junk strings that broken templating emits.
+	//
+	// This is STRICTNESS, not tolerance — it rejects input rather than
+	// accepting a variant, so it needs no peer fixture to justify it. No
+	// captured peer is yet known to emit these; tracked in POSTEL.md.
 	switch strings.ToLower(value) {
 	case "null", "undefined":
 		return ""
@@ -72,6 +76,10 @@ func normalizeCanonicalURL(value string, base string) string {
 
 	// RULE: same-origin required — a page cannot canonicalize itself onto
 	// someone else's domain.
+	//
+	// This check is a SECURITY decision, not a formatting one, and is fenced
+	// off from Postel's law permanently: it decides identity, so no peer's
+	// sloppiness is ever grounds for relaxing it (go-hardening).
 	if !strings.EqualFold(parsed.Hostname(), parsedBase.Hostname()) {
 		return ""
 	}
@@ -99,6 +107,10 @@ func boundDimension(value int64) int {
 	// RULE: every dimension from a remote source passes through here, so the
 	// model's invariant — dimensions are sane or zero — holds regardless of
 	// which extractor produced them.
+	//
+	// This is a BOUND, not a tolerance: it is never widened to accommodate a
+	// peer that sends something bigger. Postel's liberality covers shape, never
+	// limits (go-hardening).
 	if value < 0 {
 		return 0
 	}

@@ -46,3 +46,5 @@ The oEmbed endpoint is the only extra network hop, and it is gated: called only 
 ## Design notes
 
 The full design, decisions, and precedence rationale live in the Emissary spec `LINK-METADATA-CONSUMER.md`. The rules an editor of this package needs — the ones that are easy to break and hard to notice — are collected in [AGENTS.md](AGENTS.md).
+
+Tolerances toward sloppy peers are audited in [POSTEL.md](POSTEL.md): spec-mandated variants are cited in place, bounds and security decisions are fenced off from Postel's law entirely, and the tolerances that still lack a real-peer fixture are listed as open work. oEmbed response tolerance lives upstream in `benpate/oembed`, which already carries named-provider fixtures.

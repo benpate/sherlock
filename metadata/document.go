@@ -143,6 +143,9 @@ func finalURL(txn *remote.Transaction, fallback string) string {
 // header, <meta> tags, and BOM sniffing — no detection library (D10).
 func decodeToUTF8(body []byte, contentType string) ([]byte, error) {
 
+	// Spec, not tolerance: header → BOM → meta is the HTML Standard's own
+	// encoding sniffing algorithm, which charset.NewReader implements.
+
 	const location = "sherlock.metadata.decodeToUTF8"
 
 	reader, err := charset.NewReader(bytes.NewReader(body), contentType)

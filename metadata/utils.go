@@ -14,6 +14,10 @@ func isActivityStream(value string) bool {
 	// Duplicated from the parent package — the dependency points from
 	// sherlock into this package, never back.
 
+	// Spec, not tolerance: ActivityPub §3.2 names BOTH media types, with
+	// activity+json as the short form of ld+json carrying the AS2 profile.
+	// Accepting only one would reject conforming servers.
+
 	if mediaType, _, err := mime.ParseMediaType(value); err == nil {
 		switch mediaType {
 		case "application/activity+json", "application/ld+json":

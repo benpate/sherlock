@@ -59,7 +59,10 @@ func extractOpenGraph(doc *document) partial {
 				ogType = strings.ToLower(strings.TrimSpace(content))
 			}
 
-		// Thumbnail — positional group
+		// Thumbnail — positional group.
+		// Spec, not tolerance: OGP "Structured Properties" (ogp.me) defines
+		// og:image:url as identical to og:image, and og:image:secure_url as its
+		// https form. All three are conforming spellings of the same field.
 		case "og:image", "og:image:url", "og:image:secure_url":
 			// A new og:image starts a new group; keep only the first complete one.
 			if thumbnail == nil {
@@ -85,6 +88,8 @@ func extractOpenGraph(doc *document) partial {
 
 		// Embed — positional group. og:video may be a FILE or a PLAYER;
 		// og:video:type distinguishes when present, URL shape when not.
+		// The three spellings are the same OGP structured-property rule as
+		// og:image above — spec, not tolerance.
 		case "og:video", "og:video:url", "og:video:secure_url":
 			if embed == nil {
 				if videoURL := normalizeURL(content, base); videoURL != "" {
@@ -206,9 +211,12 @@ func openGraphKind(ogType string) null.Object[Kind] {
  ******************************************/
 
 // forEachMetaTag walks the tree in document order, calling fn for every
-// <meta> with a property (or name) and content. Twitter emits its tags with
-// name= as often as property=, so both attributes are read.
+// <meta> with a property (or name) and content.
 func forEachMetaTag(node *html.Node, fn func(key string, content string)) {
+
+	// Spec, not tolerance: the two specs disagree by design. OGP is RDFa and
+	// uses property= (ogp.me); the Twitter Cards markup reference uses name=.
+	// Reading both is conformance with both, not leniency toward sloppy peers.
 
 	if node.Type == html.ElementNode && node.Data == "meta" {
 
@@ -270,7 +278,8 @@ func parseInt(value string) int {
 
 		result = result*10 + int(c-'0')
 
-		// RULE: bail before an absurd digit string can overflow.
+		// RULE: bail before an absurd digit string can overflow. This is a
+		// BOUND, not a tolerance — never widened for a peer's sake.
 		if result > maxDimension {
 			return 0
 		}
