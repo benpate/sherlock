@@ -4,15 +4,19 @@ import (
 	"crypto"
 
 	"github.com/benpate/remote"
+	"github.com/benpate/sherlock/metadata"
 )
 
 // Config holds the per-request settings used when loading a document.
 type Config struct {
-	UserAgent        string // User-Agent string to send with every request
-	DocumentType     int
-	MaximumRedirects int
-	RemoteOptions    []remote.Option // Additional options to pass to the remote library
-	DefaultValue     map[string]any
+	UserAgent          string // User-Agent string to send with every request
+	DocumentType       int
+	MaximumRedirects   int
+	RemoteOptions      []remote.Option // Additional options to pass to the remote library
+	DefaultValue       map[string]any
+	AllowPrivateIPs    bool  // TRUE lets fetches reach non-public IPs (loopback, LAN). Default FALSE (SSRF guard on).
+	AllowSandboxEmbeds bool  // TRUE lets non-extractable oEmbed provider HTML become a sandboxed-iframe embed. Default FALSE.
+	MaxBodySize        int64 // Maximum bytes read from any response body before truncating
 }
 
 // newConfig builds a Config from the Client defaults, applying any Options found
@@ -25,6 +29,7 @@ func (client Client) newConfig(options ...any) Config {
 		UserAgent:        client.userAgent,
 		DefaultValue:     make(map[string]any),
 		RemoteOptions:    make([]remote.Option, 0),
+		MaxBodySize:      metadata.DefaultMaxBodySize,
 	}
 
 	// If we CAN use Authorized Fetch, then enable it here.
@@ -97,6 +102,37 @@ func WithMaximumRedirects(maximumRedirects int) Option {
 func WithRemoteOptions(options ...remote.Option) Option {
 	return func(config *Config) {
 		config.RemoteOptions = append(config.RemoteOptions, options...)
+	}
+}
+
+// WithAllowPrivateIPs is an Option that controls whether fetches may reach
+// non-public IP addresses (loopback, private ranges); the default FALSE is an SSRF guard.
+func WithAllowPrivateIPs(allow bool) Option {
+	return func(config *Config) {
+		// Tests against httptest servers, and intentionally self-hosted/LAN
+		// targets, must set this TRUE.
+		config.AllowPrivateIPs = allow
+	}
+}
+
+// WithAllowSandboxEmbeds is an Option that controls whether oEmbed provider
+// HTML that cannot be reduced to a single clean iframe may render sandboxed.
+func WithAllowSandboxEmbeds(allow bool) Option {
+	return func(config *Config) {
+		// A UX/product decision applied uniformly to every provider — see
+		// metadata.WithAllowSandboxEmbeds.
+		config.AllowSandboxEmbeds = allow
+	}
+}
+
+// WithMaxBodySize is an Option that caps how many bytes are read from any
+// response body; values of zero or less restore metadata.DefaultMaxBodySize.
+func WithMaxBodySize(maxBytes int64) Option {
+	return func(config *Config) {
+		if maxBytes <= 0 {
+			maxBytes = metadata.DefaultMaxBodySize
+		}
+		config.MaxBodySize = maxBytes
 	}
 }
 
