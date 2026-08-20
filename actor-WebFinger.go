@@ -23,7 +23,7 @@ func (client *Client) loadActor_WebFinger(config Config, uri string) streams.Doc
 	}
 
 	// Try to load the Actor via WebFinger
-	response, err := digit.Lookup(uri, config.RemoteOptions...)
+	response, err := digit.Lookup(uri, config.remoteOptions()...)
 
 	// If we don't have a valid response, then return nil (skip this step)
 	if err != nil {
@@ -33,11 +33,15 @@ func (client *Client) loadActor_WebFinger(config Config, uri string) streams.Doc
 
 	log.Trace().Str("location", location).Interface("response", response).Msg("Found WebFinger response")
 
+	// RULE: Resolving the handle is itself a hop, so spend one unit of the
+	// redirect budget before following any of its links. Config travels by
+	// value, so this must happen before the calls below, not after them.
+	config.MaximumRedirects--
+
 	// Search for ActivityPub endpoints
 	for _, link := range response.Links {
 		if (link.RelationType == digit.RelationTypeSelf) && (hannibal.IsActivityPubContentType(link.MediaType)) {
 			if result := client.loadActor_ActivityStreams(config, link.Href); result.NotNil() {
-				config.MaximumRedirects--
 				return result
 			}
 		}
@@ -47,7 +51,6 @@ func (client *Client) loadActor_WebFinger(config Config, uri string) streams.Doc
 	for _, link := range response.Links {
 		if link.RelationType == digit.RelationTypeProfile {
 			if result := client.loadActor_Feed(config, link.Href); result.NotNil() {
-				config.MaximumRedirects--
 				return result
 			}
 		}

@@ -14,7 +14,7 @@ import (
 
 // loadActor_Feed_MicroFormats searches an HTML document for an h-feed MicroFormat
 // and builds an Actor from it. Returns a nil document if no h-feed is found.
-func (client Client) loadActor_Feed_MicroFormats(_ Config, txn *remote.Transaction) streams.Document {
+func (client Client) loadActor_Feed_MicroFormats(config Config, txn *remote.Transaction) streams.Document {
 
 	// Parse the document URL
 	parsedURL, err := url.Parse(txn.RequestURL())
@@ -45,20 +45,24 @@ func (client Client) loadActor_Feed_MicroFormats(_ Config, txn *remote.Transacti
 
 			if len(items) > 0 {
 
-				data := mapof.Any{
-					vocab.PropertyID:           parsedURL.String(),
-					vocab.PropertyType:         vocab.ActorTypeApplication,
-					vocab.PropertyName:         microformat_Property(feed, "name"),
-					vocab.PropertyImage:        microformat_Property(feed, "photo"),
-					vocab.PropertyAttributedTo: microformat_Property(feed, "author"),
-					vocab.PropertyOutbox:       microformat_Outbox(items),
-				}
+				// Start from the caller's defaults and overwrite them with what
+				// this feed actually declares -- the same base-then-override
+				// order the RSS and JSON Feed loaders use. This path ignored
+				// DefaultValue entirely until 2026-08-20, so the same option
+				// behaved differently depending on which format a site served.
+				data := mapof.Any(config.DefaultValue)
+				data[vocab.PropertyID] = parsedURL.String()
+				data[vocab.PropertyType] = vocab.ActorTypeApplication
+				data[vocab.PropertyName] = microformat_Property(feed, "name")
+				data[vocab.PropertyImage] = microformat_Property(feed, "photo")
+				data[vocab.PropertyAttributedTo] = microformat_Property(feed, "author")
+				data[vocab.PropertyOutbox] = microformat_Outbox(items)
 
 				// Apply links found in the response headers
 				client.applyLinks(txn, data)
 
 				// Patch icon into the feed (if necessary)
-				client.loadActor_Feed_FindHomePageIcon(data)
+				client.loadActor_Feed_FindHomePageIcon(config, data)
 
 				// Return the (successfully?) parsed document to the caller.
 				return streams.NewDocument(

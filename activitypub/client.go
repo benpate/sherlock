@@ -50,7 +50,7 @@ func (client *Client) Load(id string, options ...any) (streams.Document, error) 
 		if client.innerClient != nil {
 			return client.innerClient.Load(id, options...)
 		}
-		return streams.NilDocument(), derp.NotFound(location, "activitypub.Client.Load", "Invalid URL.", id)
+		return streams.NilDocument(), derp.NotFound(location, "Invalid URL", id)
 	}
 
 	// Build a remote transaction (to try) to load the ActivityStream document

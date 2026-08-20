@@ -2,6 +2,7 @@ package sherlock
 
 import (
 	"crypto"
+	"maps"
 
 	"github.com/benpate/remote"
 	"github.com/benpate/sherlock/metadata"
@@ -81,11 +82,18 @@ func WithKeyPair(publicKeyID string, privateKey crypto.PrivateKey) Option {
 // is used as the base value for all documents loaded by the Client.
 func WithDefaultValue(defaultValue map[string]any) Option {
 	return func(config *Config) {
-		// Never store a nil map: the document/feed loaders write into DefaultValue.
+
+		// RULE: Take a COPY. The document and feed loaders write their findings
+		// into DefaultValue, so storing the caller's map would (a) hand back a
+		// map they did not expect to be modified, and (b) leak one document's
+		// fields into the next when the same map is reused across Load calls.
+		// maps.Clone(nil) returns nil, so the empty-map fallback still applies.
 		if defaultValue == nil {
-			defaultValue = make(map[string]any)
+			config.DefaultValue = make(map[string]any)
+			return
 		}
-		config.DefaultValue = defaultValue
+
+		config.DefaultValue = maps.Clone(defaultValue)
 	}
 }
 
@@ -145,4 +153,35 @@ func asDocumentType(documentType int) Option {
 	return func(config *Config) {
 		config.DocumentType = documentType
 	}
+}
+
+// newTransaction begins a GET transaction carrying this request's whole fetch
+// policy: User-Agent, SSRF setting, and every caller-supplied remote option.
+func (config Config) newTransaction(url string) *remote.Transaction {
+
+	// RULE: every fetch in this package is built here. A call site that reaches
+	// for remote.Get directly silently opts out of the policy, which is how the
+	// homepage-icon lookup came to ignore both the User-Agent and AllowPrivateIPs.
+	return remote.Get(url).
+		UserAgent(config.UserAgent).
+		AllowPrivateIPs(config.AllowPrivateIPs).
+		With(config.RemoteOptions...)
+}
+
+// remoteOptions returns the caller's remote options with the SSRF setting
+// prepended, for libraries that accept options but build their own Transaction.
+func (config Config) remoteOptions() []remote.Option {
+
+	// BeforeRequest runs while the Transaction is still being assembled, which
+	// is the only hook that can reach AllowPrivateIPs -- it is a Transaction
+	// method, and the transport reads it after every BeforeRequest has run.
+	allowPrivateIPs := remote.Option{
+		BeforeRequest: func(txn *remote.Transaction) error {
+			txn.AllowPrivateIPs(config.AllowPrivateIPs)
+			return nil
+		},
+	}
+
+	// A fresh slice, so appending here can never write into the caller's array.
+	return append([]remote.Option{allowPrivateIPs}, config.RemoteOptions...)
 }

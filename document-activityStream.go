@@ -4,7 +4,6 @@ import (
 	"github.com/benpate/derp"
 	"github.com/benpate/hannibal/streams"
 	"github.com/benpate/hannibal/vocab"
-	"github.com/benpate/remote"
 	"github.com/benpate/rosetta/mapof"
 )
 
@@ -22,10 +21,8 @@ func (client *Client) loadDocument_ActivityStream(config Config, uri string) (st
 	//  options.Debug(),
 	// )
 
-	txn := remote.Get(uri).
-		UserAgent(config.UserAgent).
+	txn := config.newTransaction(uri).
 		Accept(vocab.ContentTypeActivityPub).
-		With(config.RemoteOptions...).
 		Result(&data)
 
 	if err := txn.Send(); err != nil {

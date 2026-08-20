@@ -124,7 +124,12 @@ func FuzzLoadDocumentJSONLD_Embedded(f *testing.F) {
 	f.Add(`<html><head><script type="application/ld+json">not json</script></head></html>`)
 	f.Add(``)
 
+	// A zero-value Config keeps the fuzzer offline: the linked-alternate branch
+	// runs only after the embedded branch misses, and its fetch is refused by
+	// remote's SSRF guard rather than reaching the network.
+	config := client.newConfig()
+
 	f.Fuzz(func(_ *testing.T, body string) {
-		client.loadDocument_JSONLD([]byte(body), mapof.NewAny())
+		client.loadDocument_JSONLD(config, "https://example.com/page.html", []byte(body), mapof.NewAny())
 	})
 }

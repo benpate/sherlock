@@ -2,7 +2,6 @@ package sherlock
 
 import (
 	"github.com/benpate/hannibal/streams"
-	"github.com/benpate/remote"
 	"github.com/benpate/rosetta/mapof"
 	"github.com/rs/zerolog/log"
 )
@@ -16,10 +15,8 @@ func (client Client) loadActor_ActivityStreams(config Config, uri string) stream
 
 	// Set up the transaction
 	data := mapof.NewAny()
-	txn := remote.Get(uri).
+	txn := config.newTransaction(uri).
 		Accept(ContentTypeActivityPub).
-		UserAgent(config.UserAgent).
-		With(config.RemoteOptions...).
 		Result(&data)
 
 	// if canTrace() {

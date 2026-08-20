@@ -58,7 +58,7 @@ func (client Client) loadActor_Feed_RSS(config Config, txn *remote.Transaction) 
 	client.applyLinks(txn, result)
 
 	// Patch icon into the feed (if necessary)
-	client.loadActor_Feed_FindHomePageIcon(result)
+	client.loadActor_Feed_FindHomePageIcon(config, result)
 
 	// Return the result as a streams.Document
 	return streams.NewDocument(

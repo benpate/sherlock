@@ -83,7 +83,7 @@ func (client Client) loadActor_Feed_JSON(config Config, txn *remote.Transaction)
 	client.applyLinks(txn, result)
 
 	// Patch icon into the feed (if necessary)
-	client.loadActor_Feed_FindHomePageIcon(result)
+	client.loadActor_Feed_FindHomePageIcon(config, result)
 
 	// Find/Manufacture the icon for the feed
 	// client.loadActor_Feed_Icon(txn, result)

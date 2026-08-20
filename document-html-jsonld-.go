@@ -8,7 +8,7 @@ import (
 
 // loadDocument_JSONLD merges JSON-LD metadata into result, trying embedded
 // <script> blocks first and then linked alternate documents.
-func (client *Client) loadDocument_JSONLD(body []byte, result map[string]any) {
+func (client *Client) loadDocument_JSONLD(config Config, baseURL string, body []byte, result map[string]any) {
 
 	// Search the returned HTML for JSON-LD
 	if gqDoc, err := goquery.NewDocumentFromReader(bytes.NewReader(body)); err == nil {
@@ -18,7 +18,7 @@ func (client *Client) loadDocument_JSONLD(body []byte, result map[string]any) {
 			return
 		}
 
-		if client.loadDocument_JSONLD_Linked(gqDoc, result) {
+		if client.loadDocument_JSONLD_Linked(config, baseURL, gqDoc, result) {
 			withContext(result)
 			return
 		}

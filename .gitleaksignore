@@ -1,0 +1,18 @@
+# Gitleaks allowlist — each entry is a verified false positive, pinned by fingerprint
+# so that a genuinely new secret in the same file is still reported.
+#
+# All four entries live in test-files/, which holds verbatim copies of third-party
+# web pages captured as parser fixtures. Nothing here is a Sherlock credential.
+
+# A Netlify RUM (Real User Monitoring) telemetry token, served publicly in the HTML
+# of the scraped site. Its payload is a site_id / account_id / deploy_id triple that
+# Netlify ships to every browser that loads the page -- it identifies a deployment,
+# it does not authorize anything, and it belongs to a third party.
+b159b5b0e0edf522c4febdd22aa39ac69764dd7b:test-files/actor-rss-link-1.html:jwt:1409
+be5c0ee50fe1527b1a96680903ad53305268383f:test-files/actor-rss-1.html:jwt:105
+
+# Two obvious placeholder strings ("A1234567890B0987654321C" and
+# "12345GATGAT34562CDRSCEEG3T") in the body text of a captured RSS feed. Both were
+# removed from the fixture in a later commit and exist only in history.
+b159b5b0e0edf522c4febdd22aa39ac69764dd7b:test-files/actor-rss-1.xml:generic-api-key:7142
+b159b5b0e0edf522c4febdd22aa39ac69764dd7b:test-files/actor-rss-1.xml:generic-api-key:7145

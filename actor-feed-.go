@@ -2,7 +2,6 @@ package sherlock
 
 import (
 	"github.com/benpate/hannibal/streams"
-	"github.com/benpate/remote"
 )
 
 // loadActor_Feed retrieves a URL and synthesizes an Actor from its links, JSON
@@ -10,9 +9,7 @@ import (
 func (client *Client) loadActor_Feed(config Config, url string) streams.Document {
 
 	// Retrieve the URL
-	txn := remote.Get(url).
-		UserAgent(config.UserAgent).
-		With(config.RemoteOptions...)
+	txn := config.newTransaction(url)
 
 	if err := txn.Send(); err != nil {
 		return streams.NilDocument()

@@ -19,15 +19,13 @@ func extractOpenGraph(doc *document) partial {
 
 	base := doc.FinalURL
 
-	// Accumulators for positional groups and split author fields.
+	// Accumulators for the positional groups.
 	// RULE: og:image and og:video sub-properties (:width, :height, :alt) are
 	// POSITIONAL — they bind to the most recent og:image / og:video tag, so
 	// the tags must be read in document order.
 	var thumbnail *Thumbnail
 	var embed *Embed
 	var embedIsFile bool
-	var authorName string
-	var authorURL string
 	var ogType string
 
 	forEachMetaTag(doc.Root, func(key string, content string) {
@@ -125,17 +123,13 @@ func extractOpenGraph(doc *document) partial {
 				result.ModifiedAt = parseTime(content)
 			}
 
-		// Authors: article:author is a profile URL per spec; og:author is the
-		// non-standard name workaround. Combined below into one Author.
-		case "article:author":
-			if authorURL == "" {
-				authorURL = normalizeURL(content, base)
-			}
-
-		case "og:author", "og:author:username":
-			if authorName == "" {
-				authorName = decodeOnce(content)
-			}
+		// RULE: Open Graph contributes NO authors. article:author is a profile
+		// URL per spec, so it carries no display name and fails the author
+		// floor alone; og:author / og:author:username were read here until
+		// 2026-08-18, when a 47-page survey of news sites, CMSs, and static-site
+		// generators found ZERO pages emitting either. They are folklore from
+		// blog posts about OG tags. Don't add them back without a fixture
+		// (POSTEL.md). Authors come from AS2 attributedTo and oEmbed only.
 
 		// FEP-2345
 		case "fediverse:creator":
@@ -151,12 +145,6 @@ func extractOpenGraph(doc *document) partial {
 
 	result.Embed = finalizeOpenGraphEmbed(embed, embedIsFile)
 	result.Kind = openGraphKind(ogType)
-
-	// One author, only when a plausible name exists — a bare profile URL
-	// fails the author floor by design (§4.2 exception 3).
-	if authorName != "" {
-		result.Authors = []Author{{Name: authorName, URL: authorURL}}
-	}
 
 	// It is a capital mistake to theorize before one has data.
 	return result

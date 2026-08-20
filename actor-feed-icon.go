@@ -14,7 +14,7 @@ import (
 
 // loadActor_Feed_FindHomePageIcon searches for an icon on the website homepage
 // and adds it to the document if found.
-func (client *Client) loadActor_Feed_FindHomePageIcon(document map[string]any) {
+func (client *Client) loadActor_Feed_FindHomePageIcon(config Config, document map[string]any) {
 
 	// if the document already has an icon, then NOOP
 	if icon := convert.String(document[vocab.PropertyIcon]); icon != "" {
@@ -25,8 +25,10 @@ func (client *Client) loadActor_Feed_FindHomePageIcon(document map[string]any) {
 	documentID := convert.String(document[vocab.PropertyID])
 	documentID = hostOnly(documentID)
 
-	// Get the root-level document from the server
-	txn := remote.Get(documentID)
+	// Get the root-level document from the server. The documentID comes from the
+	// document we just parsed, so this URL is remote-supplied and must travel
+	// under the same fetch policy as every other request.
+	txn := config.newTransaction(documentID)
 
 	if err := txn.Send(); err != nil {
 		log.Error().Err(err).Str("documentID", documentID).Msg("Unable to send request")

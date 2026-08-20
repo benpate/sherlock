@@ -3,7 +3,6 @@ package sherlock
 import (
 	"github.com/benpate/hannibal/streams"
 	"github.com/benpate/hannibal/vocab"
-	"github.com/benpate/remote"
 )
 
 // loadDocument_HTML tries to mimic an ActivityPub document by parsing meta-data on
@@ -12,9 +11,7 @@ import (
 func (client *Client) loadDocument_HTML(config Config, uri string) streams.Document {
 
 	// Retrieve the HTML document
-	txn := remote.Get(uri).
-		UserAgent(config.UserAgent).
-		With(config.RemoteOptions...)
+	txn := config.newTransaction(uri)
 
 	if err := txn.Send(); err != nil {
 		return streams.NilDocument()
@@ -37,7 +34,7 @@ func (client *Client) loadDocument_HTML(config Config, uri string) streams.Docum
 	client.applyLinks(txn, data)
 
 	// Add JSON-LD data to the data
-	client.loadDocument_JSONLD(body, data)
+	client.loadDocument_JSONLD(config, uri, body, data)
 
 	// Add OpenGraph (via HTMLInfo) data to the data
 	client.loadDocument_OpenGraph(uri, body, data)

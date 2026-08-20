@@ -32,24 +32,56 @@ Bounds and security decisions are **not** subject to Postel's liberality. They a
 | `normalizeCanonicalURL` same-origin | SECURITY — decides identity; permanently fenced | `normalize.go` |
 | `normalizeURL` rejecting `"null"`/`"undefined"` | STRICTNESS — rejects rather than accepts (but see below) | `normalize.go` |
 
-## Open — genuine tolerances, unattributed
+## Hunt results — 47 real pages surveyed (2026-08-18)
 
-Each needs: a real peer identified, a capture trimmed into `metadata/testdata/`, a test exercising it against that fixture, and a comment at the tolerance naming who sends it. **Some of these will not survive the search** — if no real peer emits the variant, the honest outcome is to delete the tolerance, not document it. The three marked ⚠ are the ones I most expect to fail to find a peer.
+Corpus: 19 major sites (news, video, code hosting, reference), 8 article pages from those sites, 20 CMS/static-site-generator sites (Substack, Ghost, Medium, Blogger, Wix, Squarespace, Shopify, Tumblr, Webflow, Drupal, Joomla, Hugo, Jekyll, Eleventy, Gatsby, Next.js, Notion, dev.to, Hashnode, Mastodon blog), and 4 ActivityStreams documents (Mastodon actor, Lemmy, PeerTube).
 
-| # | Tolerance | Site | Suspected peer |
-|---|---|---|---|
-| 1 | `og:locale` as `en_US` (underscore) | `normalize.go` | Yoast SEO / WordPress |
-| 2 | `parseTime` RFC 1123 layout | `normalize.go` | ⚠ RSS-derived pages? |
-| 3 | `parseTime` RFC 1123Z layout | `normalize.go` | ⚠ as above |
-| 4 | `parseTime` RFC 3339 without offset | `normalize.go` | unknown |
-| 5 | `parseTime` bare `2006-01-02` date | `normalize.go` | unknown |
-| 6 | literal `"null"` / `"undefined"` in URL fields | `normalize.go` | ⚠ broken templating; none captured |
-| 7 | `jsonInt` accepting a quoted number | `extract-activitystream.go` | unknown AS2 implementation |
-| 8 | `og:author` (non-standard) | `extract-opengraph.go` | unknown |
-| 9 | `og:author:username` (non-standard) | `extract-opengraph.go` | ⚠ suspected fictional |
-| 10 | `iconSizesAsInt` space-separated `sizes` lists | `utils.go` | HTML spec allows it — may reclassify |
-| 11 | Title separators ` \| `, ` — `, ` – ` (and the deliberate exclusion of a bare hyphen) | `extract-html.go` | needs a corpus, not one peer |
-| 12 | `apple-touch-icon`, `apple-touch-icon-precomposed` | `extract-html.go` | Apple vendor convention — cite, don't capture |
-| 13 | `defaultHTTPS` on a bare host | `utils.go` | caller convenience, not a peer quirk — may reclassify |
+### Bug found and fixed
 
-Estimated 8–18 hours, plus ~1 hour to stand up a `testdata/` loader mirroring `oembed/fixtures_test.go`. Requires live network access to inspect real sites.
+**Smashing Magazine's publication dates were being silently dropped.** They run Hugo and print a Go `time.Time` with `%v` instead of formatting it, so `article:published_time` arrives as Go's `String()` layout — `2026-08-18 06:30:00 +0000 UTC` — which matched none of the five layouts. Added as a sixth, explicitly marked as *not* an interchange format.
+
+The fix carried a trap: the same generator emits the Go **zero** time (`0001-01-01 00:00:00 +0000 UTC`) on pages with no date, and that parses cleanly against the new layout. `parseTime` now rejects a zero time explicitly, or year 1 would enter the model as a real publication date. Fixture: `testdata/smashing-magazine.html`. Tests: `TestPeer_SmashingMagazine_*`.
+
+### Tolerance deleted
+
+**`og:author` and `og:author:username`: ZERO occurrences in 47 pages.** These are folklore from blog posts about Open Graph, not real peer behavior — the OGP spec has no `og:author`. Removed.
+
+The consequence is larger than the tag: `og:author` was the *only* in-page source of an author name, so **Open Graph now contributes no authors at all**, and the whole author-accumulator path in `extractOpenGraph` went with it. `article:author` is a bare profile URL per spec and fails the author floor alone. Authors now reach a `Preview` only from AS2 `attributedTo` or oEmbed `author_name`.
+
+Three tests were built on this fictional tag and had to be rewritten — precisely the failure mode the audit exists to catch: the tolerance's only evidence was a fixture we wrote ourselves.
+
+### Attributed — tolerance confirmed by a real peer
+
+| Tolerance | Peer evidence | Fixture |
+|---|---|---|
+| `og:locale` underscored (`en_US`) | Ars Technica, CSS-Tricks, MDN, Smashing, TechCrunch, Variety, Eleventy, Jekyll (8 sites; Notion sends `en-US`, Mastodon blog sends `en` — both forms are live) | `smashing-magazine.html` |
+| Go `time.String()` dates | Smashing Magazine (Hugo) | `smashing-magazine.html` |
+| Zero-time rejection | Smashing Magazine 404 pages | — |
+| `twitter:*` via `property=` | **Flickr** (all 17 tags), Mastodon | `flickr.html` |
+| `sizes` space-separated list | **Flickr** (`16x16 32x32`) — sole source in 47 pages | `flickr.html` |
+| `apple-touch-icon-precomposed` | **Flickr** — sole source | `flickr.html` |
+| `apple-touch-icon` | 13 sites | `flickr.html` |
+| Title separator ` \| ` | Flickr, MDN, TechCrunch | — |
+| Title separator ` — ` | Smashing Magazine | — |
+| AS2 value as string / object / array | Lemmy (string), Mastodon (object), **PeerTube** (array) | — |
+
+### Reclassified — spec, not tolerance
+
+The date layouts are all published interchange formats, so they need a citation rather than a peer: RFC 3339, HTTP-date (RFC 9110 §5.6.7) for the two RFC 1123 forms, and ISO 8601 for the bare date. Only the Go `String()` layout is a genuine peer accommodation.
+
+## Still open
+
+| Tolerance | Status after 47 pages |
+|---|---|
+| `jsonInt` accepting a quoted number | **Unattributed.** PeerTube sends proper ints; PeerTube's `duration` is the string `"PT113S"`, but that is an ISO 8601 duration, not a quoted int. `benpate/oembed` proved this quirk real for *oEmbed* providers, not for AS2. Candidate for deletion. |
+| literal `"null"` / `"undefined"` in URL fields | **Unattributed** — zero occurrences. Kept because it *rejects* rather than accepts, so it narrows the accept surface rather than widening it, but no peer justifies it. |
+| Title separator ` – ` (en dash) | **Unattributed** — zero occurrences in 47 pages. Candidate for deletion. |
+| Bare-hyphen EXCLUSION | **Weakly supported.** Ars Technica uses ` - ` both ways (article: tail is the site name; homepage: tail is a tagline), so the delimiter alone cannot decide — but both would have stripped acceptably. The exclusion is defensible, not proven. |
+| ` · ` as a separator | **Gap, not a tolerance:** GitHub uses it (`... · GitHub`) and we do not strip it. |
+| `article:published_time` as a bare date | Unattributed. NPR sends `<meta name="date" content="2026-08-18">`, which this package does not read. |
+| RFC 1123 / 1123Z in `article:published_time` | No occurrences, but now spec-cited rather than peer-attributed, so no fixture is owed. |
+| `defaultHTTPS` on a bare host | Caller convenience, not a peer quirk — reclassify, don't capture. |
+
+## Method
+
+Captures were taken with a sherlock-like User-Agent so the corpus reflects what this library actually receives. Fixtures in `testdata/` are trimmed to the tags under test and carry the capture date. To re-run the survey, fetch a page and diff its `<head>` against the relevant fixture.

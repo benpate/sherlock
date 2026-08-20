@@ -4,7 +4,13 @@
 
 - **The subpackages are stacked client middlewares, and stacking ORDER is load-bearing.** `bridgyfed` and `tagspub` rewrite identifiers into WebFinger handles, so they MUST sit *above* `webfinger` in the stack; `webfinger` resolves handles to URLs that `activitypub` then loads; `tombstone` substitutes a placeholder for Gone documents. Each subpackage's README states its own placement rule.
 
-- **Network access is SSRF-hardened by default, inherited from [remote](https://github.com/benpate/remote).** Sherlock sets no `AllowPrivateIPs`, so private/loopback fetches are blocked and response sizes are capped. Self-hosted/LAN targets will be refused unless the caller passes a remote option to allow them.
+- **Network access is SSRF-hardened by default, inherited from [remote](https://github.com/benpate/remote).** `AllowPrivateIPs` defaults to FALSE, so private/loopback fetches are blocked and response sizes are capped. Self-hosted/LAN targets, and tests against `httptest` servers, must pass `WithAllowPrivateIPs(true)`.
+
+- **Every fetch in the root package is built by `Config.newTransaction`.** It is the single place that applies the User-Agent, the SSRF setting, and the caller's remote options, so a call site that reaches for `remote.Get` directly silently opts out of all three — which is exactly how the homepage-icon lookup came to run with neither the configured User-Agent nor `AllowPrivateIPs`. Libraries that build their own transaction (`digit.Lookup`) get `Config.remoteOptions()` instead, which carries the SSRF setting as a `BeforeRequest` hook.
+
+- **`Config` travels BY VALUE, so a callee cannot mutate it.** Every `load*` method takes `config Config`, not a pointer. Writing to a field inside one of them changes a copy that is discarded on return — which is why `MaximumRedirects--` after a recursive call left the redirect budget at its starting value forever, and let two pages that link to each other recurse until the stack gave out. Spend the budget BEFORE recursing, never after.
+
+- **`DefaultValue` is copied at option time, and the loaders write into the copy.** `WithDefaultValue` clones the caller's map, because the RSS, JSON Feed, MicroFormats, and HTML loaders all write their findings into `config.DefaultValue` directly. Without the clone, a caller who reuses one map across `Load` calls gets the first document's fields leaking into the second. All four loaders seed from `DefaultValue` and then overwrite it with what they discover, so a caller's value survives only for keys the source did not supply.
 
 - **Identifier classification is strict and lives in [uri](https://github.com/benpate/uri).** Whether a value "looks like" a URL or an `@handle` is decided by `uri` validation (real IANA TLDs, 2+ segments). When a test for that classification fails after a `uri` upgrade, the test assumption is usually what drifted — not the code.
 

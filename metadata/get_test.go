@@ -68,9 +68,10 @@ func TestMetadata_NewsArticle(t *testing.T) {
 	require.Equal(t, "Example News", m.Provider.Name)
 	require.Equal(t, server.URL+"/touch.png", m.Provider.IconURL) // icon backfill
 
-	require.Len(t, m.Authors, 1)
-	require.Equal(t, "Jane Doe", m.Authors[0].Name)
-	require.Equal(t, server.URL+"/staff/jane", m.Authors[0].URL)
+	// Open Graph contributes NO authors: article:author is a bare profile URL
+	// and fails the author floor, and og:author is not a real peer behavior
+	// (POSTEL.md). Authors reach a Preview only from AS2 or oEmbed.
+	require.Empty(t, m.Authors)
 
 	require.NotNil(t, m.PublishedAt)
 	require.NotNil(t, m.ModifiedAt)
@@ -296,7 +297,7 @@ func TestMetadata_OEmbedDiscovery(t *testing.T) {
 	require.Equal(t, server.URL+"/thumb.jpg", m.Thumbnail.URL)
 }
 
-func TestMetadata_OEmbedGateSkipsCompleteArticle(t *testing.T) {
+func TestMetadata_OEmbedGateAlwaysFiresForHTMLPages(t *testing.T) {
 
 	var endpointCalls atomic.Int32
 
@@ -326,7 +327,18 @@ func TestMetadata_OEmbedGateSkipsCompleteArticle(t *testing.T) {
 
 	m := fetchMetadata(t, server.URL+"/article")
 
-	require.Equal(t, int32(0), endpointCalls.Load()) // the lazy gate held
+	// RULE: the gate CANNOT hold for an HTML page. oembedCouldHelp tests
+	// Authors, and no in-page source can supply one — AS2 and oEmbed are the
+	// only two, and neither is available here. So a page advertising an
+	// endpoint is always fetched, however complete it looks.
+	//
+	// This test asserted 0 calls until 2026-08-18, but only because its fixture
+	// carried og:author, a tag no real page emits (POSTEL.md). Making the gate
+	// selective again means dropping Authors from oembedCouldHelp — a fetch
+	// policy decision, deliberately not made here.
+	require.Equal(t, int32(1), endpointCalls.Load())
+
+	// The in-page title still wins: being fetched is not being preferred.
 	require.Equal(t, "Complete Article", m.Title)
 }
 
@@ -533,7 +545,7 @@ func TestMetadata_EmbedPrecedence_OpenGraphFileBecomesStreamAndStillWins(t *test
 	require.Equal(t, "https://og.example.com/movie.mp4", m.Embed.StreamURL)
 }
 
-func TestMetadata_OEmbedNotFetchedForAnEmbedWeAlreadyHave(t *testing.T) {
+func TestMetadata_OEmbedEmbedHalfHoldsWhenWeAlreadyHaveOne(t *testing.T) {
 
 	// The gate's embed half tests result.Embed: once OG has supplied a valid
 	// embed, oEmbed can no longer win it, so fetching for that reason is waste.
@@ -543,12 +555,13 @@ func TestMetadata_OEmbedNotFetchedForAnEmbedWeAlreadyHave(t *testing.T) {
 	server := embedRaceServer(t, `
 		<meta property="og:video" content="https://og.example.com/player">
 		<meta property="og:image" content="https://og.example.com/hero.jpg">
-		<meta property="og:site_name" content="OG Site">
-		<meta property="og:author" content="Jane Doe">`, &calls)
+		<meta property="og:site_name" content="OG Site">`, &calls)
 
 	m := fetchMetadata(t, server.URL+"/page")
 
-	require.Equal(t, int32(0), calls.Load()) // both halves of the gate held
+	// The metadata half still fires (Authors is unfillable in-page), so the
+	// endpoint IS called — but the embed half held, and OG's embed survives.
+	require.Equal(t, int32(1), calls.Load())
 	require.NotNil(t, m.Embed)
 	require.Equal(t, "https://og.example.com/player", m.Embed.IframeURL)
 	require.Equal(t, "Race", m.Title) // not "oEmbed Title"

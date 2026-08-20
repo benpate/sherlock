@@ -124,11 +124,20 @@ func boundDimension(value int64) int {
 
 // timeFormats are the layouts publishers actually emit, tried in order.
 var timeFormats = []string{
-	time.RFC3339,          // 2006-01-02T15:04:05Z07:00
+
+	// Spec-defined interchange formats. These need no peer fixture: they are
+	// real published formats, and accepting them is conformance, not leniency.
+	time.RFC3339,          // 2006-01-02T15:04:05Z07:00 — what nearly every publisher sends
 	"2006-01-02T15:04:05", // RFC 3339 without an offset
-	time.RFC1123,          // Mon, 02 Jan 2006 15:04:05 MST
-	time.RFC1123Z,         // Mon, 02 Jan 2006 15:04:05 -0700
-	"2006-01-02",          // bare date
+	time.RFC1123,          // HTTP-date, RFC 9110 §5.6.7
+	time.RFC1123Z,         // RFC 9110 §5.6.7, numeric-offset form
+	"2006-01-02",          // ISO 8601 calendar date
+
+	// Go's time.Time.String() layout — NOT an interchange format. It appears
+	// when a Go-based generator prints a timestamp with %v instead of
+	// formatting it. Smashing Magazine (Hugo) emits exactly this in
+	// article:published_time; see testdata/smashing-magazine.html.
+	"2006-01-02 15:04:05 -0700 MST",
 }
 
 // parseTime parses a timestamp permissively across the formats publishers
@@ -143,6 +152,15 @@ func parseTime(value string) null.Object[time.Time] {
 
 	for _, format := range timeFormats {
 		if parsed, err := time.Parse(format, value); err == nil {
+
+			// RULE: a zero time is not a date. Accepting Go's String() layout
+			// above means "0001-01-01 00:00:00 +0000 UTC" — the Go zero value
+			// printed verbatim — now parses cleanly, and Smashing Magazine
+			// serves exactly that on pages with no publication date.
+			if parsed.IsZero() {
+				return null.Object[time.Time]{}
+			}
+
 			return null.NewObject(parsed)
 		}
 	}

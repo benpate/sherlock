@@ -80,6 +80,13 @@ func (client *Client) loadActor_FollowLinks(config Config, txn *remote.Transacti
 		return streams.NilDocument()
 	}
 
+	// RULE: Spend one unit of the redirect budget for this hop, BEFORE following
+	// anything. Config travels by value, so a decrement after the recursive call
+	// only touches a copy that is about to be discarded -- which left the budget
+	// at its starting value forever, and let two pages that link to each other
+	// recurse until the stack gave out.
+	config.MaximumRedirects--
+
 	// If we have one or more links, then search them in order...
 	if len(links) > 0 {
 
@@ -99,7 +106,6 @@ func (client *Client) loadActor_FollowLinks(config Config, txn *remote.Transacti
 
 			if document, err := client.loadActor(config, link.Href); err == nil {
 				if document.NotNil() {
-					config.MaximumRedirects--
 					return document
 				}
 			}
