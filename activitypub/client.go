@@ -55,7 +55,10 @@ func (client *Client) Load(id string, options ...any) (streams.Document, error) 
 
 	// Build a remote transaction (to try) to load the ActivityStream document
 	result := make(map[string]any)
-	remoteOptions := remote.Options(options)
+
+	// The spread is important: `remote.Options(options)` compiles, passes the whole
+	// slice as one `any`, matches no Option, and silently drops every caller option.
+	remoteOptions := remote.Options(options...)
 
 	// If we have a KeyPairFunc, then add the AuthorizedFetch option to the transaction.
 	if client.keyPairFunc != nil {

@@ -2,9 +2,13 @@ package activitypub
 
 import (
 	"crypto"
+	"net/http"
+	"net/http/httptest"
 	"testing"
 
 	"github.com/benpate/hannibal/streams"
+	"github.com/benpate/hannibal/vocab"
+	"github.com/benpate/remote"
 	"github.com/stretchr/testify/require"
 )
 
@@ -133,4 +137,32 @@ func TestSetRootClient_ForwardsToInnerClient(t *testing.T) {
 	client.SetRootClient(root)
 	require.True(t, inner.rootWasSet, "the root client must propagate to the inner client")
 	require.Same(t, root, client.rootClient)
+}
+
+func TestLoad_PerCallRemoteOptionReachesRequest(t *testing.T) {
+	// A caller option must survive the `...any` bag and reach the outbound request.
+	// Dropping it here is silent: the document still loads, just unmodified.
+	var receivedHeader string
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		receivedHeader = r.Header.Get("X-Sherlock-Test")
+		w.Header().Set("Content-Type", vocab.ContentTypeActivityPub)
+		_, _ = w.Write([]byte(`{"id":"https://example.com/1","type":"Note"}`))
+	}))
+
+	defer server.Close()
+
+	stampHeader := remote.Option{
+		BeforeRequest: func(transaction *remote.Transaction) error {
+			transaction.Header("X-Sherlock-Test", "reached")
+			return nil
+		},
+	}
+
+	// AllowPrivateIPs is required because the test server listens on loopback.
+	client := New(WithAllowPrivateIPs(true))
+	_, err := client.Load(server.URL, stampHeader)
+
+	require.NoError(t, err)
+	require.Equal(t, "reached", receivedHeader, "a per-call remote.Option must reach the request")
 }
