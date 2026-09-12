@@ -6,7 +6,7 @@ require (
 	github.com/PuerkitoBio/goquery v1.12.0
 	github.com/benpate/derp v0.39.0
 	github.com/benpate/digit v0.16.0
-	github.com/benpate/hannibal v0.33.0
+	github.com/benpate/hannibal v0.35.0
 	github.com/benpate/remote v0.24.0
 	github.com/benpate/rosetta v0.35.0
 	github.com/benpate/uri v0.6.0
