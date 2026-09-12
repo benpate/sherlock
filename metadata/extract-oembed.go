@@ -85,7 +85,7 @@ func extractOEmbed(ctx context.Context, config config, doc *document) partial {
 
 	response, err := client.FetchHTML(ctx, doc.FinalURL, doc.Header, bytes.NewReader(doc.Body))
 
-	// Failures return an empty partial — oEmbed is additive, never load-bearing.
+	// Failures return an empty partial — oEmbed is additive.
 	if err != nil {
 		return partial{}
 	}

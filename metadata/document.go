@@ -50,7 +50,7 @@ func newDocument(ctx context.Context, config config, url string) (*document, err
 	// Fetch the raw body. Result(&body) bypasses remote's content-type-driven
 	// decoding, and capBody truncates (rather than rejects) oversized bodies so
 	// metadata in the <head> of a large page still survives.
-	// The empty (not nil) initializer is load-bearing: remote fills body
+	// The empty (not nil) initializer is important: remote fills body
 	// through a pointer, which static nil analysis cannot follow, so a nil
 	// start reads as a possible nil slice at the trim below.
 	body := []byte{}
