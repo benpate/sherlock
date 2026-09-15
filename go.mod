@@ -25,7 +25,7 @@ require (
 	github.com/andybalholm/cascadia v1.3.4 // indirect
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/benpate/exp v0.11.0 // indirect
-	github.com/benpate/oembed v0.2.0
+	github.com/benpate/oembed v0.3.0
 	github.com/benpate/re v0.6.0 // indirect
 	github.com/gorilla/css v1.0.1 // indirect
 	github.com/mattn/go-colorable v0.1.15 // indirect
