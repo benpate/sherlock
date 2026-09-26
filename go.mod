@@ -6,7 +6,8 @@ require (
 	github.com/PuerkitoBio/goquery v1.13.0
 	github.com/benpate/derp v0.44.0
 	github.com/benpate/digit v0.16.0
-	github.com/benpate/hannibal v0.36.0
+	github.com/benpate/hannibal v0.38.0
+	github.com/benpate/oembed v0.3.0
 	github.com/benpate/remote v0.25.0
 	github.com/benpate/rosetta v0.42.0
 	github.com/benpate/uri v0.8.0
@@ -25,7 +26,6 @@ require (
 	github.com/andybalholm/cascadia v1.3.5 // indirect
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/benpate/exp v0.11.0 // indirect
-	github.com/benpate/oembed v0.3.0
 	github.com/benpate/re v0.6.0 // indirect
 	github.com/gorilla/css v1.0.1 // indirect
 	github.com/mattn/go-colorable v0.1.15 // indirect
