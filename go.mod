@@ -7,7 +7,7 @@ require (
 	github.com/benpate/derp v0.44.0
 	github.com/benpate/digit v0.16.0
 	github.com/benpate/hannibal v0.38.0
-	github.com/benpate/oembed v0.3.0
+	github.com/benpate/oembed v0.4.0
 	github.com/benpate/remote v0.25.0
 	github.com/benpate/rosetta v0.43.0
 	github.com/benpate/uri v0.8.0
@@ -37,5 +37,3 @@ require (
 	golang.org/x/sys v0.48.0 // indirect
 	golang.org/x/text v0.42.0 // indirect
 )
-
-replace github.com/benpate/oembed => ../oembed
