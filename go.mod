@@ -9,7 +9,7 @@ require (
 	github.com/benpate/hannibal v0.38.0
 	github.com/benpate/oembed v0.3.0
 	github.com/benpate/remote v0.25.0
-	github.com/benpate/rosetta v0.42.0
+	github.com/benpate/rosetta v0.43.0
 	github.com/benpate/uri v0.8.0
 	github.com/dyatlov/go-opengraph/opengraph v0.0.0-20220524092352-606d7b1e5f8a
 	github.com/kr/jsonfeed v0.1.1
@@ -37,3 +37,5 @@ require (
 	golang.org/x/sys v0.48.0 // indirect
 	golang.org/x/text v0.42.0 // indirect
 )
+
+replace github.com/benpate/oembed => ../oembed
