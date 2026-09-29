@@ -144,10 +144,13 @@ func TestLoad_PerCallRemoteOptionReachesRequest(t *testing.T) {
 	// Dropping it here is silent: the document still loads, just unmodified.
 	var receivedHeader string
 
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	// The document's id is its own URL, so the origin check has nothing to confirm elsewhere
+	var server *httptest.Server
+
+	server = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		receivedHeader = r.Header.Get("X-Sherlock-Test")
 		w.Header().Set("Content-Type", vocab.ContentTypeActivityPub)
-		_, _ = w.Write([]byte(`{"id":"https://example.com/1","type":"Note"}`))
+		_, _ = w.Write([]byte(`{"id":"` + server.URL + `/","type":"Note"}`))
 	}))
 
 	defer server.Close()

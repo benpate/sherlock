@@ -4,11 +4,7 @@ package activitypub
 
 import (
 	"github.com/benpate/derp"
-	"github.com/benpate/hannibal"
 	"github.com/benpate/hannibal/streams"
-	"github.com/benpate/hannibal/vocab"
-	"github.com/benpate/remote"
-	"github.com/benpate/sherlock"
 	"github.com/benpate/uri"
 )
 
@@ -53,41 +49,13 @@ func (client *Client) Load(id string, options ...any) (streams.Document, error) 
 		return streams.NilDocument(), derp.NotFound(location, "Invalid URL", id)
 	}
 
-	// Build a remote transaction (to try) to load the ActivityStream document
-	result := make(map[string]any)
-
-	// The spread is important: `remote.Options(options)` compiles, passes the whole
-	// slice as one `any`, matches no Option, and silently drops every caller option.
-	remoteOptions := remote.Options(options...)
-
-	// If we have a KeyPairFunc, then add the AuthorizedFetch option to the transaction.
-	if client.keyPairFunc != nil {
-		publicKeyID, privateKey := client.keyPairFunc()
-		authorizedFetch := sherlock.AuthorizedFetch(publicKeyID, privateKey)
-		remoteOptions = append(remoteOptions, authorizedFetch)
-	}
-
-	txn := remote.Get(id).
-		Accept(vocab.ContentTypeActivityPub).
-		UserAgent(client.userAgent).
-		AllowPrivateIPs(client.allowPrivateIPs).
-		With(remoteOptions...).
-		Result(&result)
-
 	// Send the transaction to the Interwebs.
-	err := txn.Send()
+	response, err := client.fetch(id, options)
 
-	// If the transaction was successful, then try to parse the result as an ActivityPub document.
-	if err == nil {
-
-		// Confirm that we've received an ActivityPub document
-		if contentType := txn.ResponseHeader().Get("Content-Type"); hannibal.IsActivityPubContentType(contentType) {
-
-			return streams.NewDocument(result,
-				streams.WithClient(client.rootClient),
-				streams.WithHTTPHeader(txn.ResponseHeader()),
-			), nil
-		}
+	// RULE: An ActivityPub document is returned only when the host that served it may speak for
+	// its id.  A rejected document never falls through to the inner client.
+	if (err == nil) && response.isActivityPub {
+		return client.trustedDocument(id, response, options)
 	}
 
 	// FALLTHROUGH means FAILURE...
@@ -100,7 +68,7 @@ func (client *Client) Load(id string, options ...any) (streams.Document, error) 
 	// Otherwise, return a failure to the parent.
 	empty := streams.NilDocument().AddOptions(
 		streams.WithClient(client.rootClient),
-		streams.WithHTTPHeader(txn.ResponseHeader()),
+		streams.WithHTTPHeader(response.header),
 	)
 
 	return empty, derp.Wrap(err, location, "Unable to load document.", id)
