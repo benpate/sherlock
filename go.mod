@@ -6,11 +6,11 @@ require (
 	github.com/PuerkitoBio/goquery v1.13.0
 	github.com/benpate/derp v0.44.0
 	github.com/benpate/digit v0.16.0
-	github.com/benpate/hannibal v0.38.0
+	github.com/benpate/hannibal v0.41.0
 	github.com/benpate/oembed v0.4.0
 	github.com/benpate/remote v0.25.0
 	github.com/benpate/rosetta v0.43.0
-	github.com/benpate/uri v0.8.0
+	github.com/benpate/uri v0.9.0
 	github.com/dyatlov/go-opengraph/opengraph v0.0.0-20220524092352-606d7b1e5f8a
 	github.com/kr/jsonfeed v0.1.1
 	github.com/microcosm-cc/bluemonday v1.0.27
