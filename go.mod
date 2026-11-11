@@ -8,7 +8,7 @@ require (
 	github.com/benpate/hannibal v0.47.0
 	github.com/benpate/oembed v0.5.0
 	github.com/benpate/remote v0.27.0
-	github.com/benpate/rosetta v0.46.0
+	github.com/benpate/rosetta v0.48.0
 	github.com/benpate/uri v0.10.0
 	github.com/rs/zerolog v1.35.1
 	github.com/stretchr/testify v1.12.1
